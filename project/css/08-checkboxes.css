@@ -1,0 +1,60 @@
+/* ============================================ */
+/* CHECKBOXES & LABELS */
+/* ============================================ */
+
+.checkboxes {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  animation: fadeInUp 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+.checkboxes label {
+  display: inline-block;
+  margin: 0 2px;
+  position: relative;
+  font-weight: bold;
+  padding: 2px;
+  border: none;
+  min-width: 22px;
+  text-align: center;
+  transition: transform 0.2s, background-color 0.2s ease;
+}
+
+.checkboxes label:hover {
+  transform: scale(1.05);
+}
+
+.checkboxes label:not(:last-child) {
+  border-left: 1px solid #e0e0e0;
+  margin-left: 4px;
+  padding-left: 8px;
+}
+
+.no-task {
+  color: black;
+}
+
+.has-task {
+  color: #ff0000;
+}
+
+.completed {
+  color: #008000;
+}
+
+.team_cyan {
+  color: #00ced1;
+  border: 1px solid #00ced1;
+  border-radius: 3px;
+}
+
+.task-label-text {
+  flex: 1;
+  text-align: right;
+  direction: rtl;
+  word-break: break-word;
+  white-space: pre-line;
+}

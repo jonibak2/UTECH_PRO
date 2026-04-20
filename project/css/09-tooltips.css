@@ -1,0 +1,27 @@
+/* ============================================ */
+/* TOOLTIPS */
+/* ============================================ */
+
+.tooltip {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 8px;
+  z-index: 10;
+  max-width: 200px;
+  white-space: pre-line;
+  font-size: 0.9em;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+label:hover .tooltip {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}

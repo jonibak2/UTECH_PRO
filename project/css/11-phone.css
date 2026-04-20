@@ -1,0 +1,59 @@
+/* ============================================ */
+/* PHONE MANAGEMENT */
+/* ============================================ */
+
+#phone-list {
+  margin-bottom: 5px;
+}
+
+.phone-entry {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.phone-number {
+  width: 65%;
+  margin-left: 5px;
+}
+
+.phone-name {
+  width: 35%;
+}
+
+#add-phone {
+  display: block;
+  padding: 5px;
+  font-size: 1em;
+  width: auto;
+  background: #83a737;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  margin: 5px 0;
+  transition: transform 0.2s, background-color 0.2s ease;
+  cursor: pointer;
+}
+
+#add-phone:hover {
+  transform: scale(1.03);
+  background: rgba(131, 167, 55, 0.9);
+}
+
+.remove-phone {
+  padding: 5px;
+  font-size: 1em;
+  width: auto;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  margin-right: 5px;
+  transition: transform 0.2s, background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.remove-phone:hover {
+  transform: scale(1.03);
+  background: rgba(255, 68, 68, 0.9);
+}

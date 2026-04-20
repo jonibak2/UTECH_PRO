@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="project/assets/logo.jpg" type="image/jpeg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>צפייה ביומן עבודה</title>
+    <link rel="stylesheet" href="project/css/16-notifications.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: #83a737;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-btn:hover {
+            background: #6d8c2f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(131, 167, 55, 0.3);
+        }
+
+        .nav-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-sub-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background: #83a737;
+            color: white;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: not-allowed;
+            opacity: 0.6;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-sub-btn:hover {
+            background: #83a737;
+        }
+
+        .logo {
+            max-width: 500px;
+            height: auto;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+            background: #f0f0f0;
+            padding: 5px;
+            border-radius: 8px;
+        }
+
+        .search-container {
+            display: none;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 10px;
+        }
+
+        .search-container.active {
+            display: block;
+        }
+
+        #date-search-container {
+            display: none !important;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 10px;
+        }
+
+        #date-search-container.active {
+            display: block !important;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #83a737;
+        }
+
+        .view-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            color: #666;
+        }
+
+        .view-btn:hover {
+            background: rgba(131, 167, 55, 0.1);
+        }
+
+        .view-btn.active {
+            background: #83a737;
+            color: white;
+        }
+
+        .columns-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            max-width: 100%;
+        }
+
+        .column {
+            flex: 0 0 calc(16.666% - 12.5px);
+            min-width: 250px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 180px);
+            animation: fadeInUp 0.4s ease-out forwards;
+        }
+
+        @media (max-width: 1800px) {
+            .column {
+                flex: 0 0 calc(20% - 12px);
+            }
+        }
+
+        @media (max-width: 1400px) {
+            .column {
+                flex: 0 0 calc(25% - 11.25px);
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .column {
+                flex: 0 0 calc(33.333% - 10px);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .column-header {
+            padding: 18px;
+            background: #83a737;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .column-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .nested-item {
+            margin-bottom: 10px;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+
+        .nested-item:hover {
+            box-shadow: 0 2px 8px rgba(131, 167, 55, 0.2);
+            border-color: #83a737;
+        }
+
+        .nested-header {
+            padding: 12px;
+            background: #f0f0f0;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .nested-header:hover {
+            background: #e8e8e8;
+        }
+
+        .arrow {
+            transition: transform 0.3s;
+            font-size: 12px;
+            color: #83a737;
+        }
+
+        .arrow.expanded {
+            transform: rotate(90deg);
+        }
+
+        .nested-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 12px;
+        }
+
+        .nested-content.expanded {
+            max-height: 1000px;
+            padding: 12px;
+        }
+
+        .address-item, .final-item {
+            margin: 6px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+
+        .address-item:hover, .final-item:hover {
+            background: #f8f9fa;
+            border-color: #83a737;
+            transform: translateX(-2px);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            border-radius: 12px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: scale(0.9) translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #ee3742;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #83a737;
+        }
+
+        .modal-header h2 {
+            color: #83a737;
+            margin-bottom: 8px;
+        }
+
+        .modal-header h3 {
+            color: #666;
+            font-weight: normal;
+        }
+
+        .data-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #83a737;
+        }
+
+        .data-label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .data-value {
+            color: #666;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .floor-item {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .floor-title {
+            font-weight: bold;
+            color: #83a737;
+            margin-bottom: 5px;
+        }
+
+        .equipment-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .equipment-list li {
+            padding: 8px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 4px;
+            border-right: 3px solid #83a737;
+        }
+
+        .loading, .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+            font-size: 18px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Scrollbar styling */
+        .column-content::-webkit-scrollbar,
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .column-content::-webkit-scrollbar-track,
+        .modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .column-content::-webkit-scrollbar-thumb,
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #83a737;
+            border-radius: 4px;
+        }
+
+        .column-content::-webkit-scrollbar-thumb:hover,
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #6d8c2f;
+        }
+
+        /* Project management modal */
+        .project-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s;
+        }
+
+        .project-modal-overlay.active {
+            display: flex;
+        }
+
+        .project-modal {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        .project-modal-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #83a737;
+        }
+
+        .project-modal-header h2 {
+            color: #83a737;
+            margin: 0;
+        }
+
+        .project-modal-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .project-modal-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .project-modal-input:focus {
+            outline: none;
+            border-color: #83a737;
+        }
+
+        .project-modal-add-btn {
+            padding: 12px 24px;
+            background: #83a737;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .project-modal-add-btn:hover {
+            background: #6d8c2f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(131, 167, 55, 0.3);
+        }
+
+        .project-list {
+            margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .project-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+
+        .project-item:hover {
+            background: #f0f0f0;
+            border-color: #83a737;
+        }
+
+        .project-item-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .project-item-delete {
+            padding: 6px 12px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .project-item-delete:hover {
+            background: #ff3838;
+            transform: scale(1.05);
+        }
+
+        .project-modal-close {
+            padding: 12px 24px;
+            background: #e0e0e0;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .project-modal-close:hover {
+            background: #d0d0d0;
+        }
+
+        /* Date search container improvements */
+        #date-search-container {
+            position: relative;
+        }
+
+        #date-search-input {
+            appearance: none;
+            background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2383a737' stroke-width='2'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") no-repeat;
+            background-position: left 12px center;
+            padding-left: 45px !important;
+            cursor: pointer;
+        }
+
+        #date-search-input::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            border-radius: 4px;
+            margin-right: 6px;
+            opacity: 0;
+            width: 0;
+        }
+
+        /* Edit modal styles */
+        .edit-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1500;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .edit-modal-overlay.active {
+            display: flex;
+        }
+
+        .edit-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .edit-modal-header {
+            margin-bottom: 24px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #83a737;
+        }
+
+        .edit-modal-header h2 {
+            color: #83a737;
+            margin: 0 0 5px 0;
+            font-size: 24px;
+        }
+
+        .edit-modal-header p {
+            color: #666;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .edit-form-group {
+            margin-bottom: 20px;
+        }
+
+        .edit-form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .edit-form-input,
+        .edit-form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .edit-form-input:focus,
+        .edit-form-textarea:focus {
+            outline: none;
+            border-color: #83a737;
+            background: #f9fff6;
+        }
+
+        select.edit-form-input {
+            background: white;
+            appearance: none;
+            cursor: pointer;
+            padding-left: 15px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 12px center;
+            padding-left: 35px;
+        }
+
+        .edit-form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .edit-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .edit-modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .edit-save-btn {
+            flex: 1;
+            padding: 12px 24px;
+            background: #83a737;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .edit-save-btn:hover {
+            background: #6d8c2f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(131, 167, 55, 0.3);
+        }
+
+        .edit-cancel-btn {
+            flex: 1;
+            padding: 12px 24px;
+            background: #e0e0e0;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .edit-cancel-btn:hover {
+            background: #d0d0d0;
+        }
+
+        .floor-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: flex-end;
+        }
+
+        .floor-input-group select {
+            flex: 0.8;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .floor-input-group select:focus {
+            outline: none;
+            border-color: #83a737;
+            background: #f9fff6;
+        }
+
+        .floor-input-group input {
+            flex: 1;
+        }
+
+        .floor-delete-btn {
+            padding: 8px 12px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .floor-delete-btn:hover {
+            background: #ff3838;
+        }
+
+        .equipment-delete-btn {
+            padding: 6px 10px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .equipment-delete-btn:hover {
+            background: #ff3838;
+        }
+
+        .add-floor-btn {
+            padding: 8px 16px;
+            background: #83a737;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .add-floor-btn:hover {
+            background: #6d8c2f;
+        }
+
+        .equipment-item-group {
+            display: grid;
+            grid-template-columns: 2fr 1fr auto;
+            gap: 8px;
+            margin-bottom: 10px;
+            align-items: flex-end;
+        }
+
+        .add-equipment-btn {
+            padding: 8px 16px;
+            background: #83a737;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .add-equipment-btn:hover {
+            background: #6d8c2f;
+        }
+
+        /* Date picker styles */
+        #date-picker {
+            animation: slideDown 0.2s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #calendar-grid button {
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 12px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        #calendar-grid button:hover {
+            background: #f0f0f0;
+            border-color: #83a737;
+        }
+
+        #calendar-grid button.other-month {
+            color: #ccc;
+            background: #f9f9f9;
+        }
+
+        #calendar-grid button.today {
+            background: #e8f5e9;
+            border-color: #83a737;
+            font-weight: bold;
+        }
+
+        #calendar-grid button.selected {
+            background: #83a737;
+            color: white;
+            border-color: #83a737;
+        }
+
+        #calendar-grid button.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #date-picker-toggle:focus {
+            outline: none;
+            border-color: #83a737;
+        }
+
+        #date-picker-toggle:hover {
+            border-color: #83a737;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-top">
+            <div class="nav-group">
+                <a href="tofes.html" class="nav-btn">למילוי היומן</a>
+                <button disabled class="nav-sub-btn">מילוי קריאת שירות</button>
+            </div>
+            <img src="project/assets/utech.png" alt="Utech" class="logo">
+            <div class="nav-group">
+                <a href="index.html" class="nav-btn">סידור עבודה</a>
+                <button disabled class="nav-sub-btn">קריאות שירות פתחות</button>
+            </div>
+        </div>
+        <div class="view-toggle">
+            <button class="view-btn active" data-view="project">לפי פרויקט</button>
+            <button class="view-btn" data-view="date">לפי תאריך</button>
+            <button class="view-btn" data-view="worker">לפי עובד</button>
+            <button class="view-btn" data-view="address">לפי כתובת</button>
+        </div>
+        <div class="search-container" id="search-container">
+            <input type="text" class="search-input" id="search-input" placeholder="חפש כתובת...">
+        </div>
+        <div id="date-search-container" style="display: none; width: 100%; max-width: 500px; margin-top: 10px;">
+            <div style="position: relative;">
+                <button id="date-picker-toggle" style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; text-align: left; font-size: 16px; cursor: pointer; transition: border-color 0.3s; display: flex; align-items: center; gap: 10px; color: #666;">
+                    <span style="font-size: 18px;">📅</span>
+                    <span id="date-display">בחר תאריך...</span>
+                </button>
+                <div id="date-picker" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 2px solid #83a737; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; width: 100%; min-width: 320px; padding: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <button type="button" id="prev-month" style="background: none; border: none; cursor: pointer; font-size: 18px; color: #83a737;">►</button>
+                        <span id="month-year" style="font-weight: bold; color: #333; text-align: center;"></span>
+                        <button type="button" id="next-month" style="background: none; border: none; cursor: pointer; font-size: 18px; color: #83a737;">◄</button>
+                    </div>
+                    <div id="calendar-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;"></div>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+            <button id="add-project-btn" style="padding: 12px 24px; background: #83a737; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">הוסף פרויקט</button>
+        </div>
+    </div>
+
+    <div id="loading" class="loading">טוען נתונים...</div>
+    <div id="data-container"></div>
+
+    <!-- Project Management Modal -->
+    <div id="project-modal-overlay" class="project-modal-overlay">
+        <div class="project-modal">
+            <div class="project-modal-header">
+                <h2>ניהול פרויקטים</h2>
+            </div>
+            
+            <div class="project-modal-input-group">
+                <input type="text" id="project-modal-input" class="project-modal-input" placeholder="הזן שם פרויקט חדש">
+                <button id="project-modal-add-btn" class="project-modal-add-btn">הוסף</button>
+            </div>
+
+            <div class="project-list" id="project-list"></div>
+
+            <button id="project-modal-close-btn" class="project-modal-close">סגור</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">סגור</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal-overlay" class="edit-modal-overlay">
+        <div class="edit-modal-content">
+            <div class="edit-modal-header">
+                <h2 id="edit-modal-title">עריכת רשומה</h2>
+                <p id="edit-modal-subtitle"></p>
+            </div>
+            <form id="edit-form">
+                <!-- Project name -->
+                <div class="edit-form-group">
+                    <label class="edit-form-label">פרויקט</label>
+                    <select id="edit-project" class="edit-form-input" required>
+                        <option value="" disabled>בחר פרויקט</option>
+                    </select>
+                </div>
+
+                <!-- Address -->
+                <div class="edit-form-group">
+                    <label class="edit-form-label">כתובת</label>
+                    <input type="text" id="edit-address" class="edit-form-input" placeholder="הכנס כתובת">
+                </div>
+
+                <!-- Floors -->
+                <div class="edit-form-group">
+                    <label class="edit-form-label">עבודה בקומות</label>
+                    <div id="floors-container"></div>
+                    <button type="button" class="add-floor-btn" id="add-floor-btn">+ הוסף קומה</button>
+                </div>
+
+                <!-- Equipment -->
+                <div class="edit-form-group">
+                    <label class="edit-form-label">אביזרים וציוד שהותקנו / הוחלפו</label>
+                    <div id="equipment-container"></div>
+                    <button type="button" class="add-equipment-btn" id="add-equipment-btn">+ הוסף ציוד</button>
+                </div>
+
+                <!-- Issues -->
+                <div class="edit-form-group">
+                    <label class="edit-form-label">תקלות / ליקויים שהתגלו</label>
+                    <textarea id="edit-issues" class="edit-form-textarea" placeholder="תאר את התקלות שהתגלו"></textarea>
+                </div>
+
+                <!-- Next Visit -->
+                <div class="edit-form-group">
+                    <label class="edit-form-label">מה נדרש להשלים בביקור הבא</label>
+                    <textarea id="edit-nextVisit" class="edit-form-textarea" placeholder="תאר מה נדרש להשלים בביקור הבא"></textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="edit-modal-buttons">
+                    <button type="button" class="edit-cancel-btn" id="edit-cancel-btn">ביטול</button>
+                    <button type="submit" class="edit-save-btn">שמור שינויים</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuvwDMAsyQSURluc7Mr-Ow5r2Iq2xh9P8",
+            authDomain: "tofes-43c54.firebaseapp.com",
+            databaseURL: "https://tofes-43c54-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "tofes-43c54",
+            storageBucket: "tofes-43c54.firebasestorage.app",
+            messagingSenderId: "634166786476",
+            appId: "1:634166786476:web:e5118489dcf3066fcba209",
+            measurementId: "G-WS6QJN5RCT"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        let workLogsData = null;
+        let currentView = 'project';
+        let searchQuery = '';
+        let projectsList = {};
+
+        // Notification function
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.cssText = `
+              position: fixed;
+              top: 20px;
+              right: 20px;
+              background-color: #83a737;
+              color: white;
+              padding: 12px 20px;
+              border-radius: 6px;
+              font-size: 14px;
+              font-weight: bold;
+              z-index: 10000;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+              animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+              notification.style.animation = 'slideOut 0.3s ease';
+              setTimeout(() => {
+                if (notification.parentNode) {
+                  notification.parentNode.removeChild(notification);
+                }
+              }, 300);
+            }, 3000);
+        }
+
+        // Load projects from Firebase
+        const projectsRef = ref(database, 'projects');
+        onValue(projectsRef, (snapshot) => {
+            projectsList = snapshot.val() || {};
+            updateProjectsList();
+        });
+
+        // Update projects list display
+        function updateProjectsList() {
+            const projectList = document.getElementById('project-list');
+            const projects = Object.entries(projectsList).sort((a, b) => 
+                a[1].name.localeCompare(b[1].name, 'he')
+            );
+
+            projectList.innerHTML = '';
+            
+            if (projects.length === 0) {
+                projectList.innerHTML = '<div style="text-align: center; padding: 20px; color: #999;">אין פרויקטים עדיין</div>';
+                return;
+            }
+
+            projects.forEach(([projectId, project]) => {
+                const projectItem = document.createElement('div');
+                projectItem.className = 'project-item';
+                projectItem.innerHTML = `
+                    <span class="project-item-name">${project.name}</span>
+                    <button class="project-item-delete" data-project-id="${projectId}">מחק</button>
+                `;
+                
+                projectItem.querySelector('.project-item-delete').addEventListener('click', async () => {
+                    if (confirm(`האם אתה בטוח שברצונך למחוק את הפרויקט "${project.name}"?`)) {
+                        try {
+                            const projectRefToDelete = ref(database, `projects/${projectId}`);
+                            await set(projectRefToDelete, null);
+                            // Project list will update automatically via onValue listener
+                        } catch (error) {
+                            console.error('Error deleting project:', error);
+                            showNotification('שגיאה במחיקת הפרויקט');
+                        }
+                    }
+                });
+                
+                projectList.appendChild(projectItem);
+            });
+        }
+
+        // Open project modal
+        document.getElementById('add-project-btn').addEventListener('click', () => {
+            document.getElementById('project-modal-overlay').classList.add('active');
+            document.getElementById('project-modal-input').focus();
+        });
+
+        // Close project modal
+        document.getElementById('project-modal-close-btn').addEventListener('click', () => {
+            document.getElementById('project-modal-overlay').classList.remove('active');
+            document.getElementById('project-modal-input').value = '';
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('project-modal-overlay').addEventListener('click', (e) => {
+            if (e.target.id === 'project-modal-overlay') {
+                document.getElementById('project-modal-overlay').classList.remove('active');
+                document.getElementById('project-modal-input').value = '';
+            }
+        });
+
+        // Add project from modal
+        document.getElementById('project-modal-add-btn').addEventListener('click', async () => {
+            await addProject();
+        });
+
+        // Add project when pressing Enter
+        document.getElementById('project-modal-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addProject();
+            }
+        });
+
+        async function addProject() {
+            const projectInput = document.getElementById('project-modal-input');
+            const projectName = projectInput.value.trim();
+
+            if (!projectName) {
+                showNotification('נא להזין שם פרויקט');
+                return;
+            }
+
+            try {
+                // Check if project already exists
+                const projectExists = Object.values(projectsList).some(p => p.name === projectName);
+                
+                if (projectExists) {
+                    showNotification('פרויקט זה כבר קיים');
+                    return;
+                }
+
+                // Add new project
+                const newProjectRef = push(projectsRef);
+                await set(newProjectRef, {
+                    name: projectName,
+                    createdAt: new Date().toISOString()
+                });
+
+                projectInput.value = '';
+                showNotification('פרויקט הוסף בהצלחה');
+            } catch (error) {
+                console.error('Error adding project:', error);
+                showNotification('שגיאה בהוספת הפרויקט');
+            }
+        }
+
+        // Load data from Firebase
+        const workLogsRef = ref(database, 'workLogs');
+        onValue(workLogsRef, (snapshot) => {
+            workLogsData = snapshot.val();
+            document.getElementById('loading').style.display = 'none';
+            
+            if (!workLogsData || Object.keys(workLogsData).length === 0) {
+                document.getElementById('data-container').innerHTML = '<div class="empty-state">אין נתונים להצגה</div>';
+                return;
+            }
+            
+            renderView(currentView);
+        });
+        function checkDevice() {
+        const isMobile = window.matchMedia("(max-width: 768px)").matches || 
+                    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (isMobile) {
+        window.location.href = 'tofes.html';
+        }
+        }
+        checkDevice();
+
+        // View toggle
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentView = btn.dataset.view;
+                
+                // Show/hide search based on view
+                const searchContainer = document.getElementById('search-container');
+                const dateSearchContainer = document.getElementById('date-search-container');
+                if (currentView === 'address') {
+                    searchContainer.classList.add('active');
+                    dateSearchContainer.classList.remove('active');
+                } else if (currentView === 'date') {
+                    searchContainer.classList.remove('active');
+                    dateSearchContainer.classList.add('active');
+                } else {
+                    searchContainer.classList.remove('active');
+                    dateSearchContainer.classList.remove('active');
+                    searchQuery = '';
+                    const searchInput = document.getElementById('search-input');
+                    if (searchInput) {
+                        searchInput.value = '';
+                    }
+                }
+                
+                renderView(currentView);
+            });
+        });
+
+        // Search input for address
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase();
+            renderView(currentView);
+        });
+        
+        // Date picker functionality
+        let dateSearchQuery = '';
+        let currentPickerDate = new Date();
+
+        function renderCalendar() {
+            const monthYear = document.getElementById('month-year');
+            const calendarGrid = document.getElementById('calendar-grid');
+            const year = currentPickerDate.getFullYear();
+            const month = currentPickerDate.getMonth();
+
+            // Set header
+            const monthNames = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 
+                               'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
+            monthYear.textContent = `${monthNames[month]} ${year}`;
+
+            // Clear calendar
+            calendarGrid.innerHTML = '';
+
+            // Add day headers
+            const dayHeaders = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+            dayHeaders.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.textContent = day;
+                dayHeader.style.textAlign = 'center';
+                dayHeader.style.fontWeight = 'bold';
+                dayHeader.style.fontSize = '11px';
+                dayHeader.style.color = '#666';
+                dayHeader.style.padding = '5px';
+                calendarGrid.appendChild(dayHeader);
+            });
+
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            // Add days from previous month
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const dayBtn = document.createElement('button');
+                dayBtn.textContent = daysInPrevMonth - i;
+                dayBtn.className = 'other-month';
+                dayBtn.disabled = true;
+                dayBtn.type = 'button';
+                calendarGrid.appendChild(dayBtn);
+            }
+
+            // Add days of current month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayBtn = document.createElement('button');
+                dayBtn.textContent = day;
+                dayBtn.type = 'button';
+
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const today = new Date().toISOString().split('T')[0];
+
+                if (dateStr === today) {
+                    dayBtn.classList.add('today');
+                }
+
+                if (dateStr === dateSearchQuery) {
+                    dayBtn.classList.add('selected');
+                }
+
+                dayBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    dateSearchQuery = dateStr;
+                    document.getElementById('date-display').textContent = dateStr;
+                    renderCalendar();
+                    renderView(currentView);
+                    setTimeout(() => {
+                        document.getElementById('date-picker').style.display = 'none';
+                    }, 200);
+                });
+
+                calendarGrid.appendChild(dayBtn);
+            }
+
+            // Add days from next month
+            const remainingDays = 42 - (firstDay + daysInMonth);
+            for (let day = 1; day <= remainingDays; day++) {
+                const dayBtn = document.createElement('button');
+                dayBtn.textContent = day;
+                dayBtn.className = 'other-month';
+                dayBtn.disabled = true;
+                dayBtn.type = 'button';
+                calendarGrid.appendChild(dayBtn);
+            }
+        }
+
+        // Date picker toggle
+        document.getElementById('date-picker-toggle').addEventListener('click', () => {
+            const datePicker = document.getElementById('date-picker');
+            const isOpen = datePicker.style.display === 'block';
+            datePicker.style.display = isOpen ? 'none' : 'block';
+            if (!isOpen) {
+                renderCalendar();
+            }
+        });
+
+        // Previous/Next month buttons
+        document.getElementById('prev-month').addEventListener('click', (e) => {
+            e.preventDefault();
+            currentPickerDate.setMonth(currentPickerDate.getMonth() - 1);
+            renderCalendar();
+        });
+
+        document.getElementById('next-month').addEventListener('click', (e) => {
+            e.preventDefault();
+            currentPickerDate.setMonth(currentPickerDate.getMonth() + 1);
+            renderCalendar();
+        });
+
+        // Close date picker when clicking outside
+        document.addEventListener('click', (e) => {
+            const dateContainer = document.getElementById('date-search-container');
+            if (dateContainer && dateContainer.classList.contains('active') && 
+                !dateContainer.contains(e.target)) {
+                document.getElementById('date-picker').style.display = 'none';
+            }
+        });
+
+        function renderView(view) {
+            if (!workLogsData) return;
+            
+            const container = document.getElementById('data-container');
+            container.innerHTML = '';
+
+            if (view === 'project') {
+                renderByProject();
+            } else if (view === 'date') {
+                renderByDate();
+            } else if (view === 'worker') {
+                renderByWorker();
+            } else if (view === 'address') {
+                renderByAddress();
+            }
+        }
+
+        // Helper function to format date
+        function formatDate(dateStr) {
+            const [year, month, day] = dateStr.split('-');
+            return `${day}.${month}.${year}`;
+        }
+
+        function renderByProject() {
+            const container = document.getElementById('data-container');
+            const columnsContainer = document.createElement('div');
+            columnsContainer.className = 'columns-container';
+
+            // Collect all unique projects
+            const projectMap = new Map();
+            Object.keys(workLogsData).forEach(worker => {
+                Object.keys(workLogsData[worker]).forEach(date => {
+                    Object.keys(workLogsData[worker][date]).forEach(project => {
+                        if (!projectMap.has(project)) {
+                            projectMap.set(project, []);
+                        }
+                        projectMap.get(project).push({ worker, date });
+                    });
+                });
+            });
+
+            const sortedProjects = Array.from(projectMap.keys()).sort();
+
+            sortedProjects.forEach((project, index) => {
+                const column = createColumn(project, index);
+                const entries = projectMap.get(project);
+
+                // Group by worker
+                const workerMap = new Map();
+                entries.forEach(({ worker, date }) => {
+                    if (!workerMap.has(worker)) {
+                        workerMap.set(worker, []);
+                    }
+                    workerMap.get(worker).push(date);
+                });
+
+                Array.from(workerMap.keys()).sort().forEach(worker => {
+                    const workerItem = createNestedItem(worker, () => {
+                        return workerMap.get(worker).sort().reverse().map(date => {
+                            const item = document.createElement('div');
+                            item.className = 'final-item';
+                            item.textContent = formatDate(date);
+                            item.onclick = () => showModal(worker, date, project, true);
+                            return item;
+                        });
+                    });
+                    column.content.appendChild(workerItem);
+                });
+
+                columnsContainer.appendChild(column.element);
+            });
+
+            container.appendChild(columnsContainer);
+        }
+
+        function renderByWorker() {
+            const container = document.getElementById('data-container');
+            const columnsContainer = document.createElement('div');
+            columnsContainer.className = 'columns-container';
+
+            const workers = Object.keys(workLogsData).sort();
+
+            workers.forEach((worker, index) => {
+                const column = createColumn(worker, index);
+                const dates = Object.keys(workLogsData[worker]).sort().reverse();
+
+                dates.forEach(date => {
+                    const dateItem = createNestedItem(formatDate(date), () => {
+                        const projects = Object.keys(workLogsData[worker][date]);
+                        return projects.map(project => {
+                            const item = document.createElement('div');
+                            item.className = 'address-item';
+                            item.textContent = project;
+                            item.onclick = () => showModal(worker, date, project, true);
+                            return item;
+                        });
+                    });
+                    column.content.appendChild(dateItem);
+                });
+
+                columnsContainer.appendChild(column.element);
+            });
+
+            container.appendChild(columnsContainer);
+        }
+
+        function renderByDate() {
+            const container = document.getElementById('data-container');
+            const columnsContainer = document.createElement('div');
+            columnsContainer.className = 'columns-container';
+
+            // Collect all unique dates
+            const datesMap = new Map();
+            Object.keys(workLogsData).forEach(worker => {
+                Object.keys(workLogsData[worker]).forEach(date => {
+                    if (!datesMap.has(date)) {
+                        datesMap.set(date, []);
+                    }
+                    Object.keys(workLogsData[worker][date]).forEach(project => {
+                        datesMap.get(date).push({ worker, project });
+                    });
+                });
+            });
+
+            let sortedDates = Array.from(datesMap.keys()).sort().reverse();
+            
+            // Filter dates by date search query if provided
+            if (dateSearchQuery) {
+                sortedDates = sortedDates.filter(date => date === dateSearchQuery);
+            }
+            
+            if (sortedDates.length === 0) {
+                container.innerHTML = '<div class="empty-state">לא נמצאו תאריכים</div>';
+                return;
+            }
+
+            sortedDates.forEach((date, index) => {
+                const column = createColumn(formatDate(date), index);
+                const entries = datesMap.get(date);
+
+                // Group by worker
+                const workerMap = new Map();
+                entries.forEach(({ worker, project }) => {
+                    if (!workerMap.has(worker)) {
+                        workerMap.set(worker, []);
+                    }
+                    workerMap.get(worker).push(project);
+                });
+
+                Array.from(workerMap.keys()).sort().forEach(worker => {
+                    const workerItem = createNestedItem(worker, () => {
+                        return workerMap.get(worker).map(project => {
+                            const item = document.createElement('div');
+                            item.className = 'final-item';
+                            item.textContent = project;
+                            item.onclick = () => showModal(worker, date, project, true);
+                            return item;
+                        });
+                    });
+                    column.content.appendChild(workerItem);
+                });
+
+                columnsContainer.appendChild(column.element);
+            });
+
+            container.appendChild(columnsContainer);
+        }
+
+        function renderByAddress() {
+            const container = document.getElementById('data-container');
+            const columnsContainer = document.createElement('div');
+            columnsContainer.className = 'columns-container';
+
+            // Collect all unique addresses from project data
+            const addressMap = new Map();
+            Object.keys(workLogsData).forEach(worker => {
+                Object.keys(workLogsData[worker]).forEach(date => {
+                    Object.keys(workLogsData[worker][date]).forEach(project => {
+                        const projectData = workLogsData[worker][date][project];
+                        const address = projectData.address || 'אין כתובת';
+                        
+                        if (!addressMap.has(address)) {
+                            addressMap.set(address, []);
+                        }
+                        addressMap.get(address).push({ worker, date, project });
+                    });
+                });
+            });
+
+            // Filter addresses by search query
+            let sortedAddresses = Array.from(addressMap.keys()).sort();
+            if (searchQuery) {
+                sortedAddresses = sortedAddresses.filter(address => 
+                    address.toLowerCase().includes(searchQuery)
+                );
+            }
+
+            if (sortedAddresses.length === 0) {
+                container.innerHTML = '<div class="empty-state">לא נמצאו כתובות</div>';
+                return;
+            }
+
+            sortedAddresses.forEach((address, index) => {
+                const column = createColumn(address, index);
+                const entries = addressMap.get(address);
+
+                // Group by project
+                const projectMap = new Map();
+                entries.forEach(({ worker, date, project }) => {
+                    const key = `${project}`;
+                    if (!projectMap.has(key)) {
+                        projectMap.set(key, []);
+                    }
+                    projectMap.get(key).push({ worker, date });
+                });
+
+                Array.from(projectMap.keys()).sort().forEach(projectKey => {
+                    const projectItem = createNestedItem(projectKey, () => {
+                        return projectMap.get(projectKey).map(({ worker, date }) => {
+                            const item = document.createElement('div');
+                            item.className = 'final-item';
+                            item.textContent = `${worker} - ${formatDate(date)}`;
+                            item.onclick = () => showModal(worker, date, projectKey, true);
+                            return item;
+                        });
+                    });
+                    column.content.appendChild(projectItem);
+                });
+
+                columnsContainer.appendChild(column.element);
+            });
+
+            container.appendChild(columnsContainer);
+        }
+
+        function createColumn(title, index) {
+            const column = document.createElement('div');
+            column.className = 'column';
+            column.style.animationDelay = `${index * 0.1}s`;
+
+            const header = document.createElement('div');
+            header.className = 'column-header';
+            header.textContent = title;
+
+            const content = document.createElement('div');
+            content.className = 'column-content';
+
+            column.appendChild(header);
+            column.appendChild(content);
+
+            return { element: column, content };
+        }
+
+        function createNestedItem(title, getChildren) {
+            const item = document.createElement('div');
+            item.className = 'nested-item';
+
+            const header = document.createElement('div');
+            header.className = 'nested-header';
+            header.innerHTML = `
+                <span>${title}</span>
+                <span class="arrow">▶</span>
+            `;
+
+            const content = document.createElement('div');
+            content.className = 'nested-content';
+
+            header.onclick = () => {
+                const isExpanded = content.classList.contains('expanded');
+                
+                if (!isExpanded && content.children.length === 0) {
+                    const children = getChildren();
+                    children.forEach(child => content.appendChild(child));
+                }
+                
+                content.classList.toggle('expanded');
+                header.querySelector('.arrow').classList.toggle('expanded');
+            };
+
+            item.appendChild(header);
+            item.appendChild(content);
+
+            return item;
+        }
+
+        function showModal(worker, date, project, isProject = false) {
+            const data = workLogsData[worker][date][project];
+            const modalBody = document.getElementById('modal-body');
+
+            let html = `
+                <div class="modal-header">
+                    <h2><b>${project}</b></h2>
+                    <h3>${worker} • ${formatDate(date)}${data.address ? ' • ' + data.address : ''}</h3>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button id="edit-btn" style="padding: 10px 20px; background: #83a737; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.3s; flex: 1;">עריכה</button>
+                        <button id="delete-btn" style="padding: 10px 20px; background: #ff4757; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.3s; flex: 1;">מחק</button>
+                    </div>
+                </div>
+            `;
+
+            // Floors
+            if (data.floors && Object.keys(data.floors).length > 0) {
+                html += `<div class="data-section">
+                    <div class="data-label">עבודה בקומות:</div>`;
+                Object.keys(data.floors).forEach(floor => {
+                    if (data.floors[floor]) {
+                        html += `
+                            <div class="floor-item">
+                                <div class="floor-title">קומה ${floor}</div>
+                                <div class="data-value">${data.floors[floor]}</div>
+                            </div>
+                        `;
+                    }
+                });
+                html += `</div>`;
+            }
+
+            // Equipment
+            if (data.equipment && data.equipment.length > 0) {
+                html += `
+                    <div class="data-section">
+                        <div class="data-label">אביזרים וציוד שהותקנו / הוחלפו:</div>
+                        <ul class="equipment-list">
+                `;
+                data.equipment.forEach(item => {
+                    if (item.name || item.quantity) {
+                        html += `<li>${item.name || '-'} ${item.quantity ? '- כמות: ' + item.quantity : ''}</li>`;
+                    }
+                });
+                html += `</ul></div>`;
+            }
+
+            // Issues
+            if (data.issues) {
+                html += `
+                    <div class="data-section">
+                        <div class="data-label">תקלות / ליקויים שהתגלו:</div>
+                        <div class="data-value">${data.issues}</div>
+                    </div>
+                `;
+            }
+
+            // Next Visit
+            if (data.nextVisit) {
+                html += `
+                    <div class="data-section">
+                        <div class="data-label">מה נדרש להשלים בביקור הבא:</div>
+                        <div class="data-value">${data.nextVisit}</div>
+                    </div>
+                `;
+            }
+
+            // Timestamp
+            if (data.timestamp) {
+                const timestamp = new Date(data.timestamp);
+                html += `
+                    <div class="data-section">
+                        <div class="data-label">זמן שליחה:</div>
+                        <div class="data-value">${timestamp.toLocaleString('he-IL')}</div>
+                    </div>
+                `;
+            }
+
+            modalBody.innerHTML = html;
+            document.getElementById('modal-overlay').classList.add('active');
+            
+            // Add event listeners for edit and delete buttons
+            document.getElementById('edit-btn').addEventListener('click', () => {
+                openEditModal(worker, date, project);
+            });
+            
+            document.getElementById('delete-btn').addEventListener('click', () => {
+                if (confirm(`האם אתה בטוח שברצונך למחוק את הרשומה של ${worker} ב-${formatDate(date)} בפרויקט ${project}?`)) {
+                    const refToDelete = ref(database, `workLogs/${worker}/${date}/${project}`);
+                    set(refToDelete, null).then(() => {
+                        showNotification('הרשומה נמחקה בהצלחה');
+                        closeModal();
+                        renderView(currentView);
+                    }).catch(error => {
+                        console.error('Error deleting entry:', error);
+                        showNotification('שגיאה במחיקת הרשומה');
+                    });
+                }
+            });
+        }
+
+        function openEditModal(worker, date, project) {
+            const data = workLogsData[worker][date][project];
+            const editForm = document.getElementById('edit-form');
+            
+            // Set header
+            document.getElementById('edit-modal-title').textContent = `עריכת ${project}`;
+            document.getElementById('edit-modal-subtitle').textContent = `${worker} • ${formatDate(date)}`;
+            
+            // Fill project select with available projects
+            const projectSelect = document.getElementById('edit-project');
+            const projects = Object.values(projectsList).sort((a, b) => 
+                a.name.localeCompare(b.name, 'he')
+            );
+            
+            projectSelect.innerHTML = '<option value="" disabled>בחר פרויקט</option>';
+            projects.forEach(proj => {
+                const option = document.createElement('option');
+                option.value = proj.name;
+                option.textContent = proj.name;
+                if (proj.name === project) {
+                    option.selected = true;
+                }
+                projectSelect.appendChild(option);
+            });
+            
+            projectSelect.value = project;
+            
+            // Update header when project selection changes
+            projectSelect.addEventListener('change', (e) => {
+                document.getElementById('edit-modal-title').textContent = `עריכת ${e.target.value}`;
+            }, { once: false });
+            
+            // Fill other fields
+            document.getElementById('edit-address').value = data.address || '';
+            document.getElementById('edit-issues').value = data.issues || '';
+            document.getElementById('edit-nextVisit').value = data.nextVisit || '';
+            
+            // Fill floors
+            const floorsContainer = document.getElementById('floors-container');
+            floorsContainer.innerHTML = '';
+            if (data.floors && Object.keys(data.floors).length > 0) {
+                Object.keys(data.floors).forEach(floor => {
+                    const floorValue = data.floors[floor];
+                    if (floor && floorValue) {
+                        addFloorInput(floor, floorValue);
+                    }
+                });
+            }
+            
+            // Fill equipment
+            const equipmentContainer = document.getElementById('equipment-container');
+            equipmentContainer.innerHTML = '';
+            if (data.equipment && data.equipment.length > 0) {
+                data.equipment.forEach(item => {
+                    if (item.name || item.quantity) {
+                        addEquipmentInput(item.name || '', item.quantity || '');
+                    }
+                });
+            }
+            
+            // Store original data for reference
+            editForm.dataset.worker = worker;
+            editForm.dataset.date = date;
+            editForm.dataset.project = project;
+            
+            // Show edit modal
+            closeModal();
+            document.getElementById('edit-modal-overlay').classList.add('active');
+        }
+
+        function addFloorInput(floorNumber = '', floorValue = '') {
+            const floorsContainer = document.getElementById('floors-container');
+            const floorGroup = document.createElement('div');
+            floorGroup.className = 'floor-input-group';
+            
+            // Create floor select
+            const floorSelect = document.createElement('select');
+            floorSelect.className = 'edit-form-input floor-number';
+            
+            // Add options
+            for (let i = -5; i <= 40; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i < 0 ? `מינוס ${Math.abs(i)}` : (i === 0 ? 'קרקע' : `קומה ${i}`);
+                if (i.toString() === floorNumber) {
+                    option.selected = true;
+                }
+                floorSelect.appendChild(option);
+            }
+            
+            floorGroup.appendChild(floorSelect);
+            
+            // Add work description input
+            const workInput = document.createElement('input');
+            workInput.type = 'text';
+            workInput.className = 'edit-form-input floor-value';
+            workInput.placeholder = 'תיאור העבודה';
+            workInput.value = floorValue;
+            floorGroup.appendChild(workInput);
+            
+            // Add delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.type = 'button';
+            deleteBtn.className = 'floor-delete-btn';
+            deleteBtn.textContent = 'מחק';
+            deleteBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                floorGroup.remove();
+            });
+            floorGroup.appendChild(deleteBtn);
+            
+            floorsContainer.appendChild(floorGroup);
+        }
+
+        function addEquipmentInput(equipmentName = '', equipmentQuantity = '') {
+            const equipmentContainer = document.getElementById('equipment-container');
+            const equipmentGroup = document.createElement('div');
+            equipmentGroup.className = 'equipment-item-group';
+            equipmentGroup.innerHTML = `
+                <input type="text" class="edit-form-input equipment-name" placeholder="שם הציוד" value="${equipmentName}">
+                <input type="text" class="edit-form-input equipment-quantity" placeholder="כמות" value="${equipmentQuantity}">
+                <button type="button" class="equipment-delete-btn">מחק</button>
+            `;
+            
+            equipmentGroup.querySelector('.equipment-delete-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                equipmentGroup.remove();
+            });
+            
+            equipmentContainer.appendChild(equipmentGroup);
+        }
+
+        // Handle add floor button
+        document.getElementById('add-floor-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            addFloorInput();
+        });
+
+        // Handle add equipment button
+        document.getElementById('add-equipment-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            addEquipmentInput();
+        });
+
+        // Handle edit form submission
+        document.getElementById('edit-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const worker = e.target.dataset.worker;
+            const date = e.target.dataset.date;
+            const oldProject = e.target.dataset.project;
+            const newProject = document.getElementById('edit-project').value;
+            
+            if (!newProject) {
+                showNotification('בחר פרויקט');
+                return;
+            }
+            
+            try {
+                // Collect floors data
+                const floors = {};
+                document.querySelectorAll('.floor-input-group').forEach(group => {
+                    const floorNumber = group.querySelector('.floor-number').value;
+                    const floorValue = group.querySelector('.floor-value').value;
+                    if (floorNumber && floorValue) {
+                        floors[floorNumber] = floorValue;
+                    }
+                });
+                
+                // Collect equipment data
+                const equipment = [];
+                document.querySelectorAll('.equipment-item-group').forEach(group => {
+                    const name = group.querySelector('.equipment-name').value;
+                    const quantity = group.querySelector('.equipment-quantity').value;
+                    if (name || quantity) {
+                        equipment.push({
+                            name: name || '',
+                            quantity: quantity || ''
+                        });
+                    }
+                });
+                
+                // Prepare updated data
+                const updatedData = {
+                    ...workLogsData[worker][date][oldProject],
+                    address: document.getElementById('edit-address').value,
+                    floors: floors,
+                    equipment: equipment,
+                    issues: document.getElementById('edit-issues').value,
+                    nextVisit: document.getElementById('edit-nextVisit').value
+                };
+                
+                // If project changed, delete old and create new
+                if (oldProject !== newProject) {
+                    // Delete old entry
+                    const oldRef = ref(database, `workLogs/${worker}/${date}/${oldProject}`);
+                    await set(oldRef, null);
+                    
+                    // Create new entry with new project name
+                    const newRef = ref(database, `workLogs/${worker}/${date}/${newProject}`);
+                    await set(newRef, updatedData);
+                } else {
+                    // Update existing entry
+                    const updateRef = ref(database, `workLogs/${worker}/${date}/${oldProject}`);
+                    await set(updateRef, updatedData);
+                }
+                
+                showNotification('הרשומה עודכנה בהצלחה!');
+                document.getElementById('edit-modal-overlay').classList.remove('active');
+                renderView(currentView);
+            } catch (error) {
+                console.error('Error updating entry:', error);
+                showNotification('שגיאה בעדכון הרשומה');
+            }
+        });
+
+        // Handle cancel edit button
+        document.getElementById('edit-cancel-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('edit-modal-overlay').classList.remove('active');
+        });
+
+        // Close edit modal when clicking on overlay
+        document.getElementById('edit-modal-overlay').addEventListener('click', (e) => {
+            if (e.target.id === 'edit-modal-overlay') {
+                document.getElementById('edit-modal-overlay').classList.remove('active');
+            }
+        });
+
+        window.closeModal = function() {
+            document.getElementById('modal-overlay').classList.remove('active');
+        };
+
+        document.getElementById('modal-overlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

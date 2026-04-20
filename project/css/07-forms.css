@@ -1,0 +1,43 @@
+/* ============================================ */
+/* FORM ELEMENTS */
+/* ============================================ */
+
+textarea,
+input[type="text"],
+input[type="tel"],
+select {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 5px;
+  font-size: 0.9em;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="tel"]:focus,
+select:focus {
+  outline: none;
+  border-color: #83a737;
+  box-shadow: 0 0 0 2px rgba(131, 167, 55, 0.2);
+}
+
+button {
+  padding: 8px;
+  font-size: 0.9em;
+  width: 100%;
+  margin-bottom: 5px;
+  transition: transform 0.2s, background-color 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.03);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.required {
+  color: red;
+}

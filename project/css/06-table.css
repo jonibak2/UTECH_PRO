@@ -1,0 +1,78 @@
+/* ============================================ */
+/* SCHEDULE TABLE */
+/* ============================================ */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+  margin: 10px 0;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out 0.45s forwards;
+}
+
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+  vertical-align: top;
+  position: relative;
+}
+
+th {
+  background: #83a737;
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+th:hover {
+  background-color: rgba(131, 167, 55, 0.9);
+}
+
+th.name {
+  background: #fc9247;
+}
+
+#schedule-table {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out 0.45s forwards;
+}
+
+#schedule-table tbody tr {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+#schedule-table tbody tr:nth-child(1) { animation-delay: 0.6s; }
+#schedule-table tbody tr:nth-child(2) { animation-delay: 0.75s; }
+#schedule-table tbody tr:nth-child(3) { animation-delay: 0.9s; }
+#schedule-table tbody tr:nth-child(4) { animation-delay: 1.05s; }
+#schedule-table tbody tr:nth-child(5) { animation-delay: 1.2s; }
+#schedule-table tbody tr:nth-child(6) { animation-delay: 1.35s; }
+
+#schedule-table thead th {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+#schedule-table thead th:nth-child(1) { animation-delay: 0.5s; }
+#schedule-table thead th:nth-child(2) { animation-delay: 0.55s; }
+#schedule-table thead th:nth-child(3) { animation-delay: 0.6s; }
+#schedule-table thead th:nth-child(4) { animation-delay: 0.65s; }
+#schedule-table thead th:nth-child(5) { animation-delay: 0.7s; }
+#schedule-table thead th:nth-child(6) { animation-delay: 0.75s; }
+
+.today {
+  background: #965fa9 !important;
+  color: rgb(255, 255, 255);
+}
+
+.bottom-names-row td {
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  border-top: 2px solid #ccc;
+  background-color: #83a737;
+  color: white;
+}
