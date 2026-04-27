@@ -18,8 +18,8 @@ input[type="text"]:focus,
 input[type="tel"]:focus,
 select:focus {
   outline: none;
-  border-color: #83a737;
-  box-shadow: 0 0 0 2px rgba(131, 167, 55, 0.2);
+  border-color: #6AB053;
+  box-shadow: 0 0 0 2px rgba(106, 176, 83, 0.2);
 }
 
 button {

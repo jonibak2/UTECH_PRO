@@ -42,7 +42,7 @@
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
-  background: #83a737;
+  background: #6AB053;
   color: white;
   font-weight: bold;
   font-size: 16px;
@@ -53,9 +53,9 @@
 }
 
 .nav-btn:hover {
-  background: #6d8c2f;
+  background: #5A9043;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(131, 167, 55, 0.3);
+  box-shadow: 0 4px 12px rgba(106, 176, 83, 0.3);
 }
 
 .nav-group {
@@ -69,7 +69,7 @@
   padding: 8px 16px;
   border: none;
   border-radius: 6px;
-  background: #83a737;
+  background: #6AB053;
   color: white;
   font-weight: bold;
   font-size: 13px;
@@ -81,5 +81,5 @@
 }
 
 .nav-sub-btn:hover {
-  background: #83a737;
+  background: #6AB053;
 }

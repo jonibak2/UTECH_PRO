@@ -1,0 +1,138 @@
+/* ============================================ */
+/* PROJECT MANAGEMENT MODAL */
+/* ============================================ */
+
+.project-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s;
+}
+
+.project-modal-overlay.active {
+    display: flex;
+}
+
+.project-modal {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+.project-modal-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #6AB053;
+}
+
+.project-modal-header h2 {
+    color: #6AB053;
+    margin: 0;
+}
+
+.project-modal-input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.project-modal-input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.project-modal-input:focus {
+    outline: none;
+    border-color: #6AB053;
+}
+
+.project-modal-add-btn {
+    padding: 12px 24px;
+    background: #6AB053;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.project-modal-add-btn:hover {
+    background: #5A9043;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(106, 176, 83, 0.3);
+}
+
+.project-list {
+    margin-bottom: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.project-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.2s;
+}
+
+.project-item:hover {
+    background: #f0f0f0;
+    border-color: #6AB053;
+}
+
+.project-item-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.project-item-delete {
+    padding: 6px 12px;
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.project-item-delete:hover {
+    background: #ff3838;
+    transform: scale(1.05);
+}
+
+.project-modal-close {
+    padding: 12px 24px;
+    background: #e0e0e0;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.project-modal-close:hover {
+    background: #d0d0d0;
+}

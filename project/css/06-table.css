@@ -21,13 +21,13 @@ td {
 }
 
 th {
-  background: #83a737;
+  background: #6AB053;
   color: white;
   transition: background-color 0.2s ease;
 }
 
 th:hover {
-  background-color: rgba(131, 167, 55, 0.9);
+  background-color: rgba(106, 176, 83, 0.9);
 }
 
 th.name {
@@ -73,6 +73,6 @@ th.name {
   font-weight: bold;
   padding: 10px;
   border-top: 2px solid #ccc;
-  background-color: #83a737;
+  background-color: #6AB053;
   color: white;
 }

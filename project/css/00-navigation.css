@@ -1,0 +1,276 @@
+/* ===== Navigation Drawer ===== */
+:root {
+  --nav-color-schedule: #6AB053;
+  --nav-color-logs: #8FB04B;
+  --nav-color-logs-fill: #8FB04B;
+  --nav-color-service: #8a8f99;
+  --nav-color-service-fill: #8a8f99;
+}
+
+/* Hamburger Menu Button */
+.nav-hamburger {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 9998;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  max-width: max-content;
+  line-height: 0;
+  transition: all 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-hamburger:hover {
+    transform: scale(1.1);
+  }
+}
+
+.hamburger-line {
+  width: 25px;
+  height: 3px;
+  background: #333;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.nav-hamburger.active .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translate(8px, 8px);
+}
+
+.nav-hamburger.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-hamburger.active .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translate(10px, -9px);
+}
+
+/* Navigation Drawer */
+.nav-drawer {
+  position: fixed;
+  top: 0;
+  right: -350px;
+  width: 350px;
+  height: 100vh;
+  background: white;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.nav-drawer.active {
+  right: 0;
+}
+
+.nav-drawer-header {
+  padding: 20px;
+  text-align: center;
+  border-bottom: 2px solid #f0f0f0;
+  margin-bottom: 15px;
+}
+
+.nav-drawer-header img {
+  max-width: 200px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.nav-drawer-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Navigation Items */
+.nav-drawer-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.nav-item {
+  padding: 18px 20px;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+  text-align: right;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-item:hover {
+    transform: translateX(-5px);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Schedule - Green */
+.nav-item.schedule {
+  background: #6AB053;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-item.schedule:hover {
+    background: #5A9043;
+  }
+}
+
+.nav-item.schedule.active {
+  border-left-color: white;
+  box-shadow: inset 5px 0 0 white;
+  background: #5A9043;
+}
+
+/* Work Logs - Medium Green */
+.nav-item.logs {
+  background: #8FB04B;
+  color: white;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-item.logs:hover {
+    background: #7F9A3B;
+  }
+}
+
+.nav-item.logs.active {
+  border-left-color: white;
+  box-shadow: inset 5px 0 0 white;
+  background: #7F9A3B;
+}
+
+/* Fill Work Notes - Same as Logs */
+.nav-item.fill-notes {
+  background: #8FB04B;
+  color: white;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-item.fill-notes:hover {
+    background: #7F9A3B;
+  }
+}
+
+.nav-item.fill-notes.active {
+  border-left-color: white;
+  box-shadow: inset 5px 0 0 white;
+  background: #7F9A3B;
+}
+
+/* Service Calls - Muted Green */
+.nav-item.service {
+  background: #8a8f99;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-item.service:hover {
+    background: #747a84;
+  }
+}
+
+.nav-item.service.active {
+  border-left-color: white;
+  box-shadow: inset 5px 0 0 white;
+  background: #747a84;
+}
+
+/* Fill Service - Same as Service */
+.nav-item.fill-service {
+  background: #8a8f99;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-item.fill-service:hover {
+    background: #747a84;
+  }
+}
+
+.nav-item.fill-service.active {
+  border-left-color: white;
+  box-shadow: inset 5px 0 0 white;
+  background: #747a84;
+}
+
+/* Building Codes + Service Agreements */
+.nav-item.building-codes,
+.nav-item.service-agreement,
+.nav-item.fill-service-agreement {
+  background: #8a8f99;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-item.building-codes:hover,
+  .nav-item.service-agreement:hover,
+  .nav-item.fill-service-agreement:hover {
+    background: #747a84;
+  }
+}
+
+.nav-item.building-codes.active,
+.nav-item.service-agreement.active,
+.nav-item.fill-service-agreement.active {
+  border-left-color: white;
+  box-shadow: inset 5px 0 0 white;
+  background: #747a84;
+}
+
+.nav-item.building-codes {
+  background: #4b5d2d;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-item.building-codes:hover {
+    background: #3f4f26;
+  }
+}
+
+.nav-item.building-codes.active {
+  border-left-color: white;
+  box-shadow: inset 5px 0 0 white;
+  background: #3f4f26;
+}
+
+/* Overlay when drawer is open */
+.nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9997;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.nav-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .nav-hamburger,
+  .nav-overlay,
+  .nav-drawer {
+    display: none !important;
+  }
+}

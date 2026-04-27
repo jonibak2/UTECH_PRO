@@ -5,937 +5,52 @@
     <link rel="icon" href="project/assets/logo.jpg" type="image/jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>צפייה ביומן עבודה</title>
+    <!-- Navigation & Notifications -->
+    <link rel="stylesheet" href="project/css/00-navigation.css" />
     <link rel="stylesheet" href="project/css/16-notifications.css" />
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            padding: 20px;
-        }
-
-        .header {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .nav-btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            background: #83a737;
-            color: white;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .nav-btn:hover {
-            background: #6d8c2f;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(131, 167, 55, 0.3);
-        }
-
-        .nav-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .nav-sub-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            background: #83a737;
-            color: white;
-            font-weight: bold;
-            font-size: 13px;
-            cursor: not-allowed;
-            opacity: 0.6;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .nav-sub-btn:hover {
-            background: #83a737;
-        }
-
-        .logo {
-            max-width: 500px;
-            height: auto;
-        }
-
-        .view-toggle {
-            display: flex;
-            gap: 10px;
-            background: #f0f0f0;
-            padding: 5px;
-            border-radius: 8px;
-        }
-
-        .search-container {
-            display: none;
-            width: 100%;
-            max-width: 500px;
-            margin-top: 10px;
-        }
-
-        .search-container.active {
-            display: block;
-        }
-
-        #date-search-container {
-            display: none !important;
-            width: 100%;
-            max-width: 500px;
-            margin-top: 10px;
-        }
-
-        #date-search-container.active {
-            display: block !important;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #83a737;
-        }
-
-        .view-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            background: transparent;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            color: #666;
-        }
-
-        .view-btn:hover {
-            background: rgba(131, 167, 55, 0.1);
-        }
-
-        .view-btn.active {
-            background: #83a737;
-            color: white;
-        }
-
-        .columns-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            max-width: 100%;
-        }
-
-        .column {
-            flex: 0 0 calc(16.666% - 12.5px);
-            min-width: 250px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            max-height: calc(100vh - 180px);
-            animation: fadeInUp 0.4s ease-out forwards;
-        }
-
-        @media (max-width: 1800px) {
-            .column {
-                flex: 0 0 calc(20% - 12px);
-            }
-        }
-
-        @media (max-width: 1400px) {
-            .column {
-                flex: 0 0 calc(25% - 11.25px);
-            }
-        }
-
-        @media (max-width: 1100px) {
-            .column {
-                flex: 0 0 calc(33.333% - 10px);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .column-header {
-            padding: 18px;
-            background: #83a737;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-            text-align: center;
-            border-radius: 8px 8px 0 0;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .column-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 12px;
-        }
-
-        .nested-item {
-            margin-bottom: 10px;
-            border-radius: 6px;
-            overflow: hidden;
-            background: #f8f9fa;
-            border: 1px solid #e0e0e0;
-            transition: all 0.3s;
-        }
-
-        .nested-item:hover {
-            box-shadow: 0 2px 8px rgba(131, 167, 55, 0.2);
-            border-color: #83a737;
-        }
-
-        .nested-header {
-            padding: 12px;
-            background: #f0f0f0;
-            cursor: pointer;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            user-select: none;
-            transition: background 0.2s;
-        }
-
-        .nested-header:hover {
-            background: #e8e8e8;
-        }
-
-        .arrow {
-            transition: transform 0.3s;
-            font-size: 12px;
-            color: #83a737;
-        }
-
-        .arrow.expanded {
-            transform: rotate(90deg);
-        }
-
-        .nested-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            padding: 0 12px;
-        }
-
-        .nested-content.expanded {
-            max-height: 1000px;
-            padding: 12px;
-        }
-
-        .address-item, .final-item {
-            margin: 6px 0;
-            padding: 10px;
-            background: white;
-            border-radius: 4px;
-            cursor: pointer;
-            border: 1px solid #e0e0e0;
-            transition: all 0.2s;
-        }
-
-        .address-item:hover, .final-item:hover {
-            background: #f8f9fa;
-            border-color: #83a737;
-            transform: translateX(-2px);
-        }
-
-        /* Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            overflow-y: auto;
-            animation: fadeIn 0.3s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-overlay.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            max-width: 800px;
-            width: 100%;
-            border-radius: 12px;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: modalSlideIn 0.3s ease-out;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                transform: scale(0.9) translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1) translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-
-        .modal-close:hover {
-            background: #ee3742;
-        }
-
-        .modal-header {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #83a737;
-        }
-
-        .modal-header h2 {
-            color: #83a737;
-            margin-bottom: 8px;
-        }
-
-        .modal-header h3 {
-            color: #666;
-            font-weight: normal;
-        }
-
-        .data-section {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #83a737;
-        }
-
-        .data-label {
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #333;
-            font-size: 14px;
-        }
-
-        .data-value {
-            color: #666;
-            white-space: pre-wrap;
-            line-height: 1.6;
-        }
-
-        .floor-item {
-            background: white;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 4px;
-            border: 1px solid #e0e0e0;
-        }
-
-        .floor-title {
-            font-weight: bold;
-            color: #83a737;
-            margin-bottom: 5px;
-        }
-
-        .equipment-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .equipment-list li {
-            padding: 8px;
-            margin: 5px 0;
-            background: white;
-            border-radius: 4px;
-            border-right: 3px solid #83a737;
-        }
-
-        .loading, .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
-            font-size: 18px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        /* Scrollbar styling */
-        .column-content::-webkit-scrollbar,
-        .modal-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .column-content::-webkit-scrollbar-track,
-        .modal-content::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-
-        .column-content::-webkit-scrollbar-thumb,
-        .modal-content::-webkit-scrollbar-thumb {
-            background: #83a737;
-            border-radius: 4px;
-        }
-
-        .column-content::-webkit-scrollbar-thumb:hover,
-        .modal-content::-webkit-scrollbar-thumb:hover {
-            background: #6d8c2f;
-        }
-
-        /* Project management modal */
-        .project-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s;
-        }
-
-        .project-modal-overlay.active {
-            display: flex;
-        }
-
-        .project-modal {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            animation: modalSlideIn 0.3s ease-out;
-        }
-
-        .project-modal-header {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #83a737;
-        }
-
-        .project-modal-header h2 {
-            color: #83a737;
-            margin: 0;
-        }
-
-        .project-modal-input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .project-modal-input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        .project-modal-input:focus {
-            outline: none;
-            border-color: #83a737;
-        }
-
-        .project-modal-add-btn {
-            padding: 12px 24px;
-            background: #83a737;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .project-modal-add-btn:hover {
-            background: #6d8c2f;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(131, 167, 55, 0.3);
-        }
-
-        .project-list {
-            margin-bottom: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .project-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            border: 1px solid #e0e0e0;
-            transition: all 0.2s;
-        }
-
-        .project-item:hover {
-            background: #f0f0f0;
-            border-color: #83a737;
-        }
-
-        .project-item-name {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .project-item-delete {
-            padding: 6px 12px;
-            background: #ff4757;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .project-item-delete:hover {
-            background: #ff3838;
-            transform: scale(1.05);
-        }
-
-        .project-modal-close {
-            padding: 12px 24px;
-            background: #e0e0e0;
-            color: #333;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .project-modal-close:hover {
-            background: #d0d0d0;
-        }
-
-        /* Date search container improvements */
-        #date-search-container {
-            position: relative;
-        }
-
-        #date-search-input {
-            appearance: none;
-            background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2383a737' stroke-width='2'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") no-repeat;
-            background-position: left 12px center;
-            padding-left: 45px !important;
-            cursor: pointer;
-        }
-
-        #date-search-input::-webkit-calendar-picker-indicator {
-            cursor: pointer;
-            border-radius: 4px;
-            margin-right: 6px;
-            opacity: 0;
-            width: 0;
-        }
-
-        /* Edit modal styles */
-        .edit-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1500;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .edit-modal-overlay.active {
-            display: flex;
-        }
-
-        .edit-modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            animation: modalSlideIn 0.3s ease-out;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .edit-modal-header {
-            margin-bottom: 24px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #83a737;
-        }
-
-        .edit-modal-header h2 {
-            color: #83a737;
-            margin: 0 0 5px 0;
-            font-size: 24px;
-        }
-
-        .edit-modal-header p {
-            color: #666;
-            margin: 0;
-            font-size: 14px;
-        }
-
-        .edit-form-group {
-            margin-bottom: 20px;
-        }
-
-        .edit-form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #333;
-            font-size: 14px;
-        }
-
-        .edit-form-input,
-        .edit-form-textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: Arial, sans-serif;
-            transition: border-color 0.3s;
-            box-sizing: border-box;
-        }
-
-        .edit-form-input:focus,
-        .edit-form-textarea:focus {
-            outline: none;
-            border-color: #83a737;
-            background: #f9fff6;
-        }
-
-        select.edit-form-input {
-            background: white;
-            appearance: none;
-            cursor: pointer;
-            padding-left: 15px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: left 12px center;
-            padding-left: 35px;
-        }
-
-        .edit-form-textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .edit-form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .edit-modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .edit-save-btn {
-            flex: 1;
-            padding: 12px 24px;
-            background: #83a737;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .edit-save-btn:hover {
-            background: #6d8c2f;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(131, 167, 55, 0.3);
-        }
-
-        .edit-cancel-btn {
-            flex: 1;
-            padding: 12px 24px;
-            background: #e0e0e0;
-            color: #333;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .edit-cancel-btn:hover {
-            background: #d0d0d0;
-        }
-
-        .floor-input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            align-items: flex-end;
-        }
-
-        .floor-input-group select {
-            flex: 0.8;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: Arial, sans-serif;
-            transition: border-color 0.3s;
-            box-sizing: border-box;
-        }
-
-        .floor-input-group select:focus {
-            outline: none;
-            border-color: #83a737;
-            background: #f9fff6;
-        }
-
-        .floor-input-group input {
-            flex: 1;
-        }
-
-        .floor-delete-btn {
-            padding: 8px 12px;
-            background: #ff4757;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s;
-            flex-shrink: 0;
-        }
-
-        .floor-delete-btn:hover {
-            background: #ff3838;
-        }
-
-        .equipment-delete-btn {
-            padding: 6px 10px;
-            background: #ff4757;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 11px;
-            transition: all 0.2s;
-            flex-shrink: 0;
-        }
-
-        .equipment-delete-btn:hover {
-            background: #ff3838;
-        }
-
-        .add-floor-btn {
-            padding: 8px 16px;
-            background: #83a737;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: bold;
-            transition: all 0.2s;
-            margin-top: 10px;
-        }
-
-        .add-floor-btn:hover {
-            background: #6d8c2f;
-        }
-
-        .equipment-item-group {
-            display: grid;
-            grid-template-columns: 2fr 1fr auto;
-            gap: 8px;
-            margin-bottom: 10px;
-            align-items: flex-end;
-        }
-
-        .add-equipment-btn {
-            padding: 8px 16px;
-            background: #83a737;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: bold;
-            transition: all 0.2s;
-            margin-top: 10px;
-        }
-
-        .add-equipment-btn:hover {
-            background: #6d8c2f;
-        }
-
-        /* Date picker styles */
-        #date-picker {
-            animation: slideDown 0.2s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        #calendar-grid button {
-            padding: 8px;
-            border: 1px solid #e0e0e0;
-            background: white;
-            cursor: pointer;
-            border-radius: 6px;
-            font-size: 12px;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-
-        #calendar-grid button:hover {
-            background: #f0f0f0;
-            border-color: #83a737;
-        }
-
-        #calendar-grid button.other-month {
-            color: #ccc;
-            background: #f9f9f9;
-        }
-
-        #calendar-grid button.today {
-            background: #e8f5e9;
-            border-color: #83a737;
-            font-weight: bold;
-        }
-
-        #calendar-grid button.selected {
-            background: #83a737;
-            color: white;
-            border-color: #83a737;
-        }
-
-        #calendar-grid button.disabled {
-            color: #ccc;
-            cursor: not-allowed;
-        }
-
-        #date-picker-toggle:focus {
-            outline: none;
-            border-color: #83a737;
-        }
-
-        #date-picker-toggle:hover {
-            border-color: #83a737;
-        }
-    </style>
+    <!-- View CSS Modules -->
+    <link rel="stylesheet" href="project/css2/01-base.css" />
+    <link rel="stylesheet" href="project/css2/02-header.css" />
+    <link rel="stylesheet" href="project/css2/03-view-toggle.css" />
+    <link rel="stylesheet" href="project/css2/04-columns.css" />
+    <link rel="stylesheet" href="project/css2/05-nested-items.css" />
+    <link rel="stylesheet" href="project/css2/06-modal.css" />
+    <link rel="stylesheet" href="project/css2/07-project-modal.css" />
+    <link rel="stylesheet" href="project/css2/08-edit-modal.css" />
+    <link rel="stylesheet" href="project/css2/09-scrollbar-picker.css" />
+    <link rel="stylesheet" href="project/css2/10-responsive.css" />
+</head>
 </head>
 <body>
+    <!-- Navigation Drawer -->
+    <button class="nav-hamburger" id="nav-toggle">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+    
+    <div class="nav-overlay" id="nav-overlay"></div>
+    
+    <nav class="nav-drawer" id="nav-drawer">
+      <div class="nav-drawer-header">
+        <img src="project/assets/utech.png" alt="Utech">
+        <div class="nav-drawer-title">תפריט</div>
+      </div>
+      <div class="nav-drawer-items">
+        <a href="index.html" class="nav-item schedule" data-page="index">סידור עבודה</a>
+        <a href="view.html" class="nav-item logs active" data-page="view">יומני עבודה</a>
+        <a href="tofes.html" class="nav-item fill-notes" data-page="tofes">מילוי יומן עבודה</a>
+        <a href="codes-list.html" class="nav-item building-codes" data-page="codes-list">קודים לבניינים</a>
+        <a href="#" class="nav-item service" data-page="service">קריאות שירות פתוחות</a>
+        <a href="#" class="nav-item fill-service" data-page="fill-service">מילוי קריאת שירות</a>
+        <a href="#" class="nav-item service-agreement" data-page="service-agreement">הסכמי שירות</a>
+        <a href="#" class="nav-item fill-service-agreement" data-page="fill-service-agreement">מילוי הסכמי שירות</a>
+      </div>
+    </nav>
+    
     <div class="header">
-        <div class="header-top">
-            <div class="nav-group">
-                <a href="tofes.html" class="nav-btn">למילוי היומן</a>
-                <button disabled class="nav-sub-btn">מילוי קריאת שירות</button>
-            </div>
+        <div style="text-align: center; margin-bottom: 20px;">
             <img src="project/assets/utech.png" alt="Utech" class="logo">
-            <div class="nav-group">
-                <a href="index.html" class="nav-btn">סידור עבודה</a>
-                <button disabled class="nav-sub-btn">קריאות שירות פתחות</button>
-            </div>
         </div>
         <div class="view-toggle">
             <button class="view-btn active" data-view="project">לפי פרויקט</button>
@@ -952,18 +67,18 @@
                     <span style="font-size: 18px;">📅</span>
                     <span id="date-display">בחר תאריך...</span>
                 </button>
-                <div id="date-picker" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 2px solid #83a737; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; width: 100%; min-width: 320px; padding: 15px;">
+                <div id="date-picker" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 2px solid #6AB053; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; width: 100%; min-width: 320px; padding: 15px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <button type="button" id="prev-month" style="background: none; border: none; cursor: pointer; font-size: 18px; color: #83a737;">►</button>
+                        <button type="button" id="prev-month" style="background: none; border: none; cursor: pointer; font-size: 18px; color: #6AB053;">►</button>
                         <span id="month-year" style="font-weight: bold; color: #333; text-align: center;"></span>
-                        <button type="button" id="next-month" style="background: none; border: none; cursor: pointer; font-size: 18px; color: #83a737;">◄</button>
+                        <button type="button" id="next-month" style="background: none; border: none; cursor: pointer; font-size: 18px; color: #6AB053;">◄</button>
                     </div>
                     <div id="calendar-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;"></div>
                 </div>
             </div>
         </div>
         <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
-            <button id="add-project-btn" style="padding: 12px 24px; background: #83a737; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">הוסף פרויקט</button>
+            <button id="add-project-btn" style="padding: 12px 24px; background: #6AB053; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">הוסף פרויקט</button>
         </div>
     </div>
 
@@ -1085,7 +200,7 @@
               position: fixed;
               top: 20px;
               right: 20px;
-              background-color: #83a737;
+              background-color: #6AB053;
               color: white;
               padding: 12px 20px;
               border-radius: 6px;
@@ -1692,7 +807,7 @@
                     <h2><b>${project}</b></h2>
                     <h3>${worker} • ${formatDate(date)}${data.address ? ' • ' + data.address : ''}</h3>
                     <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button id="edit-btn" style="padding: 10px 20px; background: #83a737; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.3s; flex: 1;">עריכה</button>
+                        <button id="edit-btn" style="padding: 10px 20px; background: #6AB053; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.3s; flex: 1;">עריכה</button>
                         <button id="delete-btn" style="padding: 10px 20px; background: #ff4757; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.3s; flex: 1;">מחק</button>
                     </div>
                 </div>
@@ -2022,6 +1137,73 @@
                 closeModal();
             }
         });
+
+        // Navigation Drawer Setup
+        function setupNavigation() {
+            const navToggle = document.getElementById('nav-toggle');
+            const navDrawer = document.getElementById('nav-drawer');
+            const navOverlay = document.getElementById('nav-overlay');
+            const navItems = document.querySelectorAll('.nav-item');
+            const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+
+            if (!navToggle || !navDrawer || !navOverlay || !navItems.length) return;
+
+            const closeDrawer = () => {
+                navToggle.classList.remove('active');
+                navDrawer.classList.remove('active');
+                navOverlay.classList.remove('active');
+            };
+
+            if (!isDesktop) {
+                closeDrawer();
+                return;
+            }
+            
+            // Get current page from URL
+            const currentPage = window.location.pathname.split('/').pop().split('.')[0] || 'index';
+            
+            // Set active nav item
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-page') === currentPage) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Toggle drawer on hamburger click
+            navToggle.addEventListener('click', () => {
+                navToggle.classList.toggle('active');
+                navDrawer.classList.toggle('active');
+                navOverlay.classList.toggle('active');
+            });
+            
+            // Close drawer on overlay click
+            navOverlay.addEventListener('click', closeDrawer);
+            
+            // Close drawer when clicking a nav item
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    closeDrawer();
+                });
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeDrawer();
+            });
+
+            window.addEventListener('resize', () => {
+                if (!window.matchMedia('(min-width: 769px)').matches) {
+                    closeDrawer();
+                }
+            });
+        }
+        
+        // Call setup when DOM is loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupNavigation);
+        } else {
+            setupNavigation();
+        }
     </script>
 </body>
 </html>

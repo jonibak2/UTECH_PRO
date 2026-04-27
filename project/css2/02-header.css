@@ -1,0 +1,74 @@
+/* ============================================ */
+/* HEADER & LOGO */
+/* ============================================ */
+
+.header {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+.logo {
+    max-width: 500px;
+    height: auto;
+}
+
+.nav-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background: #6AB053;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.nav-btn:hover {
+    background: #5A9043;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(106, 176, 83, 0.3);
+}
+
+.nav-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.nav-sub-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #6AB053;
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: not-allowed;
+    opacity: 0.6;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.nav-sub-btn:hover {
+    background: #6AB053;
+}

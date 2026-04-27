@@ -1,0 +1,67 @@
+/* ============================================ */
+/* VIEW TOGGLE & SEARCH */
+/* ============================================ */
+
+.view-toggle {
+    display: flex;
+    gap: 10px;
+    background: #f0f0f0;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.view-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    color: #666;
+}
+
+.view-btn:hover {
+    background: rgba(106, 176, 83, 0.1);
+}
+
+.view-btn.active {
+    background: #6AB053;
+    color: white;
+}
+
+.search-container {
+    display: none;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 10px;
+}
+
+.search-container.active {
+    display: block;
+}
+
+#date-search-container {
+    display: none !important;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 10px;
+}
+
+#date-search-container.active {
+    display: block !important;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #6AB053;
+}
