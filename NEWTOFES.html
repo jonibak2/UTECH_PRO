@@ -499,7 +499,6 @@ textarea {
 <script type="module">
 /* ===== Firebase Setup ===== */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
 import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
@@ -509,12 +508,10 @@ const firebaseConfig = {
   projectId: "tofes-43c54",
   storageBucket: "tofes-43c54.firebasestorage.app",
   messagingSenderId: "634166786476",
-  appId: "1:634166786476:web:e5118489dcf3066fcba209",
-  measurementId: "G-WS6QJN5RCT"
+  appId: "1:634166786476:web:e5118489dcf3066fcba209"
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const database = getDatabase(app);
 
         /* ===== Load projects from Firebase ===== */
