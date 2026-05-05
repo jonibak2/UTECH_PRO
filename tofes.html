@@ -176,45 +176,6 @@ textarea {
   font-size: 0.9em;
 }
 
-/* ===== Equipment ===== */
-.equipment-item {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 6px;
-}
-
-.equipment-item input[type="text"] {
-  flex: 3;
-}
-
-.equipment-item input[type="number"] {
-  flex: 1;
-}
-
-.remove-equipment {
-  width: 32px;
-  min-width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #ff4444;
-  color: white;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-  padding: 0;
-}
-
-.add-btn {
-  margin-top: 6px;
-  background: #e0e0e0;
-  border: none;
-  padding: 8px;
-  border-radius: 6px;
-  cursor: pointer;
-  width: 100%;
-  font-size: 0.9em;
-}
-
 /* ===== Submit ===== */
 .submit-btn {
   background: #6AB053;
@@ -473,12 +434,6 @@ textarea {
 <div id="floorWorkContainer"></div>
 
 <div class="form-group">
-<label>אביזרים וציוד שהותקנו / הוחלפו</label>
-<div id="equipmentList"></div>
-<button type="button" class="add-btn" onclick="addEquipment()">➕ הוסף פריט</button>
-</div>
-
-<div class="form-group">
 <label>תקלות / ליקויים שהתגלו</label>
 <textarea id="issues"></textarea>
 </div>
@@ -604,7 +559,6 @@ const database = getDatabase(app);
             document.getElementById('workForm').reset();
             activeFloors.clear();
             floorWorkContainer.innerHTML = '';
-            document.getElementById('equipmentList').innerHTML = '';
         });
 
         /* ===== Storage helpers ===== */
@@ -621,7 +575,6 @@ const database = getDatabase(app);
             
             await set(reportRef, {
               floors: data.floors,
-              equipment: data.equipment,
               issues: data.issues,
               nextVisit: data.nextVisit,
               timestamp: data.timestamp
@@ -782,27 +735,6 @@ function toggleFloor(floor, chip) {
 // Make toggleFloor available globally
 window.toggleFloor = toggleFloor;
 
-/* ===== Equipment ===== */
-function addEquipment() {
-  const div = document.createElement("div");
-  div.className = "equipment-item";
-  div.innerHTML = `
-    <input type="text" placeholder="שם פריט" class="equipment-name">
-    <input type="number" placeholder="כמות" class="equipment-quantity">
-    <button type="button" class="remove-equipment">✕</button>
-  `;
-  
-  // Add remove listener
-  div.querySelector('.remove-equipment').addEventListener('click', function() {
-    this.parentElement.remove();
-  });
-  
-  document.getElementById("equipmentList").appendChild(div);
-}
-
-// Make addEquipment available globally
-window.addEquipment = addEquipment;
-
 /* ===== Form submission ===== */
 document.getElementById('workForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -817,16 +749,6 @@ document.getElementById('workForm').addEventListener('submit', async (e) => {
     setTimeout(() => messageDiv.innerHTML = '', 3000);
     return;
   }
-  
-  // Collect equipment
-  const equipment = [];
-  document.querySelectorAll('.equipment-item').forEach(item => {
-    const name = item.querySelector('.equipment-name').value;
-    const quantity = item.querySelector('.equipment-quantity').value;
-    if (name || quantity) {
-      equipment.push({ name, quantity });
-    }
-  });
   
   // Collect floor work
   const floorWork = {};
@@ -848,7 +770,6 @@ document.getElementById('workForm').addEventListener('submit', async (e) => {
     workDate: document.getElementById('workDate').value,
     project: document.getElementById('project').value,
     floors: floorWork,
-    equipment: equipment,
     issues: document.getElementById('issues').value,
     nextVisit: document.getElementById('nextVisit').value,
     timestamp: new Date().toISOString()
@@ -898,7 +819,6 @@ document.getElementById('workForm').addEventListener('submit', async (e) => {
         activeFloors.clear();
         document.querySelectorAll('.floor-chip').forEach(chip => chip.classList.remove('active'));
         floorWorkContainer.innerHTML = '';
-        document.getElementById('equipmentList').innerHTML = '';
       }, 500);
     }, 2500);
   } else {

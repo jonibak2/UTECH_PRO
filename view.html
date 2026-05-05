@@ -151,13 +151,20 @@
         }
 
         .worker-marker {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
             border: 2px solid rgba(0, 0, 0, 0.15);
             cursor: pointer;
             transition: transform 0.15s ease, box-shadow 0.15s ease;
             position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 800;
+            font-size: 14px;
+            line-height: 1;
         }
 
         .worker-marker:hover {
@@ -223,6 +230,13 @@
             gap: 6px;
             font-size: 13px;
             color: #444;
+        }
+
+        .legend-section-title {
+            width: 100%;
+            font-weight: 700;
+            color: #333;
+            margin-top: 4px;
         }
 
         .legend-dot {
@@ -904,8 +918,9 @@
             const projectConfig = Object.values(projectsList || {}).find(p => p?.name === projectName);
             const totalFloors = Number(projectConfig?.floors);
 
-            if (Number.isInteger(totalFloors) && totalFloors > 0) {
-                for (let i = 1; i <= totalFloors; i++) {
+            // Keep floor range in sync with tofes.html: always include minus floors down to -5.
+            if (Number.isInteger(totalFloors) && totalFloors >= 0) {
+                for (let i = -5; i <= totalFloors; i++) {
                     floorsSet.add(String(i));
                 }
             }
@@ -1026,7 +1041,7 @@
             matrixData.floors.forEach(floor => {
                 const row = document.createElement('tr');
                 const floorCell = document.createElement('th');
-                floorCell.textContent = floor;
+                floorCell.textContent = getFloorDisplayLabel(floor);
                 row.appendChild(floorCell);
 
                 matrixData.equipment.forEach(eq => {
@@ -1037,11 +1052,15 @@
 
                     const entries = matrixData.cellMap.get(`${floor}|||${eq}`) || [];
                     entries.forEach(({ worker, date, project, data }) => {
+                        const statusText = getStatusForCell(data, floor, eq);
+                        const statusSymbol = getStatusSymbol(statusText);
+
                         const marker = document.createElement('button');
                         marker.type = 'button';
                         marker.className = 'worker-marker';
                         marker.style.backgroundColor = getWorkerColor(worker);
                         marker.style.position = 'relative';
+                        marker.textContent = statusSymbol;
                         marker.setAttribute('aria-label', `${worker} ${formatDate(date)}`);
                         
                         // Create tooltip
@@ -1049,16 +1068,8 @@
                         tooltip.className = 'worker-marker-tooltip';
                         
                         // Extract floor and equipment info
-                        let floorInfo = '—';
-                        let statusInfo = '—';
-                        if (data.floors && Object.keys(data.floors).length > 0) {
-                            const firstFloor = Object.keys(data.floors)[0];
-                            const floorData = data.floors[firstFloor];
-                            if (floorData && typeof floorData === 'object') {
-                                floorInfo = floorData.equipment || '—';
-                                statusInfo = floorData.status || '—';
-                            }
-                        }
+                        const floorInfo = eq || '—';
+                        const statusInfo = statusText || '—';
                         
                         tooltip.innerHTML = `
                             <div style="font-weight: bold; font-size: 15px; margin-bottom: 2px;">${worker}</div>
@@ -1102,7 +1113,7 @@
             legend.className = 'project-legend';
 
             const title = document.createElement('div');
-            title.style.cssText = 'width: 100%; font-weight: 700; color: #333;';
+            title.className = 'legend-section-title';
             title.textContent = 'צבעי עובדים:';
             legend.appendChild(title);
 
@@ -1130,7 +1141,46 @@
                 legend.appendChild(item);
             });
 
+            const statusTitle = document.createElement('div');
+            statusTitle.className = 'legend-section-title';
+            statusTitle.textContent = 'מקרא סטטוסים:';
+            legend.appendChild(statusTitle);
+
+            const statusLegend = [
+                { symbol: '?', label: 'לא בוצע צנרת' },
+                { symbol: '-', label: 'חיווט בלבד' },
+                { symbol: '+', label: 'הותקן אביזר קופ (למעט גלאי)' },
+                { symbol: '%', label: 'הותקן גלאי' },
+                { symbol: '±', label: 'הותקן בסיס' }
+            ];
+
+            statusLegend.forEach(itemData => {
+                const item = document.createElement('div');
+                item.className = 'legend-item';
+
+                const symbol = document.createElement('span');
+                symbol.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;background:#f1f3f6;border:1px solid #d8dde6;font-weight:800;font-size:13px;color:#1f2937;';
+                symbol.textContent = itemData.symbol;
+
+                const text = document.createElement('span');
+                text.textContent = itemData.label;
+
+                item.appendChild(symbol);
+                item.appendChild(text);
+                legend.appendChild(item);
+            });
+
             return legend;
+        }
+
+        function getFloorDisplayLabel(floor) {
+            const text = String(floor).trim();
+            if (text === '0') return 'קרקע';
+            const numberFloor = Number(text);
+            if (!Number.isNaN(numberFloor) && numberFloor < 0) {
+                return `מינוס ${Math.abs(numberFloor)}`;
+            }
+            return text;
         }
 
         function floorSortValue(floor) {
@@ -1142,18 +1192,110 @@
             return 9000;
         }
 
-        function getWorkerColor(workerName) {
-            const palette = [
-                '#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6',
-                '#1abc9c', '#e67e22', '#34495e', '#16a085', '#8e44ad',
-                '#d35400', '#2c3e50', '#c0392b', '#27ae60', '#2980b9'
-            ];
+        const workerColorMap = new Map();
+        const assignedWorkerColorMeta = [];
+
+        function stringHash(value) {
             let hash = 0;
-            for (let i = 0; i < workerName.length; i++) {
-                hash = ((hash << 5) - hash) + workerName.charCodeAt(i);
+            for (let i = 0; i < value.length; i++) {
+                hash = ((hash << 5) - hash) + value.charCodeAt(i);
                 hash |= 0;
             }
-            return palette[Math.abs(hash) % palette.length];
+            return Math.abs(hash);
+        }
+
+        function hslDistance(a, b) {
+            const hueDiffRaw = Math.abs(a.h - b.h);
+            const hueDiff = Math.min(hueDiffRaw, 360 - hueDiffRaw) / 180;
+            const satDiff = Math.abs(a.s - b.s) / 100;
+            const lightDiff = Math.abs(a.l - b.l) / 100;
+            return (hueDiff * 0.7) + (satDiff * 0.2) + (lightDiff * 0.1);
+        }
+
+        function getWorkerColor(workerName) {
+            const key = String(workerName || '').trim();
+            if (!key) return 'hsl(0, 0%, 55%)';
+
+            if (workerColorMap.has(key)) {
+                return workerColorMap.get(key);
+            }
+
+            const hash = stringHash(key);
+            const satVariants = [72, 84, 62, 92];
+            const lightVariants = [46, 52, 40, 58];
+            const hueStep = 137.508; // golden angle
+            const maxAttempts = 720;
+
+            let bestCandidate = null;
+            let bestScore = -1;
+
+            for (let i = 0; i < maxAttempts; i++) {
+                const h = Math.round((hash + (i * hueStep)) % 360);
+                const s = satVariants[(Math.floor(hash / 7) + i) % satVariants.length];
+                const l = lightVariants[(Math.floor(hash / 13) + i) % lightVariants.length];
+                const candidate = { h, s, l };
+
+                let minDistance = Infinity;
+                for (const existing of assignedWorkerColorMeta) {
+                    const dist = hslDistance(candidate, existing);
+                    if (dist < minDistance) minDistance = dist;
+                }
+
+                if (assignedWorkerColorMeta.length === 0) {
+                    bestCandidate = candidate;
+                    break;
+                }
+
+                if (minDistance > bestScore) {
+                    bestScore = minDistance;
+                    bestCandidate = candidate;
+                }
+
+                // Strong separation threshold.
+                if (minDistance >= 0.22) {
+                    break;
+                }
+            }
+
+            const chosen = bestCandidate || { h: hash % 360, s: 78, l: 48 };
+            const chosenColor = `hsl(${chosen.h}, ${chosen.s}%, ${chosen.l}%)`;
+
+            workerColorMap.set(key, chosenColor);
+            assignedWorkerColorMeta.push(chosen);
+            return chosenColor;
+        }
+
+        function normalizeStatus(status) {
+            return String(status || '').trim().replace(/\s+/g, ' ');
+        }
+
+        function getStatusSymbol(status) {
+            const normalized = normalizeStatus(status);
+            if (normalized === 'לא בוצע צנרת') return '?';
+            if (normalized === 'חיווט בלבד') return '-';
+            if (normalized === 'הותקן אביזר קופ (למעט גלאי)' || normalized === 'הותן אביזר קופ (למעט גלאי)') return '+';
+            if (normalized === 'הותקן גלאי') return '%';
+            if (normalized === 'הותקן בסיס') return '±';
+            return '•';
+        }
+
+        function getStatusForCell(data, floor, equipment) {
+            const floorsData = data?.floors;
+            if (!floorsData || typeof floorsData !== 'object') return '—';
+
+            const floorData = floorsData[floor];
+            if (floorData && typeof floorData === 'object') {
+                const floorEquipment = String(floorData.equipment || '')
+                    .split(',')
+                    .map(part => part.trim())
+                    .filter(Boolean);
+
+                if (floorEquipment.length === 0 || floorEquipment.includes(equipment)) {
+                    return floorData.status || '—';
+                }
+            }
+
+            return '—';
         }
 
         function createColumn(title, index) {
