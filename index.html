@@ -39,6 +39,7 @@
         onValue,
         get,
         off,
+        forceWebSockets,
       } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
       const firebaseConfig = {
@@ -52,6 +53,7 @@
       };
 
       const app = initializeApp(firebaseConfig);
+      forceWebSockets();
       const db = getDatabase(app);
 
       const isAdmin = { status: false };
