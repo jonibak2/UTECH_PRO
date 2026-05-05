@@ -13,7 +13,6 @@
     <!-- View CSS Modules -->
     <link rel="stylesheet" href="project/css2/01-base.css" />
     <link rel="stylesheet" href="project/css2/02-header.css" />
-    <link rel="stylesheet" href="project/css2/03-view-toggle.css" />
     <link rel="stylesheet" href="project/css2/04-columns.css" />
     <link rel="stylesheet" href="project/css2/05-nested-items.css" />
     <link rel="stylesheet" href="project/css2/06-modal.css" />
@@ -21,6 +20,245 @@
     <link rel="stylesheet" href="project/css2/08-edit-modal.css" />
     <link rel="stylesheet" href="project/css2/09-scrollbar-picker.css" />
     <link rel="stylesheet" href="project/css2/10-responsive.css" />
+    <style>
+        .project-form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .project-modal-input-group {
+            margin-bottom: 15px;
+        }
+
+        .project-table-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0 16px;
+            flex-wrap: wrap;
+        }
+
+        .project-table-controls label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .project-table-controls select {
+            min-width: 280px;
+            padding: 10px 12px;
+            border: 1px solid #d4d4d4;
+            border-radius: 8px;
+            background: #fff;
+            font-size: 14px;
+        }
+
+        .date-filter-row {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            border-top: 1px solid #ececec;
+            padding-top: 10px;
+            margin-top: 4px;
+        }
+
+        .date-filter-row input[type="date"] {
+            padding: 9px 10px;
+            border: 1px solid #d4d4d4;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #fff;
+        }
+
+        .date-filter-today-btn {
+            padding: 9px 14px;
+            border: none;
+            border-radius: 8px;
+            background: #6AB053;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .date-filter-all-btn {
+            padding: 9px 14px;
+            border: 1px solid #d4d4d4;
+            border-radius: 8px;
+            background: #fff;
+            color: #333;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .project-matrix-wrapper {
+            overflow: auto;
+            border: 1px solid #e6e6e6;
+            border-radius: 10px;
+            background: #fff;
+            max-height: calc(100vh - 280px);
+        }
+
+        .project-matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        .project-matrix-table th,
+        .project-matrix-table td {
+            border: 1px solid #ececec;
+            padding: 8px;
+            text-align: center;
+            vertical-align: top;
+        }
+
+        .project-matrix-table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background: #f6f8fb;
+            font-weight: 700;
+            color: #243447;
+            white-space: nowrap;
+        }
+
+        .project-matrix-table tbody th {
+            position: sticky;
+            right: 0;
+            background: #fbfcfe;
+            z-index: 1;
+            min-width: 90px;
+        }
+
+        .matrix-cell {
+            min-width: 120px;
+            min-height: 56px;
+        }
+
+        .matrix-icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            min-height: 40px;
+        }
+
+        .worker-marker {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            position: relative;
+        }
+
+        .worker-marker:hover {
+            transform: scale(1.12);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+        }
+
+        .worker-marker-tooltip {
+            position: absolute;
+            background: #333;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 1500;
+            pointer-events: none;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-16px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            min-width: 200px;
+            white-space: nowrap;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .worker-marker-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #333;
+        }
+
+        .worker-marker:hover .worker-marker-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .project-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            margin-top: 12px;
+            padding: 10px;
+            border: 1px dashed #d9d9d9;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #444;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            display: inline-block;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        #data-container.fade-out {
+            animation: fadeOut 0.3s ease forwards;
+        }
+
+        #data-container.fade-in {
+            animation: fadeIn 0.3s ease forwards;
+        }
+    </style>
 </head>
 </head>
 <body>
@@ -42,6 +280,8 @@
         <a href="index.html" class="nav-item schedule" data-page="index">סידור עבודה</a>
         <a href="view.html" class="nav-item logs active" data-page="view">יומני עבודה</a>
         <a href="tofes.html" class="nav-item fill-notes" data-page="tofes">מילוי יומן עבודה</a>
+        <a href="NEWTOFES.html" class="nav-item trial-page" data-page="NEWTOFES">טופס מילוי - נסיון</a>
+        <a href="NEWVIEW.html" class="nav-item trial-page" data-page="NEWVIEW">טבלת ביצוע - נסיון</a>
         <a href="codes-list.html" class="nav-item building-codes" data-page="codes-list">קודים לבניינים</a>
         <a href="#" class="nav-item service" data-page="service">קריאות שירות פתוחות</a>
         <a href="#" class="nav-item fill-service" data-page="fill-service">מילוי קריאת שירות</a>
@@ -54,32 +294,7 @@
         <div style="text-align: center; margin-bottom: 20px;">
             <img src="project/assets/utech.png" alt="Utech" class="logo">
         </div>
-        <div class="view-toggle">
-            <button class="view-btn active" data-view="project">לפי פרויקט</button>
-            <button class="view-btn" data-view="date">לפי תאריך</button>
-            <button class="view-btn" data-view="worker">לפי עובד</button>
-            <button class="view-btn" data-view="address">לפי כתובת</button>
-        </div>
-        <div class="search-container" id="search-container">
-            <input type="text" class="search-input" id="search-input" placeholder="חפש כתובת...">
-        </div>
-        <div id="date-search-container" style="display: none; width: 100%; max-width: 500px; margin-top: 10px;">
-            <div style="position: relative;">
-                <button id="date-picker-toggle" style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; text-align: left; font-size: 16px; cursor: pointer; transition: border-color 0.3s; display: flex; align-items: center; gap: 10px; color: #666;">
-                    <span style="font-size: 18px;">📅</span>
-                    <span id="date-display">בחר תאריך...</span>
-                </button>
-                <div id="date-picker" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 2px solid #6AB053; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; width: 100%; min-width: 320px; padding: 15px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <button type="button" id="prev-month" style="background: none; border: none; cursor: pointer; font-size: 18px; color: #6AB053;">►</button>
-                        <span id="month-year" style="font-weight: bold; color: #333; text-align: center;"></span>
-                        <button type="button" id="next-month" style="background: none; border: none; cursor: pointer; font-size: 18px; color: #6AB053;">◄</button>
-                    </div>
-                    <div id="calendar-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;"></div>
-                </div>
-            </div>
-        </div>
-        <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+        <div style="display: flex; gap: 10px; align-items: center;">
             <button id="add-project-btn" style="padding: 12px 24px; background: #6AB053; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">הוסף פרויקט</button>
         </div>
     </div>
@@ -94,10 +309,39 @@
                 <h2>ניהול פרויקטים</h2>
             </div>
             
-            <div class="project-modal-input-group">
-                <input type="text" id="project-modal-input" class="project-modal-input" placeholder="הזן שם פרויקט חדש">
-                <button id="project-modal-add-btn" class="project-modal-add-btn">הוסף</button>
-            </div>
+            <form id="project-form">
+                <!-- Project Name -->
+                <div class="project-modal-input-group">
+                    <label class="project-form-label">שם פרויקט *</label>
+                    <input type="text" id="project-name-input" class="project-modal-input" placeholder="הזן שם פרויקט חדש" required>
+                </div>
+
+                <!-- Address -->
+                <div class="project-modal-input-group">
+                    <label class="project-form-label">כתובת</label>
+                    <input type="text" id="project-address-input" class="project-modal-input" placeholder="הזן כתובת (לא חובה)">
+                </div>
+
+                <!-- Project Manager -->
+                <div class="project-modal-input-group">
+                    <label class="project-form-label">מנהל פרויקט *</label>
+                    <input type="text" id="project-manager-input" class="project-modal-input" placeholder="שם מנהל הפרויקט" required>
+                </div>
+
+                <!-- Project Manager Phone -->
+                <div class="project-modal-input-group">
+                    <label class="project-form-label">טלפון מנהל פרויקט *</label>
+                    <input type="tel" id="project-phone-input" class="project-modal-input" placeholder="טלפון מנהל הפרויקט" required>
+                </div>
+
+                <!-- Number of Floors -->
+                <div class="project-modal-input-group">
+                    <label class="project-form-label">מספר קומות *</label>
+                    <input type="number" id="project-floors-input" class="project-modal-input" placeholder="הזן מספר קומות" min="1" required>
+                </div>
+
+                <button type="submit" id="project-modal-add-btn" class="project-modal-add-btn">הוסף פרויקט</button>
+            </form>
 
             <div class="project-list" id="project-list"></div>
 
@@ -172,7 +416,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue, push, set, forceWebSockets } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDuvwDMAsyQSURluc7Mr-Ow5r2Iq2xh9P8",
@@ -181,17 +425,46 @@
             projectId: "tofes-43c54",
             storageBucket: "tofes-43c54.firebasestorage.app",
             messagingSenderId: "634166786476",
-            appId: "1:634166786476:web:e5118489dcf3066fcba209",
-            measurementId: "G-WS6QJN5RCT"
+            appId: "1:634166786476:web:e5118489dcf3066fcba209"
         };
 
         const app = initializeApp(firebaseConfig);
+        forceWebSockets();
         const database = getDatabase(app);
 
         let workLogsData = null;
         let currentView = 'project';
-        let searchQuery = '';
         let projectsList = {};
+        let selectedProjectForTable = '';
+        let selectedDateFrom = '';
+        let selectedDateTo = '';
+        const MASTER_EQUIPMENT_OPTIONS = [
+            'לובי 1 גלאי 1',
+            'לובי 1 גלאי 2',
+            'לובי מעליות',
+            'לובי 2 גלאי 1',
+            'לובי 2 גלאי 2',
+            'שוט',
+            'מדרגות 1',
+            'מדרגות 2',
+            'IN',
+            'לחצן 1',
+            'לחצן 2',
+            'צופר 1',
+            'צופר 2',
+            'מגנט 1',
+            'מגנט 2',
+            'מגנט 3',
+            'מגנט 4',
+            'שקע טלפון חדר מדרגות 1',
+            'שקע טלפון חדר מדרגות 2',
+            'שקע טלפון לובי מעליות',
+            'רמקול לובי 1',
+            'רמקול לובי 2',
+            'רמקול לובי מעליות',
+            'רמקול חדר מדרגות 1',
+            'רמקול חדר מדרגות 2'
+        ];
 
         // Notification function
         function showNotification(message) {
@@ -249,10 +522,28 @@
             projects.forEach(([projectId, project]) => {
                 const projectItem = document.createElement('div');
                 projectItem.className = 'project-item';
-                projectItem.innerHTML = `
-                    <span class="project-item-name">${project.name}</span>
-                    <button class="project-item-delete" data-project-id="${projectId}">מחק</button>
+                projectItem.style.cssText = `
+                    padding: 15px;
+                    border: 1px solid #e0e0e0;
+                    border-radius: 8px;
+                    margin-bottom: 10px;
+                    background: #f9f9f9;
                 `;
+                
+                let projectInfo = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+                        <div style="flex: 1;">
+                            <div style="font-weight: bold; font-size: 16px; margin-bottom: 8px;">${project.name}</div>
+                            <div style="font-size: 14px; color: #666; margin-bottom: 5px;"><strong>מנהל:</strong> ${project.manager || '-'}</div>
+                            <div style="font-size: 14px; color: #666; margin-bottom: 5px;"><strong>טלפון:</strong> ${project.phone || '-'}</div>
+                            ${project.address ? `<div style="font-size: 14px; color: #666; margin-bottom: 5px;"><strong>כתובת:</strong> ${project.address}</div>` : ''}
+                            <div style="font-size: 14px; color: #666;"><strong>קומות:</strong> ${project.floors || '-'}</div>
+                        </div>
+                        <button class="project-item-delete" data-project-id="${projectId}" style="padding: 8px 12px; background: #ff4757; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; white-space: nowrap;">מחק</button>
+                    </div>
+                `;
+                
+                projectItem.innerHTML = projectInfo;
                 
                 projectItem.querySelector('.project-item-delete').addEventListener('click', async () => {
                     if (confirm(`האם אתה בטוח שברצונך למחוק את הפרויקט "${project.name}"?`)) {
@@ -274,41 +565,53 @@
         // Open project modal
         document.getElementById('add-project-btn').addEventListener('click', () => {
             document.getElementById('project-modal-overlay').classList.add('active');
-            document.getElementById('project-modal-input').focus();
+            document.getElementById('project-name-input').focus();
         });
 
         // Close project modal
         document.getElementById('project-modal-close-btn').addEventListener('click', () => {
             document.getElementById('project-modal-overlay').classList.remove('active');
-            document.getElementById('project-modal-input').value = '';
+            document.getElementById('project-form').reset();
         });
 
         // Close modal when clicking outside
         document.getElementById('project-modal-overlay').addEventListener('click', (e) => {
             if (e.target.id === 'project-modal-overlay') {
                 document.getElementById('project-modal-overlay').classList.remove('active');
-                document.getElementById('project-modal-input').value = '';
+                document.getElementById('project-form').reset();
             }
         });
 
-        // Add project from modal
-        document.getElementById('project-modal-add-btn').addEventListener('click', async () => {
+        // Add project from form submission
+        document.getElementById('project-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
             await addProject();
         });
 
-        // Add project when pressing Enter
-        document.getElementById('project-modal-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                addProject();
-            }
-        });
-
         async function addProject() {
-            const projectInput = document.getElementById('project-modal-input');
-            const projectName = projectInput.value.trim();
+            const projectName = document.getElementById('project-name-input').value.trim();
+            const projectAddress = document.getElementById('project-address-input').value.trim();
+            const projectManager = document.getElementById('project-manager-input').value.trim();
+            const projectPhone = document.getElementById('project-phone-input').value.trim();
+            const projectFloors = document.getElementById('project-floors-input').value.trim();
 
             if (!projectName) {
                 showNotification('נא להזין שם פרויקט');
+                return;
+            }
+
+            if (!projectManager) {
+                showNotification('נא להזין שם מנהל פרויקט');
+                return;
+            }
+
+            if (!projectPhone) {
+                showNotification('נא להזין טלפון מנהל פרויקט');
+                return;
+            }
+
+            if (!projectFloors) {
+                showNotification('נא להזין מספר קומות');
                 return;
             }
 
@@ -325,10 +628,14 @@
                 const newProjectRef = push(projectsRef);
                 await set(newProjectRef, {
                     name: projectName,
+                    address: projectAddress,
+                    manager: projectManager,
+                    phone: projectPhone,
+                    floors: parseInt(projectFloors),
                     createdAt: new Date().toISOString()
                 });
 
-                projectInput.value = '';
+                document.getElementById('project-form').reset();
                 showNotification('פרויקט הוסף בהצלחה');
             } catch (error) {
                 console.error('Error adding project:', error);
@@ -344,10 +651,12 @@
             
             if (!workLogsData || Object.keys(workLogsData).length === 0) {
                 document.getElementById('data-container').innerHTML = '<div class="empty-state">אין נתונים להצגה</div>';
+                document.getElementById('data-container').classList.add('fade-in');
                 return;
             }
             
             renderView(currentView);
+            document.getElementById('data-container').classList.add('fade-in');
         });
         function checkDevice() {
         const isMobile = window.matchMedia("(max-width: 768px)").matches || 
@@ -358,162 +667,9 @@
         }
         checkDevice();
 
-        // View toggle
-        document.querySelectorAll('.view-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentView = btn.dataset.view;
-                
-                // Show/hide search based on view
-                const searchContainer = document.getElementById('search-container');
-                const dateSearchContainer = document.getElementById('date-search-container');
-                if (currentView === 'address') {
-                    searchContainer.classList.add('active');
-                    dateSearchContainer.classList.remove('active');
-                } else if (currentView === 'date') {
-                    searchContainer.classList.remove('active');
-                    dateSearchContainer.classList.add('active');
-                } else {
-                    searchContainer.classList.remove('active');
-                    dateSearchContainer.classList.remove('active');
-                    searchQuery = '';
-                    const searchInput = document.getElementById('search-input');
-                    if (searchInput) {
-                        searchInput.value = '';
-                    }
-                }
-                
-                renderView(currentView);
-            });
-        });
-
-        // Search input for address
-        document.getElementById('search-input').addEventListener('input', (e) => {
-            searchQuery = e.target.value.toLowerCase();
-            renderView(currentView);
-        });
-        
-        // Date picker functionality
-        let dateSearchQuery = '';
-        let currentPickerDate = new Date();
-
-        function renderCalendar() {
-            const monthYear = document.getElementById('month-year');
-            const calendarGrid = document.getElementById('calendar-grid');
-            const year = currentPickerDate.getFullYear();
-            const month = currentPickerDate.getMonth();
-
-            // Set header
-            const monthNames = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 
-                               'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
-            monthYear.textContent = `${monthNames[month]} ${year}`;
-
-            // Clear calendar
-            calendarGrid.innerHTML = '';
-
-            // Add day headers
-            const dayHeaders = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
-            dayHeaders.forEach(day => {
-                const dayHeader = document.createElement('div');
-                dayHeader.textContent = day;
-                dayHeader.style.textAlign = 'center';
-                dayHeader.style.fontWeight = 'bold';
-                dayHeader.style.fontSize = '11px';
-                dayHeader.style.color = '#666';
-                dayHeader.style.padding = '5px';
-                calendarGrid.appendChild(dayHeader);
-            });
-
-            // Get first day of month and number of days
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const daysInPrevMonth = new Date(year, month, 0).getDate();
-
-            // Add days from previous month
-            for (let i = firstDay - 1; i >= 0; i--) {
-                const dayBtn = document.createElement('button');
-                dayBtn.textContent = daysInPrevMonth - i;
-                dayBtn.className = 'other-month';
-                dayBtn.disabled = true;
-                dayBtn.type = 'button';
-                calendarGrid.appendChild(dayBtn);
-            }
-
-            // Add days of current month
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayBtn = document.createElement('button');
-                dayBtn.textContent = day;
-                dayBtn.type = 'button';
-
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const today = new Date().toISOString().split('T')[0];
-
-                if (dateStr === today) {
-                    dayBtn.classList.add('today');
-                }
-
-                if (dateStr === dateSearchQuery) {
-                    dayBtn.classList.add('selected');
-                }
-
-                dayBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    dateSearchQuery = dateStr;
-                    document.getElementById('date-display').textContent = dateStr;
-                    renderCalendar();
-                    renderView(currentView);
-                    setTimeout(() => {
-                        document.getElementById('date-picker').style.display = 'none';
-                    }, 200);
-                });
-
-                calendarGrid.appendChild(dayBtn);
-            }
-
-            // Add days from next month
-            const remainingDays = 42 - (firstDay + daysInMonth);
-            for (let day = 1; day <= remainingDays; day++) {
-                const dayBtn = document.createElement('button');
-                dayBtn.textContent = day;
-                dayBtn.className = 'other-month';
-                dayBtn.disabled = true;
-                dayBtn.type = 'button';
-                calendarGrid.appendChild(dayBtn);
-            }
-        }
-
-        // Date picker toggle
-        document.getElementById('date-picker-toggle').addEventListener('click', () => {
-            const datePicker = document.getElementById('date-picker');
-            const isOpen = datePicker.style.display === 'block';
-            datePicker.style.display = isOpen ? 'none' : 'block';
-            if (!isOpen) {
-                renderCalendar();
-            }
-        });
-
-        // Previous/Next month buttons
-        document.getElementById('prev-month').addEventListener('click', (e) => {
-            e.preventDefault();
-            currentPickerDate.setMonth(currentPickerDate.getMonth() - 1);
-            renderCalendar();
-        });
-
-        document.getElementById('next-month').addEventListener('click', (e) => {
-            e.preventDefault();
-            currentPickerDate.setMonth(currentPickerDate.getMonth() + 1);
-            renderCalendar();
-        });
-
-        // Close date picker when clicking outside
-        document.addEventListener('click', (e) => {
-            const dateContainer = document.getElementById('date-search-container');
-            if (dateContainer && dateContainer.classList.contains('active') && 
-                !dateContainer.contains(e.target)) {
-                document.getElementById('date-picker').style.display = 'none';
-            }
-        });
+        // View toggle - only project view available
+        currentView = 'project';
+        renderView(currentView);
 
         function renderView(view) {
             if (!workLogsData) return;
@@ -523,12 +679,6 @@
 
             if (view === 'project') {
                 renderByProject();
-            } else if (view === 'date') {
-                renderByDate();
-            } else if (view === 'worker') {
-                renderByWorker();
-            } else if (view === 'address') {
-                renderByAddress();
             }
         }
 
@@ -538,216 +688,474 @@
             return `${day}.${month}.${year}`;
         }
 
+        function getTodayDateString() {
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function isDateInSelectedFilter(dateStr) {
+            if (!dateStr) return false;
+            if (!selectedDateFrom && !selectedDateTo) return true;
+            if (selectedDateFrom && dateStr < selectedDateFrom) return false;
+            if (selectedDateTo && dateStr > selectedDateTo) return false;
+            return true;
+        }
+
         function renderByProject() {
             const container = document.getElementById('data-container');
-            const columnsContainer = document.createElement('div');
-            columnsContainer.className = 'columns-container';
+            container.innerHTML = '';
+            const projectMap = collectProjectEntries();
+            const sortedProjects = collectSelectableProjects(projectMap);
 
-            // Collect all unique projects
+            if (sortedProjects.length === 0) {
+                container.innerHTML = '<div class="empty-state">אין פרויקטים להצגה</div>';
+                return;
+            }
+
+            if (!selectedProjectForTable || !sortedProjects.includes(selectedProjectForTable)) {
+                selectedProjectForTable = sortedProjects[0];
+            }
+
+            const controls = document.createElement('div');
+            controls.className = 'project-table-controls';
+
+            const label = document.createElement('label');
+            label.setAttribute('for', 'project-table-select');
+            label.textContent = 'בחר פרויקט:';
+
+            const select = document.createElement('select');
+            select.id = 'project-table-select';
+            sortedProjects.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project;
+                option.textContent = project;
+                if (project === selectedProjectForTable) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+
+            select.addEventListener('change', (e) => {
+                const container = document.getElementById('data-container');
+                
+                // Fade out the old table
+                container.classList.remove('fade-in');
+                container.classList.add('fade-out');
+                
+                // Wait for animation to complete, then render new table
+                setTimeout(() => {
+                    selectedProjectForTable = e.target.value;
+                    container.innerHTML = '';
+                    renderByProject();
+                    
+                    // Fade in the new table
+                    container.classList.remove('fade-out');
+                    container.classList.add('fade-in');
+                }, 300);
+            });
+
+            controls.appendChild(label);
+            controls.appendChild(select);
+
+            const dateFilterRow = document.createElement('div');
+            dateFilterRow.className = 'date-filter-row';
+
+            const dateFilterLabel = document.createElement('label');
+            dateFilterLabel.setAttribute('for', 'date-filter-from');
+            dateFilterLabel.textContent = 'סינון לפי תאריך:';
+
+            const dateFromInput = document.createElement('input');
+            dateFromInput.type = 'date';
+            dateFromInput.id = 'date-filter-from';
+            dateFromInput.value = selectedDateFrom;
+
+            const dateToInput = document.createElement('input');
+            dateToInput.type = 'date';
+            dateToInput.id = 'date-filter-to';
+            dateToInput.value = selectedDateTo;
+
+            dateFromInput.addEventListener('change', (e) => {
+                selectedDateFrom = e.target.value;
+                renderByProject();
+            });
+
+            dateToInput.addEventListener('change', (e) => {
+                selectedDateTo = e.target.value;
+                renderByProject();
+            });
+
+            const todayBtn = document.createElement('button');
+            todayBtn.type = 'button';
+            todayBtn.className = 'date-filter-today-btn';
+            todayBtn.textContent = 'היום';
+            todayBtn.addEventListener('click', () => {
+                const today = getTodayDateString();
+                selectedDateFrom = today;
+                selectedDateTo = today;
+                renderByProject();
+            });
+
+            const allDatesBtn = document.createElement('button');
+            allDatesBtn.type = 'button';
+            allDatesBtn.className = 'date-filter-all-btn';
+            allDatesBtn.textContent = 'כל התאריכים';
+            allDatesBtn.addEventListener('click', () => {
+                selectedDateFrom = '';
+                selectedDateTo = '';
+                renderByProject();
+            });
+
+            dateFilterRow.appendChild(dateFilterLabel);
+            dateFilterRow.appendChild(dateFromInput);
+            dateFilterRow.appendChild(dateToInput);
+            dateFilterRow.appendChild(todayBtn);
+            dateFilterRow.appendChild(allDatesBtn);
+            controls.appendChild(dateFilterRow);
+            container.appendChild(controls);
+
+            const entries = (projectMap.get(selectedProjectForTable) || []).filter(entry =>
+                isDateInSelectedFilter(entry.date)
+            );
+
+            if (entries.length === 0) {
+                container.innerHTML += '<div class="empty-state">אין נתונים לתאריכים שנבחרו</div>';
+                return;
+            }
+
+            const matrixData = buildProjectMatrix(entries, selectedProjectForTable);
+            const allWorkers = collectAllWorkers();
+            container.appendChild(createProjectMatrixTable(matrixData, selectedProjectForTable));
+            container.appendChild(createProjectLegend(allWorkers));
+        }
+
+        function collectProjectEntries() {
             const projectMap = new Map();
             Object.keys(workLogsData).forEach(worker => {
-                Object.keys(workLogsData[worker]).forEach(date => {
-                    Object.keys(workLogsData[worker][date]).forEach(project => {
+                Object.keys(workLogsData[worker] || {}).forEach(date => {
+                    Object.keys(workLogsData[worker][date] || {}).forEach(project => {
                         if (!projectMap.has(project)) {
                             projectMap.set(project, []);
                         }
-                        projectMap.get(project).push({ worker, date });
-                    });
-                });
-            });
 
-            const sortedProjects = Array.from(projectMap.keys()).sort();
-
-            sortedProjects.forEach((project, index) => {
-                const column = createColumn(project, index);
-                const entries = projectMap.get(project);
-
-                // Group by worker
-                const workerMap = new Map();
-                entries.forEach(({ worker, date }) => {
-                    if (!workerMap.has(worker)) {
-                        workerMap.set(worker, []);
-                    }
-                    workerMap.get(worker).push(date);
-                });
-
-                Array.from(workerMap.keys()).sort().forEach(worker => {
-                    const workerItem = createNestedItem(worker, () => {
-                        return workerMap.get(worker).sort().reverse().map(date => {
-                            const item = document.createElement('div');
-                            item.className = 'final-item';
-                            item.textContent = formatDate(date);
-                            item.onclick = () => showModal(worker, date, project, true);
-                            return item;
+                        projectMap.get(project).push({
+                            worker,
+                            date,
+                            project,
+                            data: workLogsData[worker][date][project]
                         });
                     });
-                    column.content.appendChild(workerItem);
                 });
-
-                columnsContainer.appendChild(column.element);
             });
-
-            container.appendChild(columnsContainer);
+            return projectMap;
         }
 
-        function renderByWorker() {
-            const container = document.getElementById('data-container');
-            const columnsContainer = document.createElement('div');
-            columnsContainer.className = 'columns-container';
-
-            const workers = Object.keys(workLogsData).sort();
-
-            workers.forEach((worker, index) => {
-                const column = createColumn(worker, index);
-                const dates = Object.keys(workLogsData[worker]).sort().reverse();
-
-                dates.forEach(date => {
-                    const dateItem = createNestedItem(formatDate(date), () => {
-                        const projects = Object.keys(workLogsData[worker][date]);
-                        return projects.map(project => {
-                            const item = document.createElement('div');
-                            item.className = 'address-item';
-                            item.textContent = project;
-                            item.onclick = () => showModal(worker, date, project, true);
-                            return item;
-                        });
-                    });
-                    column.content.appendChild(dateItem);
-                });
-
-                columnsContainer.appendChild(column.element);
+        function collectSelectableProjects(projectMap) {
+            const names = new Set(Array.from(projectMap.keys()));
+            Object.values(projectsList || {}).forEach(project => {
+                if (project?.name) {
+                    names.add(project.name);
+                }
             });
-
-            container.appendChild(columnsContainer);
+            return Array.from(names).sort((a, b) => a.localeCompare(b, 'he'));
         }
 
-        function renderByDate() {
-            const container = document.getElementById('data-container');
-            const columnsContainer = document.createElement('div');
-            columnsContainer.className = 'columns-container';
-
-            // Collect all unique dates
-            const datesMap = new Map();
-            Object.keys(workLogsData).forEach(worker => {
-                Object.keys(workLogsData[worker]).forEach(date => {
-                    if (!datesMap.has(date)) {
-                        datesMap.set(date, []);
-                    }
-                    Object.keys(workLogsData[worker][date]).forEach(project => {
-                        datesMap.get(date).push({ worker, project });
+        function collectAllEquipmentNames() {
+            const names = new Set(MASTER_EQUIPMENT_OPTIONS);
+            Object.keys(workLogsData || {}).forEach(worker => {
+                Object.keys(workLogsData[worker] || {}).forEach(date => {
+                    Object.keys(workLogsData[worker][date] || {}).forEach(project => {
+                        const logData = workLogsData[worker][date][project];
+                        extractEquipmentNamesFromData(logData).forEach(name => names.add(name));
                     });
                 });
             });
 
-            let sortedDates = Array.from(datesMap.keys()).sort().reverse();
-            
-            // Filter dates by date search query if provided
-            if (dateSearchQuery) {
-                sortedDates = sortedDates.filter(date => date === dateSearchQuery);
-            }
-            
-            if (sortedDates.length === 0) {
-                container.innerHTML = '<div class="empty-state">לא נמצאו תאריכים</div>';
-                return;
+            if (names.size === 0) names.add('לא צוין');
+            return Array.from(names).sort((a, b) => a.localeCompare(b, 'he'));
+        }
+
+        function extractEquipmentNamesFromData(data) {
+            const names = new Set();
+
+            if (Array.isArray(data?.equipment)) {
+                data.equipment.forEach(item => {
+                    const name = (item?.name || '').trim();
+                    if (name) names.add(name);
+                });
             }
 
-            sortedDates.forEach((date, index) => {
-                const column = createColumn(formatDate(date), index);
-                const entries = datesMap.get(date);
-
-                // Group by worker
-                const workerMap = new Map();
-                entries.forEach(({ worker, project }) => {
-                    if (!workerMap.has(worker)) {
-                        workerMap.set(worker, []);
-                    }
-                    workerMap.get(worker).push(project);
-                });
-
-                Array.from(workerMap.keys()).sort().forEach(worker => {
-                    const workerItem = createNestedItem(worker, () => {
-                        return workerMap.get(worker).map(project => {
-                            const item = document.createElement('div');
-                            item.className = 'final-item';
-                            item.textContent = project;
-                            item.onclick = () => showModal(worker, date, project, true);
-                            return item;
-                        });
-                    });
-                    column.content.appendChild(workerItem);
-                });
-
-                columnsContainer.appendChild(column.element);
-            });
-
-            container.appendChild(columnsContainer);
-        }
-
-        function renderByAddress() {
-            const container = document.getElementById('data-container');
-            const columnsContainer = document.createElement('div');
-            columnsContainer.className = 'columns-container';
-
-            // Collect all unique addresses from project data
-            const addressMap = new Map();
-            Object.keys(workLogsData).forEach(worker => {
-                Object.keys(workLogsData[worker]).forEach(date => {
-                    Object.keys(workLogsData[worker][date]).forEach(project => {
-                        const projectData = workLogsData[worker][date][project];
-                        const address = projectData.address || 'אין כתובת';
-                        
-                        if (!addressMap.has(address)) {
-                            addressMap.set(address, []);
+            if (data?.floors && typeof data.floors === 'object') {
+                Object.values(data.floors).forEach(floorValue => {
+                    if (floorValue && typeof floorValue === 'object') {
+                        const floorEquipment = String(floorValue.equipment || '').trim();
+                        if (floorEquipment) {
+                            floorEquipment.split(',').map(part => part.trim()).filter(Boolean).forEach(name => names.add(name));
                         }
-                        addressMap.get(address).push({ worker, date, project });
-                    });
-                });
-            });
-
-            // Filter addresses by search query
-            let sortedAddresses = Array.from(addressMap.keys()).sort();
-            if (searchQuery) {
-                sortedAddresses = sortedAddresses.filter(address => 
-                    address.toLowerCase().includes(searchQuery)
-                );
-            }
-
-            if (sortedAddresses.length === 0) {
-                container.innerHTML = '<div class="empty-state">לא נמצאו כתובות</div>';
-                return;
-            }
-
-            sortedAddresses.forEach((address, index) => {
-                const column = createColumn(address, index);
-                const entries = addressMap.get(address);
-
-                // Group by project
-                const projectMap = new Map();
-                entries.forEach(({ worker, date, project }) => {
-                    const key = `${project}`;
-                    if (!projectMap.has(key)) {
-                        projectMap.set(key, []);
                     }
-                    projectMap.get(key).push({ worker, date });
                 });
+            }
 
-                Array.from(projectMap.keys()).sort().forEach(projectKey => {
-                    const projectItem = createNestedItem(projectKey, () => {
-                        return projectMap.get(projectKey).map(({ worker, date }) => {
-                            const item = document.createElement('div');
-                            item.className = 'final-item';
-                            item.textContent = `${worker} - ${formatDate(date)}`;
-                            item.onclick = () => showModal(worker, date, projectKey, true);
-                            return item;
-                        });
-                    });
-                    column.content.appendChild(projectItem);
-                });
+            return Array.from(names);
+        }
 
-                columnsContainer.appendChild(column.element);
+        function collectAllProjectFloors(projectName, entries) {
+            const floorsSet = new Set();
+            const projectConfig = Object.values(projectsList || {}).find(p => p?.name === projectName);
+            const totalFloors = Number(projectConfig?.floors);
+
+            if (Number.isInteger(totalFloors) && totalFloors > 0) {
+                for (let i = 1; i <= totalFloors; i++) {
+                    floorsSet.add(String(i));
+                }
+            }
+
+            entries.forEach(entry => {
+                const entryFloors = entry?.data?.floors && Object.keys(entry.data.floors).length > 0
+                    ? Object.keys(entry.data.floors)
+                    : ['לא צוין'];
+                entryFloors.forEach(floor => floorsSet.add(String(floor).trim()));
             });
 
-            container.appendChild(columnsContainer);
+            if (floorsSet.size === 0) {
+                floorsSet.add('לא צוין');
+            }
+
+            return Array.from(floorsSet).sort((a, b) => floorSortValue(a) - floorSortValue(b));
+        }
+
+        function collectAllWorkers() {
+            return Object.keys(workLogsData || {}).sort((a, b) => a.localeCompare(b, 'he'));
+        }
+
+        function buildProjectMatrix(entries, projectName) {
+            const floorsSet = new Set();
+            const equipmentSet = new Set();
+            const cellMap = new Map();
+            const workersSet = new Set();
+            const allFloors = collectAllProjectFloors(projectName, entries);
+            const allEquipment = collectAllEquipmentNames();
+
+            allFloors.forEach(floor => floorsSet.add(floor));
+            allEquipment.forEach(equipment => equipmentSet.add(equipment));
+
+            entries.forEach(entry => {
+                const { worker, data } = entry;
+                workersSet.add(worker);
+
+                const floors = data?.floors && Object.keys(data.floors).length > 0
+                    ? Object.keys(data.floors)
+                    : ['לא צוין'];
+
+                const floorEquipmentPairs = extractFloorEquipmentPairs(data);
+                if (floorEquipmentPairs.length > 0) {
+                    floorEquipmentPairs.forEach(({ floor, equipment }) => {
+                        const key = `${floor}|||${equipment}`;
+                        if (!cellMap.has(key)) {
+                            cellMap.set(key, []);
+                        }
+                        cellMap.get(key).push(entry);
+                    });
+                    return;
+                }
+
+                const equipmentItems = extractEquipmentNamesFromData(data);
+                const effectiveEquipment = equipmentItems.length > 0 ? equipmentItems : ['לא צוין'];
+                floors.forEach(floor => {
+                    effectiveEquipment.forEach(equipment => {
+                        const key = `${floor}|||${equipment}`;
+                        if (!cellMap.has(key)) {
+                            cellMap.set(key, []);
+                        }
+                        cellMap.get(key).push(entry);
+                    });
+                });
+            });
+
+            const floors = Array.from(floorsSet).sort((a, b) => floorSortValue(a) - floorSortValue(b));
+            const equipment = Array.from(equipmentSet).sort((a, b) => a.localeCompare(b, 'he'));
+            const workers = Array.from(workersSet).sort((a, b) => a.localeCompare(b, 'he'));
+
+            return { floors, equipment, cellMap, workers };
+        }
+
+        function extractFloorEquipmentPairs(data) {
+            const pairs = [];
+            if (!data?.floors || typeof data.floors !== 'object') return pairs;
+
+            Object.entries(data.floors).forEach(([floor, floorValue]) => {
+                if (!floorValue || typeof floorValue !== 'object') return;
+
+                const floorEquipment = String(floorValue.equipment || '').trim();
+                if (!floorEquipment) return;
+
+                floorEquipment
+                    .split(',')
+                    .map(part => part.trim())
+                    .filter(Boolean)
+                    .forEach(eq => {
+                        pairs.push({ floor: String(floor).trim(), equipment: eq });
+                    });
+            });
+
+            return pairs;
+        }
+
+        function createProjectMatrixTable(matrixData, projectName) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'project-matrix-wrapper';
+
+            const table = document.createElement('table');
+            table.className = 'project-matrix-table';
+
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            const floorHeader = document.createElement('th');
+            floorHeader.textContent = 'קומה / אביזר';
+            headerRow.appendChild(floorHeader);
+
+            matrixData.equipment.forEach(eq => {
+                const th = document.createElement('th');
+                th.textContent = eq;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+            matrixData.floors.forEach(floor => {
+                const row = document.createElement('tr');
+                const floorCell = document.createElement('th');
+                floorCell.textContent = floor;
+                row.appendChild(floorCell);
+
+                matrixData.equipment.forEach(eq => {
+                    const td = document.createElement('td');
+                    td.className = 'matrix-cell';
+                    const iconsWrap = document.createElement('div');
+                    iconsWrap.className = 'matrix-icons';
+
+                    const entries = matrixData.cellMap.get(`${floor}|||${eq}`) || [];
+                    entries.forEach(({ worker, date, project, data }) => {
+                        const marker = document.createElement('button');
+                        marker.type = 'button';
+                        marker.className = 'worker-marker';
+                        marker.style.backgroundColor = getWorkerColor(worker);
+                        marker.style.position = 'relative';
+                        marker.setAttribute('aria-label', `${worker} ${formatDate(date)}`);
+                        
+                        // Create tooltip
+                        const tooltip = document.createElement('div');
+                        tooltip.className = 'worker-marker-tooltip';
+                        
+                        // Extract floor and equipment info
+                        let floorInfo = '—';
+                        let statusInfo = '—';
+                        if (data.floors && Object.keys(data.floors).length > 0) {
+                            const firstFloor = Object.keys(data.floors)[0];
+                            const floorData = data.floors[firstFloor];
+                            if (floorData && typeof floorData === 'object') {
+                                floorInfo = floorData.equipment || '—';
+                                statusInfo = floorData.status || '—';
+                            }
+                        }
+                        
+                        tooltip.innerHTML = `
+                            <div style="font-weight: bold; font-size: 15px; margin-bottom: 2px;">${worker}</div>
+                            <div style="font-size: 12px; opacity: 0.85; margin-bottom: 4px;">${formatDate(date)}</div>
+                            <div style="border-top: 1px solid rgba(255,255,255,0.3); padding-top: 3px; display: flex; gap: 12px;">
+                                <div style="font-size: 13px;"><strong>אביזר:</strong> ${floorInfo}</div>
+                                <div style="font-size: 13px;"><strong>סטטוס:</strong> ${statusInfo}</div>
+                            </div>
+                        `;
+                        marker.appendChild(tooltip);
+                        
+                        marker.addEventListener('click', () => {
+                            showModal(worker, date, project, true);
+                        });
+                        marker.addEventListener('mouseenter', () => {
+                            marker.style.borderColor = '#111';
+                        });
+                        marker.addEventListener('mouseleave', () => {
+                            marker.style.borderColor = 'rgba(0, 0, 0, 0.15)';
+                        });
+                        iconsWrap.appendChild(marker);
+                    });
+
+                    if (entries.length === 0) {
+                        td.textContent = '-';
+                    } else {
+                        td.appendChild(iconsWrap);
+                    }
+                    row.appendChild(td);
+                });
+
+                tbody.appendChild(row);
+            });
+            table.appendChild(tbody);
+            wrapper.appendChild(table);
+            return wrapper;
+        }
+
+        function createProjectLegend(workers) {
+            const legend = document.createElement('div');
+            legend.className = 'project-legend';
+
+            const title = document.createElement('div');
+            title.style.cssText = 'width: 100%; font-weight: 700; color: #333;';
+            title.textContent = 'צבעי עובדים:';
+            legend.appendChild(title);
+
+            if (!workers || workers.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'legend-item';
+                empty.textContent = 'אין עובדים להצגה';
+                legend.appendChild(empty);
+                return legend;
+            }
+
+            workers.forEach(worker => {
+                const item = document.createElement('div');
+                item.className = 'legend-item';
+
+                const dot = document.createElement('span');
+                dot.className = 'legend-dot';
+                dot.style.backgroundColor = getWorkerColor(worker);
+
+                const name = document.createElement('span');
+                name.textContent = worker;
+
+                item.appendChild(dot);
+                item.appendChild(name);
+                legend.appendChild(item);
+            });
+
+            return legend;
+        }
+
+        function floorSortValue(floor) {
+            const text = String(floor).trim();
+            if (text === 'לא צוין') return 9999;
+            if (text === 'קרקע') return 0;
+            const num = Number(text);
+            if (!Number.isNaN(num)) return num;
+            return 9000;
+        }
+
+        function getWorkerColor(workerName) {
+            const palette = [
+                '#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6',
+                '#1abc9c', '#e67e22', '#34495e', '#16a085', '#8e44ad',
+                '#d35400', '#2c3e50', '#c0392b', '#27ae60', '#2980b9'
+            ];
+            let hash = 0;
+            for (let i = 0; i < workerName.length; i++) {
+                hash = ((hash << 5) - hash) + workerName.charCodeAt(i);
+                hash |= 0;
+            }
+            return palette[Math.abs(hash) % palette.length];
         }
 
         function createColumn(title, index) {
@@ -818,18 +1226,47 @@
             // Floors
             if (data.floors && Object.keys(data.floors).length > 0) {
                 html += `<div class="data-section">
-                    <div class="data-label">עבודה בקומות:</div>`;
-                Object.keys(data.floors).forEach(floor => {
-                    if (data.floors[floor]) {
+                    <div class="data-label">עבודה בקומות:</div>
+                    <div style="display: grid; gap: 12px; margin-top: 10px;">`;
+                Object.keys(data.floors).sort((a, b) => {
+                    const numA = parseInt(a);
+                    const numB = parseInt(b);
+                    if (isNaN(numA)) return 1;
+                    if (isNaN(numB)) return -1;
+                    return numA - numB;
+                }).forEach(floor => {
+                    const floorValue = data.floors[floor];
+                    if (floorValue) {
+                        let equipment = '—';
+                        let status = '—';
+                        
+                        if (typeof floorValue === 'object') {
+                            equipment = floorValue.equipment || '—';
+                            status = floorValue.status || '—';
+                        } else {
+                            equipment = String(floorValue);
+                        }
+                        
+                        const floorLabel = floor === '0' ? 'קרקע' : (floor < 0 ? `מינוס ${Math.abs(floor)}` : `קומה ${floor}`);
+                        
                         html += `
-                            <div class="floor-item">
-                                <div class="floor-title">קומה ${floor}</div>
-                                <div class="data-value">${data.floors[floor]}</div>
+                            <div style="background: #f5f5f5; padding: 12px; border-radius: 8px; border-right: 4px solid #6AB053;">
+                                <div style="font-weight: 700; color: #333; margin-bottom: 8px; font-size: 14px;">${floorLabel}</div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                    <div>
+                                        <div style="font-weight: 600; color: #666; font-size: 12px; margin-bottom: 3px;">אביזר:</div>
+                                        <div style="color: #333; font-size: 13px;">${equipment}</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600; color: #666; font-size: 12px; margin-bottom: 3px;">סטטוס:</div>
+                                        <div style="color: #333; font-size: 13px;">${status}</div>
+                                    </div>
+                                </div>
                             </div>
                         `;
                     }
                 });
-                html += `</div>`;
+                html += `</div></div>`;
             }
 
             // Equipment
@@ -1146,6 +1583,7 @@
             const navDrawer = document.getElementById('nav-drawer');
             const navOverlay = document.getElementById('nav-overlay');
             const navItems = document.querySelectorAll('.nav-item');
+            const trialLinks = document.querySelectorAll('.nav-item.trial-page');
             const isDesktop = window.matchMedia('(min-width: 769px)').matches;
 
             if (!navToggle || !navDrawer || !navOverlay || !navItems.length) return;
@@ -1170,6 +1608,16 @@
                 if (item.getAttribute('data-page') === currentPage) {
                     item.classList.add('active');
                 }
+            });
+
+            trialLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const accessCode = prompt('הכנס קוד גישה:');
+                    if (accessCode !== '1') {
+                        e.preventDefault();
+                        alert('קוד שגוי');
+                    }
+                });
             });
             
             // Toggle drawer on hamburger click
