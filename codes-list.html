@@ -265,6 +265,7 @@
       const navDrawer = document.getElementById("nav-drawer");
       const navOverlay = document.getElementById("nav-overlay");
       const navItems = document.querySelectorAll(".nav-item");
+      const protectedPages = new Set(["view", "tofes"]);
       const isDesktop = window.matchMedia("(min-width: 769px)").matches;
 
       if (!navToggle || !navDrawer || !navOverlay || !navItems.length) return;
@@ -289,7 +290,18 @@
       navOverlay.addEventListener("click", closeDrawer);
 
       navItems.forEach((item) => {
-        item.addEventListener("click", closeDrawer);
+        item.addEventListener("click", (e) => {
+          const targetPage = item.getAttribute("data-page");
+          if (protectedPages.has(targetPage)) {
+            const accessCode = prompt("הכנס סיסמה:");
+            if (accessCode !== "1") {
+              e.preventDefault();
+              alert("סיסמה שגויה");
+              return;
+            }
+          }
+          closeDrawer();
+        });
       });
 
       document.addEventListener("keydown", (e) => {

@@ -833,7 +833,7 @@ function setupNavigation() {
   const navDrawer = document.getElementById('nav-drawer');
   const navOverlay = document.getElementById('nav-overlay');
   const navItems = document.querySelectorAll('.nav-item');
-  const trialLinks = document.querySelectorAll('.nav-item.trial-page');
+  const protectedPages = new Set(['view', 'tofes']);
   const isDesktop = window.matchMedia('(min-width: 769px)').matches;
 
   if (!navToggle || !navDrawer || !navOverlay || !navItems.length) return;
@@ -860,16 +860,6 @@ function setupNavigation() {
     }
   });
 
-  trialLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      const accessCode = prompt('הכנס קוד גישה:');
-      if (accessCode !== '1') {
-        e.preventDefault();
-        alert('קוד שגוי');
-      }
-    });
-  });
-  
   // Toggle drawer on hamburger click
   navToggle.addEventListener('click', () => {
     navToggle.classList.toggle('active');
@@ -882,7 +872,16 @@ function setupNavigation() {
   
   // Close drawer when clicking a nav item
   navItems.forEach(item => {
-    item.addEventListener('click', () => {
+    item.addEventListener('click', (e) => {
+      const targetPage = item.getAttribute('data-page');
+      if (protectedPages.has(targetPage)) {
+        const accessCode = prompt('הכנס סיסמה:');
+        if (accessCode !== '1') {
+          e.preventDefault();
+          alert('סיסמה שגויה');
+          return;
+        }
+      }
       closeDrawer();
     });
   });
