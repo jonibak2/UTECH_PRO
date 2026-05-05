@@ -235,8 +235,6 @@
       <a href="index.html" class="nav-item schedule" data-page="index">סידור עבודה</a>
       <a href="view.html" class="nav-item logs" data-page="view">יומני עבודה</a>
       <a href="tofes.html" class="nav-item fill-notes" data-page="tofes">מילוי יומן עבודה</a>
-      <a href="NEWTOFES.html" class="nav-item trial-page" data-page="NEWTOFES">טופס מילוי - נסיון</a>
-      <a href="NEWVIEW.html" class="nav-item trial-page" data-page="NEWVIEW">טבלת ביצוע - נסיון</a>
       <a href="codes-list.html" class="nav-item building-codes active" data-page="codes-list">קודים לבניינים </a>
       <a href="#" class="nav-item service" data-page="service">קריאות שירות פתוחות</a>
       <a href="#" class="nav-item fill-service" data-page="fill-service">מילוי קריאת שירות</a>
@@ -265,7 +263,6 @@
       const navDrawer = document.getElementById("nav-drawer");
       const navOverlay = document.getElementById("nav-overlay");
       const navItems = document.querySelectorAll(".nav-item");
-      const trialLinks = document.querySelectorAll(".nav-item.trial-page");
       const isDesktop = window.matchMedia("(min-width: 769px)").matches;
 
       if (!navToggle || !navDrawer || !navOverlay || !navItems.length) return;
@@ -288,16 +285,6 @@
       });
 
       navOverlay.addEventListener("click", closeDrawer);
-
-      trialLinks.forEach((link) => {
-        link.addEventListener("click", (e) => {
-          const accessCode = prompt("הכנס קוד גישה:");
-          if (accessCode !== "1") {
-            e.preventDefault();
-            alert("קוד שגוי");
-          }
-        });
-      });
 
       navItems.forEach((item) => {
         item.addEventListener("click", closeDrawer);
