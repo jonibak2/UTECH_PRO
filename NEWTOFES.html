@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" href="project/assets/logo.jpg" type="image/jpeg" />
+<link rel="apple-touch-icon" href="project/assets/logo.jpg" />
+<meta name="apple-mobile-web-app-title" content="UTECH" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>יומן עבודה</title>
 
@@ -250,6 +252,31 @@ textarea {
   margin-top: 15px;
 }
 
+/* Selection Step */
+.selection-step {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.selection-step .form-group {
+  margin-bottom: 15px;
+}
+
+.selection-step select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 2px solid #e0e0e0;
+  font-size: 0.95em;
+  box-sizing: border-box;
+  background: white;
+  cursor: pointer;
+}
+
+.selection-step select:focus {
+  border-color: #6AB053;
+  outline: none;
+}
+
 /* ===== Success Overlay Animation ===== */
 .success-overlay {
   position: fixed;
@@ -396,20 +423,35 @@ textarea {
 <div class="container">
 <img src="project/assets/utech.png" alt="Utech" class="logo">
 
-<form id="workForm">
+<!-- Selection Step -->
+<div id="selectionStep" class="selection-step">
+  <div class="form-group">
+    <label>שם העובד <span class="required">*</span></label>
+    <select id="workerName" required>
+      <option value="" disabled selected>בחר שם</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>פרויקט <span class="required">*</span></label>
+    <select id="project" required>
+      <option value="" disabled selected>בחר פרויקט</option>
+    </select>
+  </div>
+
+  <button type="button" id="proceedBtn" class="submit-btn">המשך למילוי</button>
+</div>
+
+<!-- Main Form Step -->
+<form id="workForm" style="display: none;">
 <div class="form-group">
-<label>שם העובד <span class="required">*</span></label>
-<select id="workerName" required>
-<option value="" disabled selected>בחר שם</option>
-<option>פאבל</option>
-<option>שי</option>
-<option>ויקטור</option>
-<option>פימה</option>
-<option>יהונתן</option>
-<option>איציק</option>
-<option>יורי</option>
-<option>ראובן</option>
-</select>
+  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+    <button type="button" id="backBtn" style="padding: 8px 16px; background: #ccc; color: #333; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">← חזור</button>
+    <div style="flex: 1;">
+      <div style="font-weight: bold; font-size: 16px;" id="selectedWorkerDisplay"></div>
+      <div style="font-size: 14px; color: #666;" id="selectedProjectDisplay"></div>
+    </div>
+  </div>
 </div>
 
 <div class="form-group">
@@ -418,15 +460,11 @@ textarea {
 </div>
 
 <div class="form-group">
-<label>פרויקט <span class="required">*</span></label>
-<select id="project" required>
-<option value="" disabled selected>בחר פרויקט</option>
-</select>
-</div>
-
-<div class="form-group">
-<label>כתובת</label>
-<input type="text" id="address" placeholder="הזן כתובת">
+  <label>פרטי מנהל הפרויקט</label>
+  <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; font-size: 14px;">
+    <div style="margin-bottom: 8px;"><strong>שם:</strong> <span id="managerNameDisplay">-</span></div>
+    <div><strong>טלפון:</strong> <span id="managerPhoneDisplay">-</span></div>
+  </div>
 </div>
 
 <div class="form-group">
@@ -480,12 +518,32 @@ const analytics = getAnalytics(app);
 const database = getDatabase(app);
 
         /* ===== Load projects from Firebase ===== */
+        let projectsData = {};
+        
+        function loadWorkers() {
+            const workerSelect = document.getElementById('workerName');
+            const workers = ['פאבל', 'שי', 'ויקטור', 'פימה', 'יהונתן', 'איציק', 'יורי', 'ראובן'];
+            
+            workers.forEach(worker => {
+                const option = document.createElement('option');
+                option.value = worker;
+                option.textContent = worker;
+                workerSelect.appendChild(option);
+            });
+        }
+
         function loadProjects() {
             const projectSelect = document.getElementById('project');
             const projectsRef = ref(database, 'projects');
             
             onValue(projectsRef, (snapshot) => {
+                projectsData = {};
                 const projects = snapshot.val() || {};
+                
+                Object.entries(projects).forEach(([id, project]) => {
+                    projectsData[project.name] = project;
+                });
+                
                 const projectArray = Object.values(projects).sort((a, b) => 
                     a.name.localeCompare(b.name, 'he')
                 );
@@ -502,8 +560,56 @@ const database = getDatabase(app);
             });
         }
 
-        // Load projects when page loads
+        // Load workers and projects when page loads
+        loadWorkers();
         loadProjects();
+
+        // Handle project selection and proceed
+        document.getElementById('proceedBtn').addEventListener('click', () => {
+            const workerName = document.getElementById('workerName').value;
+            const projectName = document.getElementById('project').value;
+            
+            if (!workerName) {
+                alert('בחר שם עובד');
+                return;
+            }
+            
+            if (!projectName) {
+                alert('בחר פרויקט');
+                return;
+            }
+            
+            // Get project data
+            const projectData = projectsData[projectName];
+            
+            // Update display
+            document.getElementById('selectedWorkerDisplay').textContent = `עובד: ${workerName}`;
+            document.getElementById('selectedProjectDisplay').textContent = `פרויקט: ${projectName}`;
+            document.getElementById('managerNameDisplay').textContent = projectData.manager || '-';
+            document.getElementById('managerPhoneDisplay').textContent = projectData.phone || '-';
+            
+            // Hide selection step, show form
+            document.getElementById('selectionStep').style.display = 'none';
+            document.getElementById('workForm').style.display = 'block';
+            
+            // Generate floor chips based on project data
+            generateFloorChips(projectData.floors || 0);
+            
+            // Set today's date
+            document.getElementById('workDate').valueAsDate = new Date();
+        });
+
+        // Back button
+        document.getElementById('backBtn').addEventListener('click', () => {
+            document.getElementById('selectionStep').style.display = 'block';
+            document.getElementById('workForm').style.display = 'none';
+            
+            // Reset form
+            document.getElementById('workForm').reset();
+            activeFloors.clear();
+            floorWorkContainer.innerHTML = '';
+            document.getElementById('equipmentList').innerHTML = '';
+        });
 
         /* ===== Storage helpers ===== */
         async function saveReport(data) {
@@ -518,7 +624,6 @@ const database = getDatabase(app);
             const reportRef = ref(database, reportPath);
             
             await set(reportRef, {
-              address: data.address,
               floors: data.floors,
               equipment: data.equipment,
               issues: data.issues,
@@ -541,14 +646,32 @@ const floorGrid = document.getElementById("floorGrid");
 const floorWorkContainer = document.getElementById("floorWorkContainer");
 const activeFloors = new Map();
 
-// Create floor chips
-for (let i = -5; i <= 40; i++) {
-  const chip = document.createElement("div");
-  chip.className = "floor-chip";
-  chip.textContent = i;
-  chip.addEventListener('click', () => toggleFloor(i, chip));
-  floorGrid.appendChild(chip);
+function generateFloorChips(numberOfFloors) {
+  // Clear existing chips
+  floorGrid.innerHTML = '';
+  activeFloors.clear();
+  floorWorkContainer.innerHTML = '';
+  
+  // Generate chips from -5 to numberOfFloors
+  for (let i = -5; i <= numberOfFloors; i++) {
+    const chip = document.createElement("div");
+    chip.className = "floor-chip";
+    
+    if (i < 0) {
+      chip.textContent = `מינוס ${Math.abs(i)}`;
+    } else if (i === 0) {
+      chip.textContent = 'קרקע';
+    } else {
+      chip.textContent = `קומה ${i}`;
+    }
+    
+    chip.addEventListener('click', () => toggleFloor(i, chip));
+    floorGrid.appendChild(chip);
+  }
 }
+
+// Initial generation with 0 floors (will be updated when project is selected)
+generateFloorChips(0);
 
 function toggleFloor(floor, chip) {
   if (activeFloors.has(floor)) {
@@ -556,20 +679,104 @@ function toggleFloor(floor, chip) {
     chip.classList.remove("active");
     document.querySelector(`.floor-box[data-floor="${floor}"]`)?.remove();
   } else {
-    activeFloors.set(floor, '');
+    activeFloors.set(floor, { equipment: '', status: '' });
     chip.classList.add("active");
+
+    let floorLabel = '';
+    if (floor < 0) {
+      floorLabel = `מינוס ${Math.abs(floor)}`;
+    } else if (floor === 0) {
+      floorLabel = 'קרקע';
+    } else {
+      floorLabel = `קומה ${floor}`;
+    }
 
     const box = document.createElement("div");
     box.className = "floor-box";
     box.dataset.floor = floor;
+    
+    const equipmentOptions = [
+      'לובי 1 גלאי 1',
+      'לובי 1 גלאי 2',
+      'לובי מעליות',
+      'לובי 2 גלאי 1',
+      'לובי 2 גלאי 2',
+      'שוט',
+      'מדרגות 1',
+      'מדרגות 2',
+      'IN',
+      'לחצן 1',
+      'לחצן 2',
+      'צופר 1',
+      'צופר 2',
+      'מגנט 1',
+      'מגנט 2',
+      'מגנט 3',
+      'מגנט 4',
+      'שקע טלפון חדר מדרגות 1',
+      'שקע טלפון חדר מדרגות 2',
+      'שקע טלפון לובי מעליות',
+      'רמקול לובי 1',
+      'רמקול לובי 2',
+      'רמקול לובי מעליות',
+      'רמקול חדר מדרגות 1',
+      'רמקול חדר מדרגות 2'
+    ];
+    
+    const statusOptions = [
+      'לא בוצע צנרת',
+      'חיווט בלבד',
+      'הותקן אביזר קופ (למעט גלאי)',
+      'הותקן גלאי',
+      'הותקן בסיס'
+    ];
+    
     box.innerHTML = `
-      <div class="floor-title">עבודה שבוצעה בקומה ${floor}</div>
-      <textarea data-floor-textarea="${floor}" placeholder="פרט את העבודה בקומה זו"></textarea>
+      <div class="floor-title">עבודה שבוצעה ב${floorLabel}</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div>
+          <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 5px;">אביזר</label>
+          <select class="floor-equipment-select" data-floor="${floor}" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.85em;">
+            <option value="">בחר אביזר...</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 5px;">סטטוס</label>
+          <select class="floor-status-select" data-floor="${floor}" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.85em;">
+            <option value="">בחר סטטוס...</option>
+          </select>
+        </div>
+      </div>
     `;
     
-    const textarea = box.querySelector('textarea');
-    textarea.addEventListener('input', (e) => {
-      activeFloors.set(floor, e.target.value);
+    const equipmentSelect = box.querySelector('.floor-equipment-select');
+    const statusSelect = box.querySelector('.floor-status-select');
+    
+    // Populate equipment options
+    equipmentOptions.forEach(option => {
+      const opt = document.createElement('option');
+      opt.value = option;
+      opt.textContent = option;
+      equipmentSelect.appendChild(opt);
+    });
+    
+    // Populate status options
+    statusOptions.forEach(option => {
+      const opt = document.createElement('option');
+      opt.value = option;
+      opt.textContent = option;
+      statusSelect.appendChild(opt);
+    });
+    
+    // Update activeFloors when selections change
+    equipmentSelect.addEventListener('change', (e) => {
+      const current = activeFloors.get(floor) || { equipment: '', status: '' };
+      activeFloors.set(floor, { ...current, equipment: e.target.value });
+    });
+    
+    statusSelect.addEventListener('change', (e) => {
+      const current = activeFloors.get(floor) || { equipment: '', status: '' };
+      activeFloors.set(floor, { ...current, status: e.target.value });
     });
     
     floorWorkContainer.appendChild(box);
@@ -600,9 +807,6 @@ function addEquipment() {
 // Make addEquipment available globally
 window.addEquipment = addEquipment;
 
-/* ===== Set today's date by default ===== */
-document.getElementById('workDate').valueAsDate = new Date();
-
 /* ===== Form submission ===== */
 document.getElementById('workForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -630,16 +834,23 @@ document.getElementById('workForm').addEventListener('submit', async (e) => {
   
   // Collect floor work
   const floorWork = {};
-  activeFloors.forEach((text, floor) => {
-    const textarea = document.querySelector(`textarea[data-floor-textarea="${floor}"]`);
-    floorWork[floor] = textarea ? textarea.value : text;
+  activeFloors.forEach((floorData, floor) => {
+    if (typeof floorData === 'string') {
+      // Legacy support for old format
+      floorWork[floor] = floorData;
+    } else {
+      // New format with equipment and status
+      floorWork[floor] = {
+        equipment: floorData.equipment || '',
+        status: floorData.status || ''
+      };
+    }
   });
   
   const formData = {
     workerName: document.getElementById('workerName').value,
     workDate: document.getElementById('workDate').value,
     project: document.getElementById('project').value,
-    address: document.getElementById('address').value,
     floors: floorWork,
     equipment: equipment,
     issues: document.getElementById('issues').value,
@@ -686,7 +897,8 @@ document.getElementById('workForm').addEventListener('submit', async (e) => {
       setTimeout(() => {
         overlay.remove();
         document.getElementById('workForm').reset();
-        document.getElementById('workDate').valueAsDate = new Date();
+        document.getElementById('selectionStep').style.display = 'block';
+        document.getElementById('workForm').style.display = 'none';
         activeFloors.clear();
         document.querySelectorAll('.floor-chip').forEach(chip => chip.classList.remove('active'));
         floorWorkContainer.innerHTML = '';
