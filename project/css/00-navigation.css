@@ -247,24 +247,6 @@
   background: #3f4f26;
 }
 
-/* Trial Pages - Dark Purple */
-.nav-item.trial-page {
-  background: #4b2b7f;
-  color: white;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .nav-item.trial-page:hover {
-    background: #3b2165;
-  }
-}
-
-.nav-item.trial-page.active {
-  border-left-color: white;
-  box-shadow: inset 5px 0 0 white;
-  background: #3b2165;
-}
-
 /* Overlay when drawer is open */
 .nav-overlay {
   position: fixed;

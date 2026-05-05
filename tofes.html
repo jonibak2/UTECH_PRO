@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" href="project/assets/logo.jpg" type="image/jpeg" />
+<link rel="apple-touch-icon" href="project/assets/logo.jpg" />
+<meta name="apple-mobile-web-app-title" content="UTECH" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>יומן עבודה</title>
 
@@ -383,8 +385,6 @@ textarea {
     <a href="index.html" class="nav-item schedule" data-page="index">סידור עבודה</a>
     <a href="view.html" class="nav-item logs" data-page="view">יומני עבודה</a>
     <a href="tofes.html" class="nav-item fill-notes active" data-page="tofes">מילוי יומן עבודה</a>
-    <a href="NEWTOFES.html" class="nav-item trial-page" data-page="NEWTOFES">טופס מילוי - נסיון</a>
-    <a href="NEWVIEW.html" class="nav-item trial-page" data-page="NEWVIEW">טבלת ביצוע - נסיון</a>
     <a href="codes-list.html" class="nav-item building-codes" data-page="codes-list">קודים לבניינים</a>
     <a href="#" class="nav-item service" data-page="service">קריאות שירות פתוחות</a>
     <a href="#" class="nav-item fill-service" data-page="fill-service">מילוי קריאת שירות</a>
@@ -461,7 +461,8 @@ textarea {
 <script type="module">
 /* ===== Firebase Setup ===== */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, push, set, onValue, forceWebSockets } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDuvwDMAsyQSURluc7Mr-Ow5r2Iq2xh9P8",
@@ -470,11 +471,12 @@ const firebaseConfig = {
   projectId: "tofes-43c54",
   storageBucket: "tofes-43c54.firebasestorage.app",
   messagingSenderId: "634166786476",
-  appId: "1:634166786476:web:e5118489dcf3066fcba209"
+  appId: "1:634166786476:web:e5118489dcf3066fcba209",
+  measurementId: "G-WS6QJN5RCT"
 };
 
 const app = initializeApp(firebaseConfig);
-forceWebSockets();
+const analytics = getAnalytics(app);
 const database = getDatabase(app);
 
         /* ===== Load projects from Firebase ===== */
@@ -703,7 +705,6 @@ function setupNavigation() {
   const navDrawer = document.getElementById('nav-drawer');
   const navOverlay = document.getElementById('nav-overlay');
   const navItems = document.querySelectorAll('.nav-item');
-  const trialLinks = document.querySelectorAll('.nav-item.trial-page');
   const isDesktop = window.matchMedia('(min-width: 769px)').matches;
 
   if (!navToggle || !navDrawer || !navOverlay || !navItems.length) return;
@@ -728,16 +729,6 @@ function setupNavigation() {
     if (item.getAttribute('data-page') === currentPage) {
       item.classList.add('active');
     }
-  });
-
-  trialLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      const accessCode = prompt('הכנס קוד גישה:');
-      if (accessCode !== '1') {
-        e.preventDefault();
-        alert('קוד שגוי');
-      }
-    });
   });
   
   // Toggle drawer on hamburger click
