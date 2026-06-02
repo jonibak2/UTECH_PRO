@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" href="project/assets/logo.jpg" type="image/jpeg" />
-<link rel="apple-touch-icon" href="project/assets/logo.jpg" />
-<meta name="apple-mobile-web-app-title" content="UTECH" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>יומן עבודה</title>
 
@@ -133,14 +131,7 @@ textarea {
 
 
 
-/* Main Form */
-#workForm {
-  animation: fadeInUp 0.5s ease-out forwards;
-}
-
-#workForm.hidden {
-  display: none;
-}
+/* ===== Floors grid ===== */
 .floor-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
@@ -183,6 +174,45 @@ textarea {
   font-size: 0.9em;
 }
 
+/* ===== Equipment ===== */
+.equipment-item {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.equipment-item input[type="text"] {
+  flex: 3;
+}
+
+.equipment-item input[type="number"] {
+  flex: 1;
+}
+
+.remove-equipment {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ff4444;
+  color: white;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.add-btn {
+  margin-top: 6px;
+  background: #e0e0e0;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 0.9em;
+}
+
 /* ===== Submit ===== */
 .submit-btn {
   background: #6AB053;
@@ -218,132 +248,6 @@ textarea {
   border-radius: 6px;
   text-align: center;
   margin-top: 15px;
-}
-
-/* Selection Step */
-.selection-step {
-  animation: fadeInUp 0.5s ease-out forwards;
-}
-
-.selection-step .form-group {
-  margin-bottom: 15px;
-}
-
-.selection-step select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 6px;
-  border: 2px solid #e0e0e0;
-  font-size: 0.95em;
-  box-sizing: border-box;
-  background: white;
-  cursor: pointer;
-}
-
-.selection-step select:focus {
-  border-color: #6AB053;
-  outline: none;
-}
-
-/* Worker chips for mobile */
-.worker-chips {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 8px;
-  margin-bottom: 15px;
-}
-
-.worker-chip {
-  padding: 12px 8px;
-  border-radius: 8px;
-  background: #f1f1f1;
-  border: 2px solid transparent;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: bold;
-  font-size: 0.9em;
-  opacity: 0;
-  animation: fadeInUp 0.4s ease-out forwards;
-  user-select: none;
-}
-
-.worker-chip:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.worker-chip.active {
-  background: #6AB053;
-  color: white;
-  border-color: #5A9043;
-}
-
-/* User Header */
-.user-header {
-  display: none;
-}
-
-.user-header.active {
-  display: flex;
-}
-
-.user-info {
-  font-size: 1.1em;
-  font-weight: bold;
-}
-
-.change-user-btn {
-  padding: 8px 16px;
-  background: #6AB053;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 0.9em;
-  transition: all 0.3s ease;
-}
-
-.change-user-btn:hover {
-  background: #5A9043;
-  transform: translateY(-2px);
-}
-
-/* Project chips */
-.project-chips {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.project-chip {
-  padding: 14px;
-  border-radius: 8px;
-  background: #f1f1f1;
-  border: 2px solid transparent;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: bold;
-  font-size: 0.9em;
-  opacity: 0;
-  animation: fadeInUp 0.4s ease-out forwards;
-  user-select: none;
-  color: #333;
-}
-
-.project-chip:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  background: #e8e8e8;
-}
-
-.project-chip.active {
-  background: #6AB053;
-  color: white;
-  border-color: #5A9043;
 }
 
 /* ===== Success Overlay Animation ===== */
@@ -490,36 +394,20 @@ textarea {
 <div class="container">
 <img src="project/assets/utech.png" alt="Utech" class="logo">
 
-<!-- Selection Step -->
-<div id="selectionStep" class="selection-step">
-  <div id="workerSelectionContainer" class="form-group">
-    <label>שם העובד <span class="required">*</span></label>
-    <div id="workerChips" class="worker-chips"></div>
-  </div>
-
-  <div id="projectSelectionContainer" class="form-group" style="display: none;">
-    <div id="userStatusBar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
-      <div style="font-weight: bold; font-size: 0.95em;">
-        נכנסת כ: <span id="selectedUserName" style="color: #6AB053;">-</span>
-      </div>
-      <button type="button" class="change-user-btn" id="changeUserBtn" style="padding: 6px 12px; font-size: 0.8em; background: #ccc; color: #333;">שינוי</button>
-    </div>
-    
-    <label>בחר פרויקט <span class="required">*</span></label>
-    <div id="projectChips" class="project-chips"></div>
-  </div>
-</div>
-
-<!-- Main Form Step -->
-<form id="workForm" class="hidden" style="display: none;">
+<form id="workForm">
 <div class="form-group">
-  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-    <button type="button" id="backBtn" style="padding: 8px 16px; background: #ccc; color: #333; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">← חזור</button>
-    <div style="flex: 1;">
-      <div style="font-weight: bold; font-size: 16px;" id="selectedWorkerDisplay"></div>
-      <div style="font-size: 14px; color: #666;" id="selectedProjectDisplay"></div>
-    </div>
-  </div>
+<label>שם העובד <span class="required">*</span></label>
+<select id="workerName" required>
+<option value="" disabled selected>בחר שם</option>
+<option>פאבל</option>
+<option>שי</option>
+<option>ויקטור</option>
+<option>פימה</option>
+<option>יהונתן</option>
+<option>איציק</option>
+<option>יורי</option>
+<option>ראובן</option>
+</select>
 </div>
 
 <div class="form-group">
@@ -528,11 +416,15 @@ textarea {
 </div>
 
 <div class="form-group">
-  <label>פרטי מנהל הפרויקט</label>
-  <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; font-size: 14px;">
-    <div style="margin-bottom: 8px;"><strong>שם:</strong> <span id="managerNameDisplay">-</span></div>
-    <div><strong>טלפון:</strong> <span id="managerPhoneDisplay">-</span></div>
-  </div>
+<label>פרויקט <span class="required">*</span></label>
+<select id="project" required>
+<option value="" disabled selected>בחר פרויקט</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>כתובת</label>
+<input type="text" id="address" placeholder="הזן כתובת">
 </div>
 
 <div class="form-group">
@@ -541,6 +433,12 @@ textarea {
 </div>
 
 <div id="floorWorkContainer"></div>
+
+<div class="form-group">
+<label>אביזרים וציוד שהותקנו / הוחלפו</label>
+<div id="equipmentList"></div>
+<button type="button" class="add-btn" onclick="addEquipment()">➕ הוסף פריט</button>
+</div>
 
 <div class="form-group">
 <label>תקלות / ליקויים שהתגלו</label>
@@ -561,7 +459,8 @@ textarea {
 <script type="module">
 /* ===== Firebase Setup ===== */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, push, set, onValue, forceWebSockets } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDuvwDMAsyQSURluc7Mr-Ow5r2Iq2xh9P8",
@@ -570,168 +469,41 @@ const firebaseConfig = {
   projectId: "tofes-43c54",
   storageBucket: "tofes-43c54.firebasestorage.app",
   messagingSenderId: "634166786476",
-  appId: "1:634166786476:web:e5118489dcf3066fcba209"
+  appId: "1:634166786476:web:e5118489dcf3066fcba209",
+  measurementId: "G-WS6QJN5RCT"
 };
 
 const app = initializeApp(firebaseConfig);
-forceWebSockets();
+const analytics = getAnalytics(app);
 const database = getDatabase(app);
 
         /* ===== Load projects from Firebase ===== */
-        let projectsData = {};
-        
-        function loadWorkers() {
-            const workerChipsContainer = document.getElementById('workerChips');
-            const workers = ['פאבל', 'שי', 'ויקטור', 'פימה', 'יהונתן', 'איציק', 'יורי', 'ראובן'];
-            
-            // Clear existing chips
-            workerChipsContainer.innerHTML = '';
-            
-            // Load from localStorage
-            const savedWorker = localStorage.getItem('selectedWorker');
-            
-            // Create mobile chips
-            workers.forEach((worker, index) => {
-                const chip = document.createElement('div');
-                chip.className = 'worker-chip';
-                chip.textContent = worker;
-                chip.style.animationDelay = `${index * 0.08}s`;
-                
-                if (savedWorker === worker) {
-                    chip.classList.add('active');
-                    selectWorker(worker);
-                }
-                
-                chip.addEventListener('click', () => {
-                    selectWorker(worker);
-                });
-                
-                workerChipsContainer.appendChild(chip);
-            });
-        }
-        
-        function selectWorker(worker) {
-            // Save to localStorage
-            localStorage.setItem('selectedWorker', worker);
-            
-            // Hide all chips
-            document.getElementById('workerChips').style.display = 'none';
-            document.getElementById('workerSelectionContainer').style.display = 'none';
-            
-            // Update selected user name in status bar
-            document.getElementById('selectedUserName').textContent = worker;
-            
-            // Show project selection
-            document.getElementById('projectSelectionContainer').style.display = 'block';
-            
-            // Setup change button
-            document.getElementById('changeUserBtn').addEventListener('click', resetWorkerSelection);
-        }
-        
-        function resetWorkerSelection() {
-            localStorage.removeItem('selectedWorker');
-            document.getElementById('workerChips').style.display = 'grid';
-            document.getElementById('workerSelectionContainer').style.display = 'block';
-            document.getElementById('projectSelectionContainer').style.display = 'none';
-            const workForm = document.getElementById('workForm');
-            workForm.classList.add('hidden');
-            workForm.style.display = 'none';
-            activeFloors.clear();
-            floorWorkContainer.innerHTML = '';
-            document.querySelectorAll('.floor-chip').forEach(chip => chip.classList.remove('active'));
-            
-            // Reload workers
-            loadWorkers();
-        }
-
         function loadProjects() {
-            const projectChipsContainer = document.getElementById('projectChips');
+            const projectSelect = document.getElementById('project');
             const projectsRef = ref(database, 'projects');
             
             onValue(projectsRef, (snapshot) => {
-                projectsData = {};
                 const projects = snapshot.val() || {};
-                
-                Object.entries(projects).forEach(([id, project]) => {
-                    projectsData[project.name] = project;
-                });
-                
                 const projectArray = Object.values(projects).sort((a, b) => 
                     a.name.localeCompare(b.name, 'he')
                 );
 
-                // Clear existing chips
-                projectChipsContainer.innerHTML = '';
+                // Keep only the first default option
+                projectSelect.innerHTML = '<option value="" disabled selected>בחר פרויקט</option>';
 
-                projectArray.forEach((project, index) => {
-                    const chip = document.createElement('div');
-                    chip.className = 'project-chip';
-                    chip.textContent = project.name;
-                    chip.style.animationDelay = `${index * 0.08}s`;
-                    
-                    chip.addEventListener('click', () => {
-                        selectProject(project);
-                    });
-                    
-                    projectChipsContainer.appendChild(chip);
+                projectArray.forEach(project => {
+                    const option = document.createElement('option');
+                    option.value = project.name;
+                    option.textContent = project.name;
+                    projectSelect.appendChild(option);
                 });
             });
         }
-        
-        function selectProject(project) {
-            const savedWorker = localStorage.getItem('selectedWorker');
-            
-            if (!savedWorker) {
-                alert('בחר שם עובד');
-                return;
-            }
-            
-            // Update display
-            document.getElementById('selectedWorkerDisplay').textContent = `עובד: ${savedWorker}`;
-            document.getElementById('selectedProjectDisplay').textContent = `פרויקט: ${project.name}`;
-            document.getElementById('managerNameDisplay').textContent = project.manager || '-';
-            document.getElementById('managerPhoneDisplay').textContent = project.phone || '-';
-            
-            // Hide selection step, show form with animation
-            document.getElementById('selectionStep').style.display = 'none';
-            const workForm = document.getElementById('workForm');
-            workForm.classList.remove('hidden');
-            workForm.style.display = 'block';
-            
-            // Generate floor chips based on project data
-            generateFloorChips(project.floors || 0);
-            
-            // Set today's date
-            document.getElementById('workDate').valueAsDate = new Date();
-        }
 
-        // Load workers and projects when page loads
-        loadWorkers();
+        // Load projects when page loads
         loadProjects();
-        
-        // Restore user on page load
-        function restoreUser() {
-            const savedWorker = localStorage.getItem('selectedWorker');
-            if (savedWorker) {
-                selectWorker(savedWorker);
-            }
-        }
-        
-        restoreUser();
 
-        // Back button
-        document.getElementById('backBtn').addEventListener('click', () => {
-            document.getElementById('selectionStep').style.display = 'block';
-            const workForm = document.getElementById('workForm');
-            workForm.classList.add('hidden');
-            workForm.style.display = 'none';
-            
-            // Reset form
-            document.getElementById('workForm').reset();
-            activeFloors.clear();
-            floorWorkContainer.innerHTML = '';
-            document.querySelectorAll('.floor-chip').forEach(chip => chip.classList.remove('active'));
-        });
+        /* ===== Storage helpers ===== */
         async function saveReport(data) {
           try {
             console.log('Saving report to Firebase...');
@@ -744,7 +516,9 @@ const database = getDatabase(app);
             const reportRef = ref(database, reportPath);
             
             await set(reportRef, {
+              address: data.address,
               floors: data.floors,
+              equipment: data.equipment,
               issues: data.issues,
               nextVisit: data.nextVisit,
               timestamp: data.timestamp
@@ -765,47 +539,14 @@ const floorGrid = document.getElementById("floorGrid");
 const floorWorkContainer = document.getElementById("floorWorkContainer");
 const activeFloors = new Map();
 
-function generateFloorChips(numberOfFloors) {
-  // Clear existing chips
-  floorGrid.innerHTML = '';
-  activeFloors.clear();
-  floorWorkContainer.innerHTML = '';
-  
-  // Generate chips in order: 0 (קרקע), then 1..numberOfFloors, then -1..-5
-  const floorsArray = [];
-  
-  // Add ground floor
-  floorsArray.push(0);
-  
-  // Add positive floors
-  for (let i = 1; i <= numberOfFloors; i++) {
-    floorsArray.push(i);
-  }
-  
-  // Add negative floors (in order -1, -2, -3, -4, -5)
-  for (let i = -1; i >= -5; i--) {
-    floorsArray.push(i);
-  }
-  
-  floorsArray.forEach(floor => {
-    const chip = document.createElement("div");
-    chip.className = "floor-chip";
-    
-    if (floor < 0) {
-      chip.textContent = `${floor}`;
-    } else if (floor === 0) {
-      chip.textContent = '0';
-    } else {
-      chip.textContent = `${floor}`;
-    }
-    
-    chip.addEventListener('click', () => toggleFloor(floor, chip));
-    floorGrid.appendChild(chip);
-  });
+// Create floor chips
+for (let i = -5; i <= 40; i++) {
+  const chip = document.createElement("div");
+  chip.className = "floor-chip";
+  chip.textContent = i;
+  chip.addEventListener('click', () => toggleFloor(i, chip));
+  floorGrid.appendChild(chip);
 }
-
-// Initial generation with 0 floors (will be updated when project is selected)
-generateFloorChips(0);
 
 function toggleFloor(floor, chip) {
   if (activeFloors.has(floor)) {
@@ -813,104 +554,20 @@ function toggleFloor(floor, chip) {
     chip.classList.remove("active");
     document.querySelector(`.floor-box[data-floor="${floor}"]`)?.remove();
   } else {
-    activeFloors.set(floor, { equipment: '', status: '' });
+    activeFloors.set(floor, '');
     chip.classList.add("active");
-
-    let floorLabel = '';
-    if (floor < 0) {
-      floorLabel = `${floor}`;
-    } else if (floor === 0) {
-      floorLabel = 'קרקע';
-    } else {
-      floorLabel = `${floor}`;
-    }
 
     const box = document.createElement("div");
     box.className = "floor-box";
     box.dataset.floor = floor;
-    
-    const equipmentOptions = [
-      'לובי 1 גלאי 1',
-      'לובי 1 גלאי 2',
-      'לובי מעליות',
-      'לובי 2 גלאי 1',
-      'לובי 2 גלאי 2',
-      'שוט',
-      'מדרגות 1',
-      'מדרגות 2',
-      'IN',
-      'לחצן 1',
-      'לחצן 2',
-      'צופר 1',
-      'צופר 2',
-      'מגנט 1',
-      'מגנט 2',
-      'מגנט 3',
-      'מגנט 4',
-      'שקע טלפון חדר מדרגות 1',
-      'שקע טלפון חדר מדרגות 2',
-      'שקע טלפון לובי מעליות',
-      'רמקול לובי 1',
-      'רמקול לובי 2',
-      'רמקול לובי מעליות',
-      'רמקול חדר מדרגות 1',
-      'רמקול חדר מדרגות 2'
-    ];
-    
-    const statusOptions = [
-      'לא בוצע צנרת',
-      'חיווט בלבד',
-      'הותקן אביזר קופ (למעט גלאי)',
-      'הותקן גלאי',
-      'הותקן בסיס'
-    ];
-    
     box.innerHTML = `
-      <div class="floor-title">עבודה שבוצעה ב${floorLabel}</div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-        <div>
-          <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 5px;">אביזר</label>
-          <select class="floor-equipment-select" data-floor="${floor}" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.85em;">
-            <option value="">בחר אביזר...</option>
-          </select>
-        </div>
-        <div>
-          <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 5px;">סטטוס</label>
-          <select class="floor-status-select" data-floor="${floor}" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.85em;">
-            <option value="">בחר סטטוס...</option>
-          </select>
-        </div>
-      </div>
+      <div class="floor-title">עבודה שבוצעה בקומה ${floor}</div>
+      <textarea data-floor-textarea="${floor}" placeholder="פרט את העבודה בקומה זו"></textarea>
     `;
     
-    const equipmentSelect = box.querySelector('.floor-equipment-select');
-    const statusSelect = box.querySelector('.floor-status-select');
-    
-    // Populate equipment options
-    equipmentOptions.forEach(option => {
-      const opt = document.createElement('option');
-      opt.value = option;
-      opt.textContent = option;
-      equipmentSelect.appendChild(opt);
-    });
-    
-    // Populate status options
-    statusOptions.forEach(option => {
-      const opt = document.createElement('option');
-      opt.value = option;
-      opt.textContent = option;
-      statusSelect.appendChild(opt);
-    });
-    
-    // Update activeFloors when selections change
-    equipmentSelect.addEventListener('change', (e) => {
-      const current = activeFloors.get(floor) || { equipment: '', status: '' };
-      activeFloors.set(floor, { ...current, equipment: e.target.value });
-    });
-    
-    statusSelect.addEventListener('change', (e) => {
-      const current = activeFloors.get(floor) || { equipment: '', status: '' };
-      activeFloors.set(floor, { ...current, status: e.target.value });
+    const textarea = box.querySelector('textarea');
+    textarea.addEventListener('input', (e) => {
+      activeFloors.set(floor, e.target.value);
     });
     
     floorWorkContainer.appendChild(box);
@@ -919,6 +576,30 @@ function toggleFloor(floor, chip) {
 
 // Make toggleFloor available globally
 window.toggleFloor = toggleFloor;
+
+/* ===== Equipment ===== */
+function addEquipment() {
+  const div = document.createElement("div");
+  div.className = "equipment-item";
+  div.innerHTML = `
+    <input type="text" placeholder="שם פריט" class="equipment-name">
+    <input type="number" placeholder="כמות" class="equipment-quantity">
+    <button type="button" class="remove-equipment">✕</button>
+  `;
+  
+  // Add remove listener
+  div.querySelector('.remove-equipment').addEventListener('click', function() {
+    this.parentElement.remove();
+  });
+  
+  document.getElementById("equipmentList").appendChild(div);
+}
+
+// Make addEquipment available globally
+window.addEquipment = addEquipment;
+
+/* ===== Set today's date by default ===== */
+document.getElementById('workDate').valueAsDate = new Date();
 
 /* ===== Form submission ===== */
 document.getElementById('workForm').addEventListener('submit', async (e) => {
@@ -935,26 +616,30 @@ document.getElementById('workForm').addEventListener('submit', async (e) => {
     return;
   }
   
+  // Collect equipment
+  const equipment = [];
+  document.querySelectorAll('.equipment-item').forEach(item => {
+    const name = item.querySelector('.equipment-name').value;
+    const quantity = item.querySelector('.equipment-quantity').value;
+    if (name || quantity) {
+      equipment.push({ name, quantity });
+    }
+  });
+  
   // Collect floor work
   const floorWork = {};
-  activeFloors.forEach((floorData, floor) => {
-    if (typeof floorData === 'string') {
-      // Legacy support for old format
-      floorWork[floor] = floorData;
-    } else {
-      // New format with equipment and status
-      floorWork[floor] = {
-        equipment: floorData.equipment || '',
-        status: floorData.status || ''
-      };
-    }
+  activeFloors.forEach((text, floor) => {
+    const textarea = document.querySelector(`textarea[data-floor-textarea="${floor}"]`);
+    floorWork[floor] = textarea ? textarea.value : text;
   });
   
   const formData = {
     workerName: document.getElementById('workerName').value,
     workDate: document.getElementById('workDate').value,
     project: document.getElementById('project').value,
+    address: document.getElementById('address').value,
     floors: floorWork,
+    equipment: equipment,
     issues: document.getElementById('issues').value,
     nextVisit: document.getElementById('nextVisit').value,
     timestamp: new Date().toISOString()
@@ -999,13 +684,11 @@ document.getElementById('workForm').addEventListener('submit', async (e) => {
       setTimeout(() => {
         overlay.remove();
         document.getElementById('workForm').reset();
-        document.getElementById('selectionStep').style.display = 'block';
-        const workForm = document.getElementById('workForm');
-        workForm.classList.add('hidden');
-        workForm.style.display = 'none';
+        document.getElementById('workDate').valueAsDate = new Date();
         activeFloors.clear();
         document.querySelectorAll('.floor-chip').forEach(chip => chip.classList.remove('active'));
         floorWorkContainer.innerHTML = '';
+        document.getElementById('equipmentList').innerHTML = '';
       }, 500);
     }, 2500);
   } else {
@@ -1020,7 +703,6 @@ function setupNavigation() {
   const navDrawer = document.getElementById('nav-drawer');
   const navOverlay = document.getElementById('nav-overlay');
   const navItems = document.querySelectorAll('.nav-item');
-  const protectedPages = new Set(['view', 'tofes']);
   const isDesktop = window.matchMedia('(min-width: 769px)').matches;
 
   if (!navToggle || !navDrawer || !navOverlay || !navItems.length) return;
@@ -1046,7 +728,7 @@ function setupNavigation() {
       item.classList.add('active');
     }
   });
-
+  
   // Toggle drawer on hamburger click
   navToggle.addEventListener('click', () => {
     navToggle.classList.toggle('active');
@@ -1059,16 +741,7 @@ function setupNavigation() {
   
   // Close drawer when clicking a nav item
   navItems.forEach(item => {
-    item.addEventListener('click', (e) => {
-      const targetPage = item.getAttribute('data-page');
-      if (protectedPages.has(targetPage)) {
-        const accessCode = prompt('הכנס סיסמה:');
-        if (accessCode !== '1') {
-          e.preventDefault();
-          alert('סיסמה שגויה');
-          return;
-        }
-      }
+    item.addEventListener('click', () => {
       closeDrawer();
     });
   });

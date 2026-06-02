@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="project/css2/08-edit-modal.css" />
     <link rel="stylesheet" href="project/css2/09-scrollbar-picker.css" />
     <link rel="stylesheet" href="project/css2/10-responsive.css" />
+    <link rel="stylesheet" href="project/css2/11-compact-mode.css" />
     <style>
         .project-form-label {
             display: block;
@@ -102,12 +103,15 @@
             border-radius: 10px;
             background: #fff;
             max-height: calc(100vh - 280px);
+            position: relative;
+            z-index: 1;
         }
 
         .project-matrix-table {
             width: 100%;
             border-collapse: collapse;
             min-width: 1000px;
+            position: relative;
         }
 
         .project-matrix-table th,
@@ -116,6 +120,7 @@
             padding: 8px;
             text-align: center;
             vertical-align: top;
+            overflow: visible !important;
         }
 
         .project-matrix-table thead th {
@@ -126,6 +131,7 @@
             font-weight: 700;
             color: #243447;
             white-space: nowrap;
+            overflow: visible !important;
         }
 
         .project-matrix-table tbody th {
@@ -134,11 +140,14 @@
             background: #fbfcfe;
             z-index: 1;
             min-width: 90px;
+            overflow: visible !important;
         }
 
         .matrix-cell {
             min-width: 120px;
             min-height: 56px;
+            position: relative;
+            overflow: visible !important;
         }
 
         .matrix-icons {
@@ -148,6 +157,8 @@
             gap: 6px;
             flex-wrap: wrap;
             min-height: 40px;
+            position: relative;
+            z-index: 1;
         }
 
         .worker-marker {
@@ -165,6 +176,7 @@
             font-weight: 800;
             font-size: 14px;
             line-height: 1;
+            z-index: 100;
         }
 
         .worker-marker:hover {
@@ -179,7 +191,7 @@
             padding: 8px 14px;
             border-radius: 8px;
             font-size: 14px;
-            z-index: 1500;
+            z-index: 99999;
             pointer-events: none;
             bottom: 100%;
             left: 50%;
@@ -193,6 +205,7 @@
             display: flex;
             flex-direction: column;
             gap: 2px;
+            margin-bottom: 5px;
         }
 
         .worker-marker-tooltip::after {
@@ -206,6 +219,7 @@
             border-left: 5px solid transparent;
             border-right: 5px solid transparent;
             border-top: 5px solid #333;
+            z-index: 99999;
         }
 
         .worker-marker:hover .worker-marker-tooltip {
@@ -306,8 +320,15 @@
         <div style="text-align: center; margin-bottom: 20px;">
             <img src="project/assets/utech.png" alt="Utech" class="logo">
         </div>
-        <div style="display: flex; gap: 10px; align-items: center;">
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: space-between;">
             <button id="add-project-btn" style="padding: 12px 24px; background: #6AB053; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">הוסף פרויקט</button>
+            <div class="compact-mode-container">
+                <label class="compact-mode-label" for="compact-mode-toggle">מצב קומפקטי</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="compact-mode-toggle" class="compact-mode-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
         </div>
     </div>
 
@@ -377,32 +398,11 @@
                 <p id="edit-modal-subtitle"></p>
             </div>
             <form id="edit-form">
-                <!-- Project name -->
-                <div class="edit-form-group">
-                    <label class="edit-form-label">פרויקט</label>
-                    <select id="edit-project" class="edit-form-input" required>
-                        <option value="" disabled>בחר פרויקט</option>
-                    </select>
-                </div>
-
-                <!-- Address -->
-                <div class="edit-form-group">
-                    <label class="edit-form-label">כתובת</label>
-                    <input type="text" id="edit-address" class="edit-form-input" placeholder="הכנס כתובת">
-                </div>
-
                 <!-- Floors -->
                 <div class="edit-form-group">
                     <label class="edit-form-label">עבודה בקומות</label>
                     <div id="floors-container"></div>
                     <button type="button" class="add-floor-btn" id="add-floor-btn">+ הוסף קומה</button>
-                </div>
-
-                <!-- Equipment -->
-                <div class="edit-form-group">
-                    <label class="edit-form-label">אביזרים וציוד שהותקנו / הוחלפו</label>
-                    <div id="equipment-container"></div>
-                    <button type="button" class="add-equipment-btn" id="add-equipment-btn">+ הוסף ציוד</button>
                 </div>
 
                 <!-- Issues -->
@@ -450,6 +450,35 @@
         let selectedProjectForTable = '';
         let selectedDateFrom = '';
         let selectedDateTo = '';
+        let isCompactMode = localStorage.getItem('compactMode') === 'true';
+        
+        // Equipment abbreviation mapping
+        const EQUIPMENT_ABBREVIATIONS = {
+            'לובי 1 גלאי 1': 'ל1ג1',
+            'לובי 1 גלאי 2': 'ל1ג2',
+            'לובי 2 גלאי 1': 'ל2ג1',
+            'לובי 2 גלאי 2': 'ל2ג2',
+            'לובי מעליות': 'למע',
+            'לחצן 1': 'לח1',
+            'לחצן 2': 'לח2',
+            'מגנט 1': 'מג1',
+            'מגנט 2': 'מג2',
+            'מגנט 3': 'מג3',
+            'מגנט 4': 'מג4',
+            'מדרגות 1': 'מד1',
+            'מדרגות 2': 'מד2',
+            'צופר 1': 'צפ1',
+            'צופר 2': 'צפ2',
+            'רמקול חדר מדרגות 1': 'רמחמ1',
+            'רמקול חדר מדרגות 2': 'רמחמ2',
+            'רמקול לובי 1': 'רל1',
+            'רמקול לובי 2': 'רל2',
+            'רמקול לובי מעליות': 'רלמע',
+            'שוט': 'שט',
+            'שקע טלפון חדר מדרגות 1': 'שטחמ1',
+            'שקע טלפון חדר מדרגות 2': 'שטחמ2',
+            'שקע טלפון לובי מעליות': 'שטלמע'
+        };
         const MASTER_EQUIPMENT_OPTIONS = [
             'לובי 1 גלאי 1',
             'לובי 1 גלאי 2',
@@ -477,6 +506,27 @@
             'רמקול חדר מדרגות 1',
             'רמקול חדר מדרגות 2'
         ];
+
+        // Get display text (abbreviated or full)
+        function getDisplayText(text) {
+            if (!isCompactMode || !text) return text;
+            return EQUIPMENT_ABBREVIATIONS[text] || text;
+        }
+
+        // Create element with tooltip for compact mode
+        function createCompactElement(fullText, tag = 'span') {
+            const element = document.createElement(tag);
+            const displayText = getDisplayText(fullText);
+            element.textContent = displayText;
+            
+            if (isCompactMode && fullText !== displayText) {
+                element.className = 'compact-text';
+                element.setAttribute('data-full-text', fullText);
+                element.setAttribute('title', fullText);
+            }
+            
+            return element;
+        }
 
         // Notification function
         function showNotification(message) {
@@ -578,6 +628,28 @@
         document.getElementById('add-project-btn').addEventListener('click', () => {
             document.getElementById('project-modal-overlay').classList.add('active');
             document.getElementById('project-name-input').focus();
+        });
+
+        // Compact mode toggle
+        const compactModeToggle = document.getElementById('compact-mode-toggle');
+        compactModeToggle.checked = isCompactMode;
+        compactModeToggle.addEventListener('change', (e) => {
+            isCompactMode = e.target.checked;
+            localStorage.setItem('compactMode', isCompactMode);
+            
+            // Re-render the table with new compact mode
+            if (workLogsData) {
+                const container = document.getElementById('data-container');
+                container.classList.remove('fade-in');
+                container.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    container.innerHTML = '';
+                    renderByProject();
+                    container.classList.remove('fade-out');
+                    container.classList.add('fade-in');
+                }, 300);
+            }
         });
 
         // Close project modal
@@ -778,47 +850,42 @@
             const dateFilterLabel = document.createElement('label');
             dateFilterLabel.setAttribute('for', 'date-filter-from');
             dateFilterLabel.textContent = 'סינון לפי תאריך:';
+            dateFilterLabel.style.opacity = '0.5';
+            dateFilterLabel.style.cursor = 'not-allowed';
 
             const dateFromInput = document.createElement('input');
             dateFromInput.type = 'date';
             dateFromInput.id = 'date-filter-from';
             dateFromInput.value = selectedDateFrom;
+            dateFromInput.disabled = true;
+            dateFromInput.style.opacity = '0.5';
+            dateFromInput.style.cursor = 'not-allowed';
+            dateFromInput.style.backgroundColor = '#f0f0f0';
 
             const dateToInput = document.createElement('input');
             dateToInput.type = 'date';
             dateToInput.id = 'date-filter-to';
             dateToInput.value = selectedDateTo;
-
-            dateFromInput.addEventListener('change', (e) => {
-                selectedDateFrom = e.target.value;
-                renderByProject();
-            });
-
-            dateToInput.addEventListener('change', (e) => {
-                selectedDateTo = e.target.value;
-                renderByProject();
-            });
+            dateToInput.disabled = true;
+            dateToInput.style.opacity = '0.5';
+            dateToInput.style.cursor = 'not-allowed';
+            dateToInput.style.backgroundColor = '#f0f0f0';
 
             const todayBtn = document.createElement('button');
             todayBtn.type = 'button';
             todayBtn.className = 'date-filter-today-btn';
             todayBtn.textContent = 'היום';
-            todayBtn.addEventListener('click', () => {
-                const today = getTodayDateString();
-                selectedDateFrom = today;
-                selectedDateTo = today;
-                renderByProject();
-            });
+            todayBtn.disabled = true;
+            todayBtn.style.opacity = '0.5';
+            todayBtn.style.cursor = 'not-allowed';
 
             const allDatesBtn = document.createElement('button');
             allDatesBtn.type = 'button';
             allDatesBtn.className = 'date-filter-all-btn';
             allDatesBtn.textContent = 'כל התאריכים';
-            allDatesBtn.addEventListener('click', () => {
-                selectedDateFrom = '';
-                selectedDateTo = '';
-                renderByProject();
-            });
+            allDatesBtn.disabled = true;
+            allDatesBtn.style.opacity = '0.5';
+            allDatesBtn.style.cursor = 'not-allowed';
 
             dateFilterRow.appendChild(dateFilterLabel);
             dateFilterRow.appendChild(dateFromInput);
@@ -1022,6 +1089,9 @@
 
             const table = document.createElement('table');
             table.className = 'project-matrix-table';
+            if (isCompactMode) {
+                table.classList.add('compact-mode');
+            }
 
             const thead = document.createElement('thead');
             const headerRow = document.createElement('tr');
@@ -1031,7 +1101,12 @@
 
             matrixData.equipment.forEach(eq => {
                 const th = document.createElement('th');
-                th.textContent = eq;
+                const displayText = getDisplayText(eq);
+                th.textContent = displayText;
+                if (isCompactMode && eq !== displayText) {
+                    th.title = eq;
+                    th.style.cursor = 'help';
+                }
                 headerRow.appendChild(th);
             });
             thead.appendChild(headerRow);
@@ -1063,33 +1138,73 @@
                         marker.textContent = statusSymbol;
                         marker.setAttribute('aria-label', `${worker} ${formatDate(date)}`);
                         
-                        // Create tooltip
-                        const tooltip = document.createElement('div');
-                        tooltip.className = 'worker-marker-tooltip';
-                        
                         // Extract floor and equipment info
                         const floorInfo = eq || '—';
                         const statusInfo = statusText || '—';
                         
-                        tooltip.innerHTML = `
-                            <div style="font-weight: bold; font-size: 15px; margin-bottom: 2px;">${worker}</div>
-                            <div style="font-size: 12px; opacity: 0.85; margin-bottom: 4px;">${formatDate(date)}</div>
-                            <div style="border-top: 1px solid rgba(255,255,255,0.3); padding-top: 3px; display: flex; gap: 12px;">
-                                <div style="font-size: 13px;"><strong>אביזר:</strong> ${floorInfo}</div>
-                                <div style="font-size: 13px;"><strong>סטטוס:</strong> ${statusInfo}</div>
-                            </div>
-                        `;
-                        marker.appendChild(tooltip);
+                        const tooltipData = {
+                            worker,
+                            date: formatDate(date),
+                            floor: floorInfo,
+                            status: statusInfo
+                        };
                         
-                        marker.addEventListener('click', () => {
-                            showModal(worker, date, project, true);
-                        });
+                        // Create tooltip as fixed element
+                        const createTooltip = (e) => {
+                            const rect = marker.getBoundingClientRect();
+                            const tooltip = document.createElement('div');
+                            tooltip.innerHTML = `
+                                <div style="font-weight: bold; font-size: 15px; margin-bottom: 2px;">${tooltipData.worker}</div>
+                                <div style="font-size: 12px; opacity: 0.85; margin-bottom: 4px;">${tooltipData.date}</div>
+                                <div style="border-top: 1px solid rgba(255,255,255,0.3); padding-top: 3px; display: flex; gap: 12px;">
+                                    <div style="font-size: 13px;"><strong>אביזר:</strong> ${tooltipData.floor}</div>
+                                    <div style="font-size: 13px;"><strong>סטטוס:</strong> ${tooltipData.status}</div>
+                                </div>
+                            `;
+                            
+                            // Set all styles for fixed positioning
+                            Object.assign(tooltip.style, {
+                                position: 'fixed',
+                                top: (rect.top - 85) + 'px',
+                                left: (rect.left + rect.width / 2) + 'px',
+                                transform: 'translateX(-50%)',
+                                zIndex: '99999',
+                                background: '#333',
+                                color: 'white',
+                                padding: '8px 14px',
+                                borderRadius: '8px',
+                                fontSize: '14px',
+                                pointerEvents: 'none',
+                                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+                                minWidth: '200px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '2px',
+                                whiteSpace: 'nowrap'
+                            });
+                            
+                            document.body.appendChild(tooltip);
+                            
+                            const removeTooltip = () => {
+                                if (tooltip.parentNode) {
+                                    tooltip.parentNode.removeChild(tooltip);
+                                }
+                            };
+                            
+                            marker.addEventListener('mouseleave', removeTooltip, { once: true });
+                        };
+                        
+                        marker.addEventListener('mouseenter', createTooltip);
                         marker.addEventListener('mouseenter', () => {
                             marker.style.borderColor = '#111';
                         });
                         marker.addEventListener('mouseleave', () => {
                             marker.style.borderColor = 'rgba(0, 0, 0, 0.15)';
                         });
+                        marker.addEventListener('click', () => {
+                            showModal(worker, date, project, true);
+                        });
+                        
                         iconsWrap.appendChild(marker);
                     });
 
@@ -1379,15 +1494,19 @@
                     if (floorValue) {
                         let equipment = '—';
                         let status = '—';
+                        let fullEquipment = '—';
                         
                         if (typeof floorValue === 'object') {
-                            equipment = floorValue.equipment || '—';
+                            fullEquipment = floorValue.equipment || '—';
+                            equipment = getDisplayText(fullEquipment);
                             status = floorValue.status || '—';
                         } else {
-                            equipment = String(floorValue);
+                            fullEquipment = String(floorValue);
+                            equipment = getDisplayText(fullEquipment);
                         }
                         
                         const floorLabel = floor === '0' ? 'קרקע' : (floor < 0 ? `מינוס ${Math.abs(floor)}` : `קומה ${floor}`);
+                        const equipmentTitle = isCompactMode && fullEquipment !== equipment ? `title="${fullEquipment}"` : '';
                         
                         html += `
                             <div style="background: #f5f5f5; padding: 12px; border-radius: 8px; border-right: 4px solid #6AB053;">
@@ -1395,7 +1514,7 @@
                                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                                     <div>
                                         <div style="font-weight: 600; color: #666; font-size: 12px; margin-bottom: 3px;">אביזר:</div>
-                                        <div style="color: #333; font-size: 13px;">${equipment}</div>
+                                        <div style="color: #333; font-size: 13px; ${isCompactMode && fullEquipment !== equipment ? 'cursor: help; text-decoration: underline dotted #999;' : ''}" ${equipmentTitle}>${equipment}</div>
                                     </div>
                                     <div>
                                         <div style="font-weight: 600; color: #666; font-size: 12px; margin-bottom: 3px;">סטטוס:</div>
@@ -1409,22 +1528,7 @@
                 html += `</div></div>`;
             }
 
-            // Equipment
-            if (data.equipment && data.equipment.length > 0) {
-                html += `
-                    <div class="data-section">
-                        <div class="data-label">אביזרים וציוד שהותקנו / הוחלפו:</div>
-                        <ul class="equipment-list">
-                `;
-                data.equipment.forEach(item => {
-                    if (item.name || item.quantity) {
-                        html += `<li>${item.name || '-'} ${item.quantity ? '- כמות: ' + item.quantity : ''}</li>`;
-                    }
-                });
-                html += `</ul></div>`;
-            }
 
-            // Issues
             if (data.issues) {
                 html += `
                     <div class="data-section">
@@ -1447,10 +1551,17 @@
             // Timestamp
             if (data.timestamp) {
                 const timestamp = new Date(data.timestamp);
+                const timeString = timestamp.toLocaleString('he-IL', { 
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
                 html += `
                     <div class="data-section">
                         <div class="data-label">זמן שליחה:</div>
-                        <div class="data-value">${timestamp.toLocaleString('he-IL')}</div>
+                        <div class="data-value">${timeString}</div>
                     </div>
                 `;
             }
@@ -1486,32 +1597,7 @@
             document.getElementById('edit-modal-title').textContent = `עריכת ${project}`;
             document.getElementById('edit-modal-subtitle').textContent = `${worker} • ${formatDate(date)}`;
             
-            // Fill project select with available projects
-            const projectSelect = document.getElementById('edit-project');
-            const projects = Object.values(projectsList).sort((a, b) => 
-                a.name.localeCompare(b.name, 'he')
-            );
-            
-            projectSelect.innerHTML = '<option value="" disabled>בחר פרויקט</option>';
-            projects.forEach(proj => {
-                const option = document.createElement('option');
-                option.value = proj.name;
-                option.textContent = proj.name;
-                if (proj.name === project) {
-                    option.selected = true;
-                }
-                projectSelect.appendChild(option);
-            });
-            
-            projectSelect.value = project;
-            
-            // Update header when project selection changes
-            projectSelect.addEventListener('change', (e) => {
-                document.getElementById('edit-modal-title').textContent = `עריכת ${e.target.value}`;
-            }, { once: false });
-            
             // Fill other fields
-            document.getElementById('edit-address').value = data.address || '';
             document.getElementById('edit-issues').value = data.issues || '';
             document.getElementById('edit-nextVisit').value = data.nextVisit || '';
             
@@ -1522,18 +1608,11 @@
                 Object.keys(data.floors).forEach(floor => {
                     const floorValue = data.floors[floor];
                     if (floor && floorValue) {
-                        addFloorInput(floor, floorValue);
-                    }
-                });
-            }
-            
-            // Fill equipment
-            const equipmentContainer = document.getElementById('equipment-container');
-            equipmentContainer.innerHTML = '';
-            if (data.equipment && data.equipment.length > 0) {
-                data.equipment.forEach(item => {
-                    if (item.name || item.quantity) {
-                        addEquipmentInput(item.name || '', item.quantity || '');
+                        if (typeof floorValue === 'object') {
+                            addFloorInput(floor, floorValue.equipment || '', floorValue.status || '');
+                        } else {
+                            addFloorInput(floor, floorValue, '');
+                        }
                     }
                 });
             }
@@ -1548,7 +1627,7 @@
             document.getElementById('edit-modal-overlay').classList.add('active');
         }
 
-        function addFloorInput(floorNumber = '', floorValue = '') {
+        function addFloorInput(floorNumber = '', equipmentValue = '', statusValue = '') {
             const floorsContainer = document.getElementById('floors-container');
             const floorGroup = document.createElement('div');
             floorGroup.className = 'floor-input-group';
@@ -1570,13 +1649,52 @@
             
             floorGroup.appendChild(floorSelect);
             
-            // Add work description input
-            const workInput = document.createElement('input');
-            workInput.type = 'text';
-            workInput.className = 'edit-form-input floor-value';
-            workInput.placeholder = 'תיאור העבודה';
-            workInput.value = floorValue;
-            floorGroup.appendChild(workInput);
+            // Add equipment select (dropdown instead of text input)
+            const equipmentSelect = document.createElement('select');
+            equipmentSelect.className = 'edit-form-input floor-value';
+            
+            const emptyOption = document.createElement('option');
+            emptyOption.value = '';
+            emptyOption.textContent = 'בחר אביזר';
+            equipmentSelect.appendChild(emptyOption);
+            
+            // Add all equipment options from MASTER_EQUIPMENT_OPTIONS
+            MASTER_EQUIPMENT_OPTIONS.forEach(eq => {
+                const option = document.createElement('option');
+                option.value = eq;
+                option.textContent = eq;
+                if (eq === equipmentValue) {
+                    option.selected = true;
+                }
+                equipmentSelect.appendChild(option);
+            });
+            
+            floorGroup.appendChild(equipmentSelect);
+            
+            // Add status select
+            const statusSelect = document.createElement('select');
+            statusSelect.className = 'edit-form-input floor-status';
+            
+            const statusOptions = [
+                { value: '', label: 'בחר סטטוס' },
+                { value: 'לא בוצע צנרת', label: '? לא בוצע צנרת' },
+                { value: 'חיווט בלבד', label: '- חיווט בלבד' },
+                { value: 'הותקן אביזר קופ (למעט גלאי)', label: '+ הותקן אביזר קופ (למעט גלאי)' },
+                { value: 'הותקן גלאי', label: '% הותקן גלאי' },
+                { value: 'הותקן בסיס', label: '± הותקן בסיס' }
+            ];
+            
+            statusOptions.forEach(status => {
+                const option = document.createElement('option');
+                option.value = status.value;
+                option.textContent = status.label;
+                if (status.value === statusValue) {
+                    option.selected = true;
+                }
+                statusSelect.appendChild(option);
+            });
+            
+            floorGroup.appendChild(statusSelect);
             
             // Add delete button
             const deleteBtn = document.createElement('button');
@@ -1592,34 +1710,10 @@
             floorsContainer.appendChild(floorGroup);
         }
 
-        function addEquipmentInput(equipmentName = '', equipmentQuantity = '') {
-            const equipmentContainer = document.getElementById('equipment-container');
-            const equipmentGroup = document.createElement('div');
-            equipmentGroup.className = 'equipment-item-group';
-            equipmentGroup.innerHTML = `
-                <input type="text" class="edit-form-input equipment-name" placeholder="שם הציוד" value="${equipmentName}">
-                <input type="text" class="edit-form-input equipment-quantity" placeholder="כמות" value="${equipmentQuantity}">
-                <button type="button" class="equipment-delete-btn">מחק</button>
-            `;
-            
-            equipmentGroup.querySelector('.equipment-delete-btn').addEventListener('click', (e) => {
-                e.preventDefault();
-                equipmentGroup.remove();
-            });
-            
-            equipmentContainer.appendChild(equipmentGroup);
-        }
-
         // Handle add floor button
         document.getElementById('add-floor-btn').addEventListener('click', (e) => {
             e.preventDefault();
             addFloorInput();
-        });
-
-        // Handle add equipment button
-        document.getElementById('add-equipment-btn').addEventListener('click', (e) => {
-            e.preventDefault();
-            addEquipmentInput();
         });
 
         // Handle edit form submission
@@ -1629,61 +1723,33 @@
             const worker = e.target.dataset.worker;
             const date = e.target.dataset.date;
             const oldProject = e.target.dataset.project;
-            const newProject = document.getElementById('edit-project').value;
-            
-            if (!newProject) {
-                showNotification('בחר פרויקט');
-                return;
-            }
             
             try {
                 // Collect floors data
                 const floors = {};
                 document.querySelectorAll('.floor-input-group').forEach(group => {
                     const floorNumber = group.querySelector('.floor-number').value;
-                    const floorValue = group.querySelector('.floor-value').value;
-                    if (floorNumber && floorValue) {
-                        floors[floorNumber] = floorValue;
-                    }
-                });
-                
-                // Collect equipment data
-                const equipment = [];
-                document.querySelectorAll('.equipment-item-group').forEach(group => {
-                    const name = group.querySelector('.equipment-name').value;
-                    const quantity = group.querySelector('.equipment-quantity').value;
-                    if (name || quantity) {
-                        equipment.push({
-                            name: name || '',
-                            quantity: quantity || ''
-                        });
+                    const equipmentValue = group.querySelector('.floor-value').value;
+                    const statusValue = group.querySelector('.floor-status').value;
+                    if (floorNumber && equipmentValue) {
+                        floors[floorNumber] = {
+                            equipment: equipmentValue,
+                            status: statusValue || '—'
+                        };
                     }
                 });
                 
                 // Prepare updated data
                 const updatedData = {
                     ...workLogsData[worker][date][oldProject],
-                    address: document.getElementById('edit-address').value,
                     floors: floors,
-                    equipment: equipment,
                     issues: document.getElementById('edit-issues').value,
                     nextVisit: document.getElementById('edit-nextVisit').value
                 };
                 
-                // If project changed, delete old and create new
-                if (oldProject !== newProject) {
-                    // Delete old entry
-                    const oldRef = ref(database, `workLogs/${worker}/${date}/${oldProject}`);
-                    await set(oldRef, null);
-                    
-                    // Create new entry with new project name
-                    const newRef = ref(database, `workLogs/${worker}/${date}/${newProject}`);
-                    await set(newRef, updatedData);
-                } else {
-                    // Update existing entry
-                    const updateRef = ref(database, `workLogs/${worker}/${date}/${oldProject}`);
-                    await set(updateRef, updatedData);
-                }
+                // Update the entry
+                const updateRef = ref(database, `workLogs/${worker}/${date}/${oldProject}`);
+                await set(updateRef, updatedData);
                 
                 showNotification('הרשומה עודכנה בהצלחה!');
                 document.getElementById('edit-modal-overlay').classList.remove('active');
