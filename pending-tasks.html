@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="project/assets/logo.jpg" type="image/jpeg" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>משימות ממתינות</title>
+
+<link rel="stylesheet" href="project/css/base.css" />
+<link rel="stylesheet" href="project/css/components.css" />
+<link rel="stylesheet" href="project/css/app.css" />
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  padding: 10px;
+  margin: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(-15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 8px;
+  font-size: 1.5em;
+}
+
+.logo {
+  display: block;
+  max-width: 320px;
+  height: auto;
+  margin: 0 auto 15px auto;
+}
+
+.meta {
+  text-align: center;
+  color: #666;
+  font-size: 0.9em;
+  margin-bottom: 16px;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 14px;
+  animation: fadeInUp 0.35s ease-out forwards;
+  border: 1px solid #e0e0e0;
+}
+
+.task-id {
+  font-size: 0.75em;
+  color: #999;
+  margin-bottom: 6px;
+  word-break: break-all;
+  direction: ltr;
+  text-align: left;
+}
+
+.task-field {
+  margin-bottom: 6px;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+.task-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.task-address {
+  font-size: 1.05em;
+  font-weight: bold;
+  color: #111;
+  margin-bottom: 8px;
+}
+
+.task-code {
+  display: inline-block;
+  background: #eef8ea;
+  color: #4f8e3f;
+  border: 1px solid #d6eccc;
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-weight: bold;
+  font-size: 0.85em;
+}
+
+.empty {
+  text-align: center;
+  color: #888;
+  padding: 40px 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.loading {
+  text-align: center;
+  color: #888;
+  padding: 40px 16px;
+}
+
+.add-link {
+  display: block;
+  text-align: center;
+  margin-bottom: 16px;
+  padding: 10px 16px;
+  background: #6AB053;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.95em;
+}
+
+.add-link:hover {
+  background: #5A9043;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.status-badge {
+  font-size: 0.8em;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.status-waiting { background: #fff3cd; color: #856404; }
+.status-scheduled { background: #cce5ff; color: #004085; }
+.status-billed { background: #d4edda; color: #155724; }
+
+.bill-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.bill-row label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 0;
+}
+
+.bill-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #6AB053;
+}
+
+.schedule-info {
+  font-size: 0.85em;
+  color: #555;
+  background: #eef4ff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+</style>
+</head>
+
+<body>
+
+<button class="nav-hamburger" id="nav-toggle">
+  <span class="hamburger-line"></span>
+  <span class="hamburger-line"></span>
+  <span class="hamburger-line"></span>
+</button>
+
+<div class="nav-overlay" id="nav-overlay"></div>
+
+<nav class="nav-drawer" id="nav-drawer">
+  <div class="nav-drawer-header">
+    <img src="project/assets/utech.png" alt="Utech">
+    <div class="nav-drawer-title">תפריט</div>
+  </div>
+  <div class="nav-drawer-items">
+    <a href="index.html" class="nav-item schedule" data-page="index">סידור עבודה</a>
+    <a href="view.html" class="nav-item logs" data-page="view">יומני עבודה</a>
+    <a href="tofes.html" class="nav-item fill-notes" data-page="tofes">מילוי יומן עבודה</a>
+    <a href="codes-list.html" class="nav-item building-codes" data-page="codes-list">קודים לבניינים</a>
+    <a href="pending-form.html" class="nav-item fill-notes" data-page="pending-form">מילוי משימה עתידית</a>
+    <a href="pending-tasks.html" class="nav-item service active" data-page="pending-tasks">משימות ממתינות</a>
+    <a href="#" class="nav-item service" data-page="service">קריאות שירות פתוחות</a>
+    <a href="#" class="nav-item fill-service" data-page="fill-service">מילוי קריאת שירות</a>
+    <a href="#" class="nav-item service-agreement" data-page="service-agreement">הסכמי שירות</a>
+    <a href="#" class="nav-item fill-service-agreement" data-page="fill-service-agreement">מילוי הסכמי שירות</a>
+  </div>
+</nav>
+
+<div class="container">
+  <img src="project/assets/utech.png" alt="Utech" class="logo">
+  <h1>משימות ממתינות</h1>
+  <div id="meta" class="meta"></div>
+
+  <a href="pending-form.html" class="add-link">➕ הוסף משימה חדשה</a>
+
+  <div id="taskList" class="task-list">
+    <div class="loading">טוען...</div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAFTYDz4TvUfiXx1F3xFer86WV-UMVRi7U",
+  authDomain: "tablichka-e2c39.firebaseapp.com",
+  databaseURL: "https://tablichka-e2c39-default-rtdb.firebaseio.com",
+  projectId: "tablichka-e2c39",
+  storageBucket: "tablichka-e2c39.appspot.com",
+  messagingSenderId: "218058227797",
+  appId: "1:218058227797:web:0525b8e6057350918c54dc",
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+const listEl = document.getElementById("taskList");
+const metaEl = document.getElementById("meta");
+
+function escapeHtml(str) {
+  return String(str ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function formatDate(ts) {
+  if (!ts) return "";
+  return new Date(ts).toLocaleString("he-IL");
+}
+
+function statusBadge(status) {
+  const s = status || "ממתין";
+  if (s === "שובץ") return `<span class="status-badge status-scheduled">שובץ</span>`;
+  if (s === "חויב") return `<span class="status-badge status-billed">חויב</span>`;
+  return `<span class="status-badge status-waiting">ממתין</span>`;
+}
+
+function renderTasks(snapshot) {
+  const data = snapshot.val();
+  const tasks = [];
+
+  if (data) {
+    Object.entries(data).forEach(([id, task]) => {
+      if (typeof task === "object" && task !== null && /^\d+$/.test(id)) {
+        tasks.push({ id: Number(id), ...task });
+      }
+    });
+  }
+
+  tasks.sort((a, b) => b.id - a.id);
+
+  const waiting = tasks.filter((t) => (t.status || "ממתין") === "ממתין").length;
+  const scheduled = tasks.filter((t) => t.status === "שובץ").length;
+  const billed = tasks.filter((t) => t.status === "חויב").length;
+  metaEl.textContent = `${tasks.length} משימות · ממתין: ${waiting} · שובץ: ${scheduled} · חויב: ${billed}`;
+
+  if (!tasks.length) {
+    listEl.innerHTML = '<div class="empty">אין משימות<br><br><a href="pending-form.html">הוסף משימה ראשונה</a></div>';
+    return;
+  }
+
+  listEl.innerHTML = tasks.map((task) => {
+    const phones = (task.phones || [])
+      .map((p, i) => `טלפון ${i + 1}: ${escapeHtml(p.phone)}, שם: ${escapeHtml(p.name)}`)
+      .join("<br>");
+    const status = task.status || "ממתין";
+    const scheduleBlock = (status === "שובץ" || status === "חויב") && task.scheduledName
+      ? `<div class="schedule-info">שובץ: ${escapeHtml(task.scheduledName)} · ${escapeHtml(task.scheduledDay || "")} · משימה ${escapeHtml(String(task.scheduledTaskNumber || ""))} · שבוע ${escapeHtml(task.scheduledWeek || "")}</div>`
+      : "";
+    const billBlock = status === "שובץ"
+      ? `<div class="bill-row"><label><input type="checkbox" class="bill-checkbox" data-id="${task.id}"> סמן כחויב</label></div>`
+      : "";
+
+    return `
+      <div class="task-card">
+        <div class="task-header">
+          <div class="task-id">#${escapeHtml(task.id)}</div>
+          ${statusBadge(status)}
+        </div>
+        <div class="task-address">${escapeHtml(task.address)}</div>
+        ${scheduleBlock}
+        <div class="task-field"><span class="task-label">קוד: </span><span class="task-code">${escapeHtml(task.code)}</span></div>
+        ${phones ? `<div class="task-field"><span class="task-label">טלפון:</span><br>${phones}</div>` : ""}
+        <div class="task-field"><span class="task-label">משימה:</span> ${escapeHtml(task.reason)}</div>
+        ${task.comments ? `<div class="task-field"><span class="task-label">הערות:</span> ${escapeHtml(task.comments)}</div>` : ""}
+        <div class="task-field" style="color:#999;font-size:0.8em;margin-top:8px;">${formatDate(task.createdAt)}</div>
+        ${billBlock}
+      </div>
+    `;
+  }).join("");
+
+  listEl.querySelectorAll(".bill-checkbox").forEach((checkbox) => {
+    checkbox.addEventListener("change", async () => {
+      if (!checkbox.checked) return;
+      checkbox.disabled = true;
+      try {
+        await update(ref(database, `pending-tasks/${checkbox.dataset.id}`), {
+          status: "חויב",
+          billedAt: Date.now(),
+        });
+      } catch (err) {
+        console.error(err);
+        checkbox.checked = false;
+        checkbox.disabled = false;
+        alert("שגיאה בעדכון הסטטוס");
+      }
+    });
+  });
+}
+
+onValue(ref(database, "pending-tasks"), renderTasks, (err) => {
+  console.error(err);
+  listEl.innerHTML = '<div class="empty">שגיאה בטעינת הנתונים</div>';
+});
+
+function setupNavigation() {
+  const navToggle = document.getElementById("nav-toggle");
+  const navDrawer = document.getElementById("nav-drawer");
+  const navOverlay = document.getElementById("nav-overlay");
+  const navItems = document.querySelectorAll(".nav-item");
+  const protectedPages = new Set(["view", "tofes"]);
+  const isDesktop = window.matchMedia("(min-width: 769px)").matches;
+
+  if (!navToggle || !navDrawer || !navOverlay) return;
+
+  const closeDrawer = () => {
+    navToggle.classList.remove("active");
+    navDrawer.classList.remove("active");
+    navOverlay.classList.remove("active");
+  };
+
+  if (!isDesktop) {
+    closeDrawer();
+    return;
+  }
+
+  navToggle.addEventListener("click", () => {
+    navToggle.classList.toggle("active");
+    navDrawer.classList.toggle("active");
+    navOverlay.classList.toggle("active");
+  });
+
+  navOverlay.addEventListener("click", closeDrawer);
+
+  navItems.forEach((item) => {
+    item.addEventListener("click", (e) => {
+      const targetPage = item.getAttribute("data-page");
+      if (protectedPages.has(targetPage)) {
+        const accessCode = prompt("הכנס סיסמה:");
+        if (accessCode !== "1") {
+          e.preventDefault();
+          alert("סיסמה שגויה");
+          return;
+        }
+      }
+      closeDrawer();
+    });
+  });
+}
+
+setupNavigation();
+</script>
+
+</body>
+</html>
