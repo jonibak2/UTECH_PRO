@@ -1,0 +1,1239 @@
+/* === Forms (ex 07-forms.css) === */
+
+/* ============================================ */
+/* FORM ELEMENTS */
+/* ============================================ */
+
+body.page-work textarea, body.page-work input[type="text"], body.page-work input[type="tel"], body.page-work select {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 5px;
+  font-size: 0.9em;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+body.page-work textarea:focus, body.page-work input[type="text"]:focus, body.page-work input[type="tel"]:focus, body.page-work select:focus {
+  outline: none;
+  border-color: #6AB053;
+  box-shadow: 0 0 0 2px rgba(106, 176, 83, 0.2);
+}
+
+body.page-work button {
+  padding: 8px;
+  font-size: 0.9em;
+  width: 100%;
+  margin-bottom: 5px;
+  transition: transform 0.2s, background-color 0.2s ease;
+}
+
+body.page-work button:hover {
+  transform: scale(1.03);
+}
+
+body.page-work button:active {
+  transform: scale(0.98);
+}
+
+body.page-work .required {
+  color: red;
+}
+
+/* === Checkboxes (ex 08-checkboxes.css) === */
+
+/* ============================================ */
+/* CHECKBOXES & LABELS */
+/* ============================================ */
+
+body.page-work .checkboxes {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  animation: fadeInUp 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+body.page-work .checkboxes label {
+  display: inline-block;
+  margin: 0 2px;
+  position: relative;
+  font-weight: bold;
+  padding: 2px;
+  border: none;
+  min-width: 22px;
+  text-align: center;
+  transition: transform 0.2s, background-color 0.2s ease;
+}
+
+body.page-work .checkboxes label:hover {
+  transform: scale(1.05);
+}
+
+body.page-work .checkboxes label:not(:last-child) {
+  border-left: 1px solid #e0e0e0;
+  margin-left: 4px;
+  padding-left: 8px;
+}
+
+body.page-work .no-task {
+  color: black;
+}
+
+body.page-work .has-task {
+  color: #ff0000;
+}
+
+body.page-work .completed {
+  color: #008000;
+}
+
+body.page-work .team_cyan {
+  color: #00ced1;
+  border: 1px solid #00ced1;
+  border-radius: 3px;
+}
+
+body.page-work .task-label-text {
+  flex: 1;
+  text-align: right;
+  direction: rtl;
+  word-break: break-word;
+  white-space: pre-line;
+}
+
+/* === Tooltips (ex 09-tooltips.css) === */
+
+/* ============================================ */
+/* TOOLTIPS */
+/* ============================================ */
+
+body.page-work .tooltip {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 8px;
+  z-index: 10;
+  max-width: 200px;
+  white-space: pre-line;
+  font-size: 0.9em;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+body.page-work label:hover .tooltip {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === Edit Task Modal (ex 15-edit-modal.css) === */
+
+/* ============================================ */
+/* EDIT TASK MODAL */
+/* ============================================ */
+
+body.page-work #edit-task-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+body.page-work #edit-task-modal-content {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 90%;
+  max-height: 90%;
+  overflow-y: auto;
+  direction: rtl;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.page-work #edit-task-modal-content h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1.5em;
+}
+
+body.page-work #edit-single-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+body.page-work #edit-single-panel label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+body.page-work #edit-single-panel input, body.page-work #edit-single-panel select, body.page-work #edit-single-panel textarea {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+body.page-work #edit-single-panel input:focus, body.page-work #edit-single-panel select:focus, body.page-work #edit-single-panel textarea:focus {
+  outline: none;
+  border-color: #83a737;
+  box-shadow: 0 0 0 2px rgba(131, 167, 55, 0.2);
+}
+
+body.page-work .edit-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+body.page-work .edit-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+body.page-work #edit-save-task {
+  background-color: #83a737;
+  color: white;
+}
+
+body.page-work #edit-save-task:hover {
+  background-color: #6b8a2a;
+}
+
+body.page-work #edit-delete-task {
+  background-color: #dc3545;
+  color: white;
+}
+
+body.page-work #edit-delete-task:hover {
+  background-color: #c82333;
+}
+
+body.page-work #edit-cancel {
+  background-color: #6c757d;
+  color: white;
+}
+
+body.page-work #edit-cancel:hover {
+  background-color: #5a6268;
+}
+
+@media (max-width: 600px) {
+  body.page-work #edit-task-modal-content {
+    max-width: 95%;
+    max-height: 95%;
+    padding: 15px;
+  }
+
+  body.page-work .edit-buttons {
+    flex-direction: column;
+  }
+
+  body.page-work .edit-buttons button {
+    width: 100%;
+  }
+}
+
+/* === Edit Modal View (ex css2/08-edit-modal.css) === */
+
+/* ============================================ */
+/* EDIT MODAL */
+/* ============================================ */
+
+.edit-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1500;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.edit-modal-overlay.active {
+    display: flex;
+}
+
+.edit-modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.edit-modal-header {
+    margin-bottom: 24px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #6AB053;
+}
+
+.edit-modal-header h2 {
+    color: #6AB053;
+    margin: 0 0 5px 0;
+    font-size: 24px;
+}
+
+.edit-modal-header p {
+    color: #666;
+    margin: 0;
+    font-size: 14px;
+}
+
+.edit-form-group {
+    margin-bottom: 20px;
+}
+
+.edit-form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.edit-form-input,
+.edit-form-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+}
+
+.edit-form-input:focus,
+.edit-form-textarea:focus {
+    outline: none;
+    border-color: #6AB053;
+    background: #f9fff6;
+}
+
+select.edit-form-input {
+    background: white;
+    appearance: none;
+    cursor: pointer;
+    padding-left: 15px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 12px center;
+    padding-left: 35px;
+}
+
+.edit-form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.edit-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.edit-modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.edit-save-btn {
+    flex: 1;
+    padding: 12px 24px;
+    background: #6AB053;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.edit-save-btn:hover {
+    background: #5A9043;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(106, 176, 83, 0.3);
+}
+
+.edit-cancel-btn {
+    flex: 1;
+    padding: 12px 24px;
+    background: #e0e0e0;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.edit-cancel-btn:hover {
+    background: #d0d0d0;
+}
+
+.floor-input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: flex-end;
+}
+
+.floor-input-group select {
+    flex: 0.8;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+}
+
+.floor-input-group select:focus {
+    outline: none;
+    border-color: #6AB053;
+    background: #f9fff6;
+}
+
+.floor-input-group input {
+    flex: 1;
+}
+
+.floor-delete-btn {
+    padding: 8px 12px;
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.floor-delete-btn:hover {
+    background: #ff3838;
+}
+
+.equipment-delete-btn {
+    padding: 6px 10px;
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.equipment-delete-btn:hover {
+    background: #ff3838;
+}
+
+.add-floor-btn {
+    padding: 8px 16px;
+    background: #6AB053;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    transition: all 0.2s;
+    margin-top: 10px;
+}
+
+.add-floor-btn:hover {
+    background: #5A9043;
+}
+
+.equipment-item-group {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: 8px;
+    margin-bottom: 10px;
+    align-items: flex-end;
+}
+
+.add-equipment-btn {
+    padding: 8px 16px;
+    background: #6AB053;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    transition: all 0.2s;
+    margin-top: 10px;
+}
+
+.add-equipment-btn:hover {
+    background: #5A9043;
+}
+
+/* === Fullscreen (ex 17-fullscreen.css) === */
+
+/* ============================================ */
+/* TASK FULLSCREEN DISPLAY */
+/* ============================================ */
+
+body.page-work #task-fullscreen-overlay {
+  animation: overlayFadeIn 0.4s cubic-bezier(.4,0,.2,1);
+}
+
+body.page-work #task-fullscreen-content {
+  opacity: 0;
+  transform: translateY(-40px) scale(0.96);
+  animation: contentFadeIn 0.4s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+body.page-work .task-fullscreen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #83a737;
+}
+
+body.page-work .task-fullscreen-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.8em;
+}
+
+body.page-work .task-fullscreen-body {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+body.page-work .task-fullscreen-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+body.page-work .task-line {
+  margin-bottom: 12px;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border-right: 4px solid #83a737;
+}
+
+body.page-work .phone-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+body.page-work .address-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+body.page-work .close-fullscreen-btn {
+  background: #fc9247;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+body.page-work .close-fullscreen-btn:hover {
+  background: #e67e22;
+  transform: scale(1.05);
+}
+
+body.page-work .delete-task-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+body.page-work .delete-task-btn:hover {
+  background: #c82333;
+  transform: scale(1.05);
+}
+
+body.page-work .call-phone {
+  display: none;
+  width: auto;
+  height: auto;
+  padding: 0;
+  font-size: 1em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  color: black;
+}
+
+body.page-work .call-phone-btn {
+  color: #28a745;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+body.page-work .call-phone-btn:hover {
+  color: #218838;
+  transform: scale(1.05);
+}
+
+body.page-work .navigate-btn {
+  color: #007bff;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+body.page-work .navigate-btn:hover {
+  color: #0056b3;
+  transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+  body.page-work #task-fullscreen-content {
+    max-width: 95%;
+    max-height: 95%;
+    padding: 20px;
+  }
+
+  body.page-work .task-fullscreen-header h2 {
+    font-size: 1.5em;
+  }
+
+  body.page-work .task-line {
+    font-size: 14px;
+  }
+
+  body.page-work .task-fullscreen-actions {
+    flex-direction: row;
+    gap: 8px;
+  }
+  
+  body.page-work .delete-task-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
+/* === Overlays (ex 18-overlays.css) === */
+
+/* ============================================ */
+/* OVERLAYS & MODALS */
+/* ============================================ */
+
+body.page-work #task-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 200;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease;
+}
+
+body.page-work #task-overlay-content {
+  background: #fff;
+  padding: 20px;
+  max-width: 90%;
+  max-height: 80%;
+  overflow-y: auto;
+  font-size: 1.5em;
+  text-align: right;
+  border-radius: 8px;
+  white-space: pre-line;
+  line-height: 2;
+}
+
+body.page-work #task-overlay-content p {
+  margin: 0 0 15px 0;
+  direction: rtl;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+body.page-work #back-confirm-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 300;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease;
+}
+
+body.page-work #back-confirm-content {
+  background: #fff;
+  padding: 20px;
+  max-width: 90%;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 1.2em;
+}
+
+body.page-work #back-cancel {
+  margin-top: 10px;
+  padding: 8px 16px;
+  font-size: 1em;
+  background: #83a737;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s ease;
+}
+
+body.page-work #back-cancel:hover {
+  transform: scale(1.03);
+  background: rgba(131, 167, 55, 0.9);
+}
+
+body.page-work #print-modal, body.page-work #swap-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 20000;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease;
+}
+
+/* === Buttons (ex 19-buttons.css) === */
+
+/* ============================================ */
+/* BUTTON ANIMATIONS & EFFECTS */
+/* ============================================ */
+
+body.page-work #single-insert, body.page-work #clear-all-fields, body.page-work #print-day-tasks, body.page-work #swap-tasks, body.page-work #print-modal-confirm, body.page-work #print-modal-cancel, body.page-work #swap-modal-confirm, body.page-work #swap-modal-cancel {
+  transition: transform 0.2s, background-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+body.page-work #single-insert:hover, body.page-work #clear-all-fields:hover, body.page-work #print-day-tasks:hover, body.page-work #swap-tasks:hover, body.page-work #print-modal-confirm:hover, body.page-work #swap-modal-confirm:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
+
+body.page-work #print-modal-cancel:hover, body.page-work #swap-modal-cancel:hover {
+  transform: scale(1.03);
+}
+
+body.page-work .link-card {
+  transition: transform 0.2s, background-color 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+body.page-work .link-card:hover {
+  transform: scale(1.03);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.page-work a {
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+body.page-work a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* ============================================ */
+/* NAVIGATION GROUPS */
+/* ============================================ */
+
+body.page-work .nav-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+body.page-work .nav-sub-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #83a737;
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: not-allowed;
+  opacity: 0.6;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+body.page-work .nav-sub-btn:hover {
+  background: #83a737;
+}
+
+/* === Modal (ex css2/06-modal.css) === */
+
+/* ============================================ */
+/* MODAL */
+/* ============================================ */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    overflow-y: auto;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-overlay.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    max-width: 800px;
+    width: 100%;
+    border-radius: 12px;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: scale(0.9) translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.modal-close:hover {
+    background: #ee3742;
+}
+
+.modal-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #6AB053;
+}
+
+.modal-header h2 {
+    color: #6AB053;
+    margin-bottom: 8px;
+}
+
+.modal-header h3 {
+    color: #666;
+    font-weight: normal;
+}
+
+.data-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #6AB053;
+}
+
+.data-label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 14px;
+}
+
+.data-value {
+    color: #666;
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+
+.floor-item {
+    background: white;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+}
+
+.floor-title {
+    font-weight: bold;
+    color: #6AB053;
+    margin-bottom: 5px;
+}
+
+.equipment-list {
+    list-style: none;
+    padding: 0;
+}
+
+.equipment-list li {
+    padding: 8px;
+    margin: 5px 0;
+    background: white;
+    border-radius: 4px;
+    border-right: 3px solid #6AB053;
+}
+
+/* === Project Modal (ex css2/07-project-modal.css) === */
+
+/* ============================================ */
+/* PROJECT MANAGEMENT MODAL */
+/* ============================================ */
+
+.project-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s;
+}
+
+.project-modal-overlay.active {
+    display: flex;
+}
+
+.project-modal {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+.project-modal-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #6AB053;
+}
+
+.project-modal-header h2 {
+    color: #6AB053;
+    margin: 0;
+}
+
+.project-modal-input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.project-modal-input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.project-modal-input:focus {
+    outline: none;
+    border-color: #6AB053;
+}
+
+.project-modal-add-btn {
+    padding: 12px 24px;
+    background: #6AB053;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.project-modal-add-btn:hover {
+    background: #5A9043;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(106, 176, 83, 0.3);
+}
+
+.project-list {
+    margin-bottom: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.project-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.2s;
+}
+
+.project-item:hover {
+    background: #f0f0f0;
+    border-color: #6AB053;
+}
+
+.project-item-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.project-item-delete {
+    padding: 6px 12px;
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.project-item-delete:hover {
+    background: #ff3838;
+    transform: scale(1.05);
+}
+
+.project-modal-close {
+    padding: 12px 24px;
+    background: #e0e0e0;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.project-modal-close:hover {
+    background: #d0d0d0;
+}
+
+/* === Scrollbar & Date Picker (ex css2/09-scrollbar-picker.css) === */
+
+/* ============================================ */
+/* SCROLLBAR STYLING */
+/* ============================================ */
+
+.column-content::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.column-content::-webkit-scrollbar-track,
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.column-content::-webkit-scrollbar-thumb,
+.modal-content::-webkit-scrollbar-thumb {
+    background: #6AB053;
+    border-radius: 4px;
+}
+
+.column-content::-webkit-scrollbar-thumb:hover,
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: #5A9043;
+}
+
+/* ============================================ */
+/* DATE PICKER STYLES */
+/* ============================================ */
+
+#date-search-container {
+    position: relative;
+}
+
+#date-search-input {
+    appearance: none;
+    background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236AB053' stroke-width='2'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") no-repeat;
+    background-position: left 12px center;
+    padding-left: 45px !important;
+    cursor: pointer;
+}
+
+#date-search-input::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 6px;
+    opacity: 0;
+    width: 0;
+}
+
+#date-picker {
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#calendar-grid button {
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    background: white;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 12px;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+#calendar-grid button:hover {
+    background: #f0f0f0;
+    border-color: #6AB053;
+}
+
+#calendar-grid button.other-month {
+    color: #ccc;
+    background: #f9f9f9;
+}
+
+#calendar-grid button.today {
+    background: #e8f5e9;
+    border-color: #6AB053;
+    font-weight: bold;
+}
+
+#calendar-grid button.selected {
+    background: #6AB053;
+    color: white;
+    border-color: #6AB053;
+}
+
+#calendar-grid button.disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+#date-picker-toggle:focus {
+    outline: none;
+    border-color: #6AB053;
+}
+
+#date-picker-toggle:hover {
+    border-color: #6AB053;
+}
+
