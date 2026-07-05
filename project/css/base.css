@@ -1,3 +1,26 @@
+﻿/* === Reset & Body === */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  padding: 20px;
+  background: #ffffff;
+  margin: 0;
+  position: relative;
+}
+
+body.page-view {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+}
+
+/* === Navigation (ex 00-navigation.css) === */
+
 /* ===== Navigation Drawer ===== */
 :root {
   --nav-color-schedule: #6AB053;
@@ -273,4 +296,80 @@
   .nav-drawer {
     display: none !important;
   }
+}
+
+/* === Animations (ex 01-animations.css) === */
+
+/* ============================================ */
+/* ANIMATIONS */
+/* ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* === Notifications (ex 16-notifications.css) === */
+
+/* ============================================ */
+/* NOTIFICATIONS */
+/* ============================================ */
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #83a737;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 10000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease;
 }

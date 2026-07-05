@@ -1,0 +1,1215 @@
+﻿/* === Header Index (ex 03-header.css) === */
+
+/* ============================================ */
+/* HEADER & NAVIGATION */
+/* ============================================ */
+
+body.page-work .header-nav {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto 20px auto;
+}
+
+body.page-work .header-image {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 10px auto;
+  transition: transform 0.2s;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out 0s forwards;
+}
+
+body.page-work .header-image:hover {
+  transform: scale(1.02);
+}
+
+body.page-work .logo {
+  max-width: 500px;
+  height: auto;
+}
+
+body.page-work .logo-mobile {
+  display: block;
+  max-width: 200px;
+  height: auto;
+  margin: 0 auto 15px auto;
+}
+
+body.page-work .nav-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background: #6AB053;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+body.page-work .nav-btn:hover {
+  background: #5A9043;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(106, 176, 83, 0.3);
+}
+
+
+/* === Header View (ex css2/02-header.css) === */
+
+/* ============================================ */
+/* HEADER & LOGO */
+/* ============================================ */
+
+.header {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+.header .logo {
+    max-width: 500px;
+    height: auto;
+}
+
+.header .nav-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background: #6AB053;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.header .nav-btn:hover {
+    background: #5A9043;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(106, 176, 83, 0.3);
+}
+
+.header .nav-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.header .nav-sub-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #6AB053;
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: not-allowed;
+    opacity: 0.6;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.header .nav-sub-btn:hover {
+    background: #6AB053;
+}
+
+/* === View Toggle (ex css2/03-view-toggle.css) === */
+
+/* ============================================ */
+/* VIEW TOGGLE & SEARCH */
+/* ============================================ */
+
+.view-toggle {
+    display: flex;
+    gap: 10px;
+    background: #f0f0f0;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.view-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    color: #666;
+}
+
+.view-btn:hover {
+    background: rgba(106, 176, 83, 0.1);
+}
+
+.view-btn.active {
+    background: #6AB053;
+    color: white;
+}
+
+.search-container {
+    display: none;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 10px;
+}
+
+.search-container.active {
+    display: block;
+}
+
+#date-search-container {
+    display: none !important;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 10px;
+}
+
+#date-search-container.active {
+    display: block !important;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #6AB053;
+}
+
+/* === Week Controls (ex 04-week-controls.css) === */
+
+/* ============================================ */
+/* WEEK CONTROLS */
+/* ============================================ */
+
+body.page-work .week-controls {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out 0.15s forwards;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+body.page-work .week-primary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+body.page-work .week-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+body.page-work .week-range {
+  font-weight: bold;
+  text-align: center;
+  flex: 1;
+}
+
+body.page-work .week-select {
+  font-size: 0.9em;
+  padding: 4px 6px;
+  min-width: 220px;
+  max-width: 260px;
+}
+
+body.page-work .week-btn {
+  font-size: 0.9em;
+  padding: 3px 8px;
+  transition: transform 0.2s, background-color 0.2s ease;
+  cursor: pointer;
+}
+
+body.page-work .week-btn:hover {
+  transform: scale(1.015);
+}
+
+body.page-work .week-this {
+  font-size: 0.8em;
+  max-width: 150px;
+  white-space: nowrap;
+}
+
+body.page-work #prev-week {
+  margin-left: 10px;
+}
+
+body.page-work #next-week {
+  margin-right: 10px;
+}
+
+/* === Day Select (ex 05-day-select.css) === */
+
+/* ============================================ */
+/* DAY SELECT */
+/* ============================================ */
+
+body.page-work #day-select {
+  display: block;
+  margin: 10px auto;
+  padding: 5px;
+  font-size: 1em;
+  width: 200px;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out 0.3s forwards;
+}
+
+/* === Table (ex 06-table.css) === */
+
+/* ============================================ */
+/* SCHEDULE TABLE */
+/* ============================================ */
+
+body.page-work table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+  margin: 10px 0;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out 0.45s forwards;
+}
+
+body.page-work th, body.page-work td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+  vertical-align: top;
+  position: relative;
+}
+
+body.page-work th {
+  background: #6AB053;
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+body.page-work th:hover {
+  background-color: rgba(106, 176, 83, 0.9);
+}
+
+body.page-work th.name {
+  background: #fc9247;
+}
+
+body.page-work #schedule-table {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out 0.45s forwards;
+}
+
+body.page-work #schedule-table tbody tr {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+body.page-work #schedule-table tbody tr:nth-child(1) { animation-delay: 0.6s; }
+body.page-work #schedule-table tbody tr:nth-child(2) { animation-delay: 0.75s; }
+body.page-work #schedule-table tbody tr:nth-child(3) { animation-delay: 0.9s; }
+body.page-work #schedule-table tbody tr:nth-child(4) { animation-delay: 1.05s; }
+body.page-work #schedule-table tbody tr:nth-child(5) { animation-delay: 1.2s; }
+body.page-work #schedule-table tbody tr:nth-child(6) { animation-delay: 1.35s; }
+
+body.page-work #schedule-table thead th {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+body.page-work #schedule-table thead th:nth-child(1) { animation-delay: 0.5s; }
+body.page-work #schedule-table thead th:nth-child(2) { animation-delay: 0.55s; }
+body.page-work #schedule-table thead th:nth-child(3) { animation-delay: 0.6s; }
+body.page-work #schedule-table thead th:nth-child(4) { animation-delay: 0.65s; }
+body.page-work #schedule-table thead th:nth-child(5) { animation-delay: 0.7s; }
+body.page-work #schedule-table thead th:nth-child(6) { animation-delay: 0.75s; }
+
+body.page-work .today {
+  background: #965fa9 !important;
+  color: rgb(255, 255, 255);
+}
+
+body.page-work .bottom-names-row td {
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  border-top: 2px solid #ccc;
+  background-color: #6AB053;
+  color: white;
+}
+
+/* === Panels (ex 10-panels.css) === */
+
+/* ============================================ */
+/* PANELS (ADMIN & SINGLE) */
+/* ============================================ */
+
+body.page-work #admin-panel, body.page-work #single-panel {
+  display: none;
+  position: relative;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 15px;
+  width: 100%;
+  max-width: 100%;
+  margin: 10px 0;
+  box-sizing: border-box;
+  z-index: 100;
+}
+
+body.page-work #single-panel {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out 1.5s forwards;
+}
+
+body.page-work #admin-button {
+  display: block;
+  margin: 10px auto;
+  padding: 8px 12px;
+  font-size: 0.9em;
+  background: #6AB053;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* === Phone (ex 11-phone.css) === */
+
+/* ============================================ */
+/* PHONE MANAGEMENT */
+/* ============================================ */
+
+body.page-work #phone-list {
+  margin-bottom: 5px;
+}
+
+body.page-work .phone-entry {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+body.page-work .phone-number {
+  width: 65%;
+  margin-left: 5px;
+}
+
+body.page-work .phone-name {
+  width: 35%;
+}
+
+body.page-work #add-phone {
+  display: block;
+  padding: 5px;
+  font-size: 1em;
+  width: auto;
+  background: #83a737;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  margin: 5px 0;
+  transition: transform 0.2s, background-color 0.2s ease;
+  cursor: pointer;
+}
+
+body.page-work #add-phone:hover {
+  transform: scale(1.03);
+  background: rgba(131, 167, 55, 0.9);
+}
+
+body.page-work .remove-phone {
+  padding: 5px;
+  font-size: 1em;
+  width: auto;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  margin-right: 5px;
+  transition: transform 0.2s, background-color 0.2s ease;
+  cursor: pointer;
+}
+
+body.page-work .remove-phone:hover {
+  transform: scale(1.03);
+  background: rgba(255, 68, 68, 0.9);
+}
+
+/* === Code (ex 12-code.css) === */
+
+/* ============================================ */
+/* CODE/ENTRY SECTION */
+/* ============================================ */
+
+body.page-work #codes-section {
+  margin-bottom: 8px;
+}
+
+body.page-work #codes-section label {
+  display: block;
+  margin-bottom: 2px;
+}
+
+body.page-work .code-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+body.page-work .code-row input[type="text"] {
+  width: 60%;
+  padding: 3px;
+  font-size: 0.9em;
+  margin-left: 5px;
+}
+
+body.page-work .checkbox-container {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  text-align: center;
+}
+
+body.page-work .checkbox-container input[type="checkbox"] {
+  margin: 0;
+}
+
+body.page-work .checkbox-container label {
+  font-size: 0.9em;
+  margin-top: 1px;
+  line-height: 1;
+}
+
+body.page-work .code-options {
+  display: none;
+  margin-top: -27px;
+  margin-bottom: 2px;
+  padding-right: 40%;
+}
+
+body.page-work .code-options select {
+  width: 60%;
+  font-size: 0.8em;
+  padding: 3px;
+  margin-left: 5px;
+}
+
+body.page-work #target-name-2-container {
+  display: none;
+  margin-bottom: 8px;
+}
+
+/* === Day Notes (ex 13-day-notes.css) === */
+
+/* ============================================ */
+/* DAY NOTES STYLES */
+/* ============================================ */
+
+body.page-work .day-notes-row {
+  background-color: #f8f9fa;
+}
+
+body.page-work .day-notes-header {
+  background-color: white !important;
+  color: black !important;
+  font-weight: bold;
+  text-align: center;
+  padding: 8px !important;
+  vertical-align: middle;
+}
+
+body.page-work .day-notes-cell {
+  padding: 8px !important;
+  vertical-align: top;
+}
+
+body.page-work .day-notes-container {
+  width: 100%;
+  position: relative;
+}
+
+body.page-work .day-notes-textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px;
+  padding-right: 40px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-family: inherit;
+  resize: vertical;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+body.page-work .day-notes-textarea:focus {
+  outline: none;
+  border-color: #83a737;
+  box-shadow: 0 0 0 2px rgba(131, 167, 55, 0.2);
+}
+
+body.page-work .day-notes-textarea::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+body.page-work .day-notes-save-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  background-color: #83a737;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+body.page-work .day-notes-save-btn:hover {
+  background-color: #6b8a2a;
+  transform: scale(1.05);
+}
+
+body.page-work .day-notes-save-btn:active {
+  transform: scale(0.95);
+}
+
+/* === Mobile Notes (ex 14-mobile-notes.css) === */
+
+/* ============================================ */
+/* MOBILE NOTES STYLES */
+/* ============================================ */
+
+body.page-work .mobile-notes-row {
+  background-color: #f8f9fa;
+}
+
+body.page-work .mobile-notes-cell {
+  padding: 8px !important;
+  vertical-align: top;
+}
+
+body.page-work .mobile-notes-container {
+  width: 100%;
+  position: relative;
+}
+
+body.page-work .mobile-notes-textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px;
+  padding-right: 40px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: inherit;
+  resize: vertical;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+body.page-work .mobile-notes-textarea:focus {
+  outline: none;
+  border-color: #83a737;
+  box-shadow: 0 0 0 2px rgba(131, 167, 55, 0.2);
+}
+
+body.page-work .mobile-notes-save-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  background-color: #83a737;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+body.page-work .mobile-notes-save-btn:hover {
+  background-color: #6b8a2a;
+  transform: scale(1.05);
+}
+
+/* === Columns (ex css2/04-columns.css) === */
+
+/* ============================================ */
+/* COLUMNS LAYOUT */
+/* ============================================ */
+
+.columns-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    max-width: 100%;
+}
+
+.column {
+    flex: 0 0 calc(16.666% - 12.5px);
+    min-width: 250px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 180px);
+    animation: fadeInUp 0.4s ease-out forwards;
+}
+
+to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.column-header {
+    padding: 18px;
+    background: #6AB053;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 8px 8px 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.column-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+.loading, .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+    font-size: 18px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* === Nested Items (ex css2/05-nested-items.css) === */
+
+/* ============================================ */
+/* NESTED ITEMS */
+/* ============================================ */
+
+.nested-item {
+    margin-bottom: 10px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s;
+}
+
+.nested-item:hover {
+    box-shadow: 0 2px 8px rgba(106, 176, 83, 0.2);
+    border-color: #6AB053;
+}
+
+.nested-header {
+    padding: 12px;
+    background: #f0f0f0;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: background 0.2s;
+}
+
+.nested-header:hover {
+    background: #e8e8e8;
+}
+
+.arrow {
+    transition: transform 0.3s;
+    font-size: 12px;
+    color: #6AB053;
+}
+
+.arrow.expanded {
+    transform: rotate(90deg);
+}
+
+.nested-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    padding: 0 12px;
+}
+
+.nested-content.expanded {
+    max-height: 1000px;
+    padding: 12px;
+}
+
+.address-item, .final-item {
+    margin: 6px 0;
+    padding: 10px;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid #e0e0e0;
+    transition: all 0.2s;
+}
+
+.address-item:hover, .final-item:hover {
+    background: #f8f9fa;
+    border-color: #6AB053;
+    transform: translateX(-2px);
+}
+
+/* === View Responsive (ex css2/10-responsive.css) === */
+
+/* ============================================ */
+/* RESPONSIVE DESIGN */
+/* ============================================ */
+
+@media (max-width: 1800px) {
+    .column {
+        flex: 0 0 calc(20% - 12px);
+    }
+}
+
+@media (max-width: 1400px) {
+    .column {
+        flex: 0 0 calc(25% - 11.25px);
+    }
+}
+
+@media (max-width: 1100px) {
+    .column {
+        flex: 0 0 calc(33.333% - 10px);
+    }
+}
+
+/* === Compact Mode (ex css2/11-compact-mode.css) === */
+
+/* Compact Mode Toggle */
+.compact-mode-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.compact-mode-label {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    user-select: none;
+    margin: 0;
+}
+
+.compact-mode-toggle {
+    display: none;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    margin: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+input:checked + .toggle-slider {
+    background-color: #6AB053;
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(20px);
+}
+
+/* Compact Text Display */
+.compact-text {
+    position: relative;
+    text-decoration: underline dotted #999;
+    cursor: help;
+    display: inline-block;
+}
+
+/* Tooltip for full text */
+.compact-text[data-full-text]::after {
+    content: attr(data-full-text);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 99999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.compact-text[data-full-text]::before {
+    content: '';
+    position: absolute;
+    bottom: 116%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #333;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    pointer-events: none;
+    z-index: 99999;
+}
+
+.compact-text[data-full-text]:hover::after,
+.compact-text[data-full-text]:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Table header compression in compact mode */
+.project-matrix-table.compact-mode th,
+.project-matrix-table.compact-mode td {
+    padding: 6px 4px;
+}
+
+.project-matrix-table.compact-mode .matrix-cell {
+    min-width: 60px;
+    min-height: 48px;
+}
+
+.project-matrix-table.compact-mode thead th {
+    font-size: 12px;
+    max-height: 60px;
+    word-break: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+    overflow: visible !important;
+}
+
+.project-matrix-table.compact-mode .worker-marker {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+}
+
+.project-matrix-table.compact-mode tbody th {
+    font-size: 12px;
+}
+
+/* Responsive adjustments for compact mode */
+@media (max-width: 1024px) {
+    .project-matrix-table.compact-mode .matrix-cell {
+        min-width: 50px;
+    }
+
+    .project-matrix-table.compact-mode thead th {
+        font-size: 11px;
+    }
+}
+
+/* Ensure tooltip appears above everything */
+.project-matrix-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.worker-marker-tooltip {
+    z-index: 99999 !important;
+}
+
+.worker-marker {
+    z-index: 100 !important;
+}
+
+/* Dark theme support for tooltips */
+@media (prefers-color-scheme: dark) {
+    .compact-text[data-full-text]::after {
+        background: #f0f0f0;
+        color: #333;
+    }
+
+    .compact-text[data-full-text]::before {
+        border-top-color: #f0f0f0;
+    }
+}
+
+/* === Responsive Mobile (ex 20-responsive-mobile.css) === */
+
+/* ============================================ */
+/* RESPONSIVE DESIGN - MOBILE */
+/* ============================================ */
+
+@media (max-width: 600px) {
+  body.page-work * {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+  }
+
+  body.page-work {
+    padding: 10px;
+  }
+
+  body.page-work .header-image {
+    max-width: 150px;
+    margin: 5px auto;
+  }
+
+  body.page-work .logo-mobile {
+    display: block;
+  }
+
+  body.page-work table {
+    font-size: 0.85em;
+  }
+
+  body.page-work th, body.page-work td {
+    padding: 5px;
+  }
+
+  body.page-work .checkboxes label {
+    margin: 0 1px;
+  }
+
+  body.page-work .tooltip {
+    max-width: 150px;
+    font-size: 0.8em;
+  }
+
+  body.page-work #day-select {
+    width: 150px;
+    font-size: 0.9em;
+  }
+
+  body.page-work #admin-button, body.page-work #admin-panel {
+    display: none;
+  }
+
+  body.page-work #single-panel {
+    padding: 10px;
+  }
+
+  body.page-work .call-phone {
+    display: inline-block;
+  }
+
+  body.page-work .phone-number {
+    width: 60%;
+  }
+
+  body.page-work .phone-name {
+    width: 40%;
+  }
+
+  body.page-work .code-row input[type="text"] {
+    width: 55%;
+  }
+
+  body.page-work .checkbox-container {
+    width: 45%;
+  }
+
+  body.page-work .checkbox-container label {
+    font-size: 0.85em;
+  }
+
+  body.page-work .code-options select {
+    width: 55%;
+  }
+
+  body.page-work .day-notes-textarea {
+    min-height: 50px;
+    font-size: 0.8em;
+    padding: 6px;
+    padding-right: 35px;
+  }
+
+  body.page-work .day-notes-cell {
+    padding: 4px !important;
+  }
+
+  body.page-work .day-notes-save-btn {
+    width: 20px;
+    height: 20px;
+    top: 6px;
+    right: 6px;
+    font-size: 10px;
+  }
+
+  body.page-work .day-notes-header {
+    display: none !important;
+  }
+
+  body.page-work .mobile-notes-textarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 8px;
+    padding-right: 40px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: inherit;
+    resize: vertical;
+    background-color: #fff;
+    box-sizing: border-box;
+  }
+
+  body.page-work .mobile-notes-cell {
+    padding: 4px !important;
+  }
+
+  body.page-work .mobile-notes-save-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 4px;
+    background-color: #83a737;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.2s ease;
+  }
+
+  body.page-work .mobile-notes-save-btn:hover {
+    background-color: #6b8a2a;
+  }
+}
+
+/* === Responsive Desktop (ex 21-responsive-desktop.css) === */
+
+/* ============================================ */
+/* RESPONSIVE DESIGN - DESKTOP */
+/* ============================================ */
+
+@media (min-width: 601px) {
+  body.page-work #day-select {
+    display: none;
+  }
+
+  body.page-work .checkboxes input[type="checkbox"]:disabled {
+    opacity: 1;
+    cursor: default;
+  }
+}
+
+@media (min-width: 769px) {
+  body.page-work .header-nav {
+    display: flex;
+  }
+
+  body.page-work .logo-mobile {
+    display: none;
+  }
+
+  body.page-work .checkboxes label:not(:last-child) {
+    border-left: 1px solid #e0e0e0;
+    margin-left: 4px;
+    padding-left: 8px;
+  }
+
+  body.page-work .checkboxes {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+  }
+}
+
