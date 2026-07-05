@@ -197,6 +197,24 @@ body.page-view {
   background: #7F9A3B;
 }
 
+/* Pending form & tasks */
+.nav-item.pending-task {
+  background: #7f993b;
+  color: white;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-item.pending-task:hover {
+    background: #6f8833;
+  }
+}
+
+.nav-item.pending-task.active {
+  border-left-color: white;
+  box-shadow: inset 5px 0 0 white;
+  background: #6f8833;
+}
+
 /* Service Calls - Muted Green */
 .nav-item.service {
   background: #8a8f99;
@@ -231,29 +249,7 @@ body.page-view {
   background: #747a84;
 }
 
-/* Building Codes + Service Agreements */
-.nav-item.building-codes,
-.nav-item.service-agreement,
-.nav-item.fill-service-agreement {
-  background: #8a8f99;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .nav-item.building-codes:hover,
-  .nav-item.service-agreement:hover,
-  .nav-item.fill-service-agreement:hover {
-    background: #747a84;
-  }
-}
-
-.nav-item.building-codes.active,
-.nav-item.service-agreement.active,
-.nav-item.fill-service-agreement.active {
-  border-left-color: white;
-  box-shadow: inset 5px 0 0 white;
-  background: #747a84;
-}
-
+/* Building Codes */
 .nav-item.building-codes {
   background: #4b5d2d;
 }
