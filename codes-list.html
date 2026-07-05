@@ -85,6 +85,30 @@
       text-align: center;
     }
 
+    .update-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .update-badge {
+      display: inline-block;
+      background: #eef8ea;
+      color: var(--accent-dark);
+      border: 1px solid #d6eccc;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .update-date {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
     .list-box {
       background: var(--surface);
       border: 1px solid var(--line);
@@ -251,6 +275,10 @@
         <img src="project/assets/utech.png" alt="Utech" />
       </div>
       <h1>רשימת כתובות וקודי כניסה</h1>
+      <div class="update-info">
+        <span class="update-badge">+114 קודים חדשים</span>
+        <span class="update-date">עדכון אחרון 05.07.2026</span>
+      </div>
       <input id="searchInput" class="search-input" type="text" placeholder="חיפוש לפי כתובת..." />
       <div id="meta" class="meta"></div>
     </div>

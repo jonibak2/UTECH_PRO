@@ -20,7 +20,14 @@
         }
         
         .project-modal-input-group {
+            display: flex;
+            flex-direction: column;
             margin-bottom: 15px;
+        }
+
+        .project-modal-input {
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .project-table-controls {
@@ -574,28 +581,17 @@
             projects.forEach(([projectId, project]) => {
                 const projectItem = document.createElement('div');
                 projectItem.className = 'project-item';
-                projectItem.style.cssText = `
-                    padding: 15px;
-                    border: 1px solid #e0e0e0;
-                    border-radius: 8px;
-                    margin-bottom: 10px;
-                    background: #f9f9f9;
-                `;
-                
-                let projectInfo = `
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
-                        <div style="flex: 1;">
-                            <div style="font-weight: bold; font-size: 16px; margin-bottom: 8px;">${project.name}</div>
-                            <div style="font-size: 14px; color: #666; margin-bottom: 5px;"><strong>מנהל:</strong> ${project.manager || '-'}</div>
-                            <div style="font-size: 14px; color: #666; margin-bottom: 5px;"><strong>טלפון:</strong> ${project.phone || '-'}</div>
-                            ${project.address ? `<div style="font-size: 14px; color: #666; margin-bottom: 5px;"><strong>כתובת:</strong> ${project.address}</div>` : ''}
-                            <div style="font-size: 14px; color: #666;"><strong>קומות:</strong> ${project.floors || '-'}</div>
-                        </div>
-                        <button class="project-item-delete" data-project-id="${projectId}" style="padding: 8px 12px; background: #ff4757; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; white-space: nowrap;">מחק</button>
+
+                projectItem.innerHTML = `
+                    <div class="project-item-info">
+                        <div class="project-item-name">${project.name}</div>
+                        <div class="project-item-detail"><strong>מנהל:</strong> ${project.manager || '-'}</div>
+                        <div class="project-item-detail"><strong>טלפון:</strong> ${project.phone || '-'}</div>
+                        ${project.address ? `<div class="project-item-detail"><strong>כתובת:</strong> ${project.address}</div>` : ''}
+                        <div class="project-item-detail"><strong>קומות:</strong> ${project.floors ?? '-'}</div>
                     </div>
+                    <button type="button" class="project-item-delete" data-project-id="${projectId}">מחק</button>
                 `;
-                
-                projectItem.innerHTML = projectInfo;
                 
                 projectItem.querySelector('.project-item-delete').addEventListener('click', async () => {
                     if (confirm(`האם אתה בטוח שברצונך למחוק את הפרויקט "${project.name}"?`)) {

@@ -8,7 +8,8 @@
 
 <link rel="stylesheet" href="project/css/base.css" />
 
-<style>\n/* ===== Base ===== */
+<style>
+/* ===== Base ===== */
 body {
   font-family: Arial, sans-serif;
   background: #ffffff;
@@ -170,47 +171,69 @@ textarea {
 
 .floor-title {
   font-weight: bold;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   font-size: 0.9em;
 }
 
-/* ===== Equipment ===== */
-.equipment-item {
+.floor-work-row {
   display: flex;
-  gap: 4px;
-  margin-bottom: 6px;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
-.equipment-item input[type="text"] {
-  flex: 3;
+.floor-work-row:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
-.equipment-item input[type="number"] {
-  flex: 1;
+.floor-work-row label {
+  font-size: 0.8em;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 2px;
 }
 
-.remove-equipment {
-  width: 32px;
-  min-width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #ff4444;
-  color: white;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-  padding: 0;
-}
-
-.add-btn {
-  margin-top: 6px;
-  background: #e0e0e0;
-  border: none;
+.floor-work-row select {
+  width: 100%;
   padding: 8px;
   border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.85em;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.floor-row-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.floor-add-row-btn,
+.floor-remove-row-btn {
+  flex: 1;
+  border: none;
+  border-radius: 6px;
+  padding: 7px;
+  font-size: 0.8em;
   cursor: pointer;
+}
+
+.floor-add-row-btn {
+  background: #e8f5e3;
+  color: #3d6b2f;
+  font-weight: bold;
+  margin-top: 8px;
   width: 100%;
-  font-size: 0.9em;
+}
+
+.floor-remove-row-btn {
+  background: #ffe8e8;
+  color: #c0392b;
 }
 
 /* ===== Submit ===== */
@@ -229,6 +252,137 @@ textarea {
 
 .submit-btn:hover {
   background: #5A9043;
+}
+
+/* ===== Wizard ===== */
+.wizard-steps {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.wizard-step-dot {
+  flex: 1;
+  height: 4px;
+  border-radius: 4px;
+  background: #e0e0e0;
+  transition: background 0.3s;
+}
+
+.wizard-step-dot.active,
+.wizard-step-dot.done {
+  background: #6AB053;
+}
+
+.wizard-panel {
+  display: none;
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.wizard-panel.active {
+  display: block;
+}
+
+.wizard-title {
+  text-align: center;
+  margin: 0 0 6px;
+  font-size: 1.4em;
+}
+
+.wizard-subtitle {
+  text-align: center;
+  color: #666;
+  margin: 0 0 18px;
+  font-size: 0.9em;
+}
+
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.choice-card {
+  background: #f8f9fa;
+  border: 2px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1em;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.choice-card:hover {
+  border-color: #6AB053;
+  background: #f0f8ed;
+  transform: translateY(-2px);
+}
+
+.choice-card.selected {
+  border-color: #6AB053;
+  background: #6AB053;
+  color: white;
+}
+
+.choice-card .choice-meta {
+  display: block;
+  font-weight: normal;
+  font-size: 0.75em;
+  color: #888;
+  margin-top: 4px;
+}
+
+.choice-card.selected .choice-meta {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.choice-card.project-card {
+  text-align: right;
+  padding: 14px;
+}
+
+.choice-card.project-card .project-card-name {
+  font-size: 1.05em;
+  margin-bottom: 4px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #6AB053;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 0 12px;
+  font-size: 0.9em;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+.selection-summary {
+  background: #f0f8ed;
+  border: 1px solid #c8e6b8;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+.selection-summary strong {
+  color: #3d6b2f;
+}
+
+.empty-projects {
+  text-align: center;
+  padding: 30px 16px;
+  color: #999;
+  background: #f8f9fa;
+  border-radius: 8px;
 }
 
 .success-message {
@@ -396,64 +550,65 @@ textarea {
 <div class="container">
 <img src="project/assets/utech.png" alt="Utech" class="logo">
 
-<form id="workForm">
-<div class="form-group">
-<label>שם העובד <span class="required">*</span></label>
-<select id="workerName" required>
-<option value="" disabled selected>בחר שם</option>
-<option>פאבל</option>
-<option>שי</option>
-<option>ויקטור</option>
-<option>פימה</option>
-<option>יהונתן</option>
-<option>איציק</option>
-<option>יורי</option>
-<option>ראובן</option>
-</select>
+<div class="wizard-steps" aria-hidden="true">
+  <div class="wizard-step-dot active" id="dot-step-1"></div>
+  <div class="wizard-step-dot" id="dot-step-2"></div>
+  <div class="wizard-step-dot" id="dot-step-3"></div>
 </div>
 
-<div class="form-group">
-<label>תאריך <span class="required">*</span></label>
-<input type="date" id="workDate" required>
+<!-- Step 1: Worker -->
+<div class="wizard-panel active" id="step-worker">
+  <h1 class="wizard-title">מי אתה?</h1>
+  <p class="wizard-subtitle">בחר את שמך מהרשימה</p>
+  <div class="choice-grid" id="workerGrid"></div>
 </div>
 
-<div class="form-group">
-<label>פרויקט <span class="required">*</span></label>
-<select id="project" required>
-<option value="" disabled selected>בחר פרויקט</option>
-</select>
+<!-- Step 2: Project -->
+<div class="wizard-panel" id="step-project">
+  <button type="button" class="back-btn" id="backToWorker">← חזור לבחירת שם</button>
+  <h1 class="wizard-title">בחר פרויקט</h1>
+  <p class="wizard-subtitle" id="workerLabel"></p>
+  <div id="projectGrid" class="choice-grid"></div>
+  <div id="noProjects" class="empty-projects" style="display:none">
+    אין פרויקטים במערכת.<br>הוסף פרויקט בדף <a href="view.html">יומני עבודה</a>.
+  </div>
 </div>
 
-<div class="form-group">
-<label>כתובת</label>
-<input type="text" id="address" placeholder="הזן כתובת">
+<!-- Step 3: Form details -->
+<div class="wizard-panel" id="step-form">
+  <button type="button" class="back-btn" id="backToProject">← חזור לבחירת פרויקט</button>
+  <div class="selection-summary" id="selectionSummary"></div>
+
+  <form id="workForm">
+    <input type="hidden" id="workerName" required>
+    <input type="hidden" id="project" required>
+
+    <div class="form-group">
+      <label>תאריך <span class="required">*</span></label>
+      <input type="date" id="workDate" required>
+    </div>
+
+    <div class="form-group">
+      <label>בחירת קומות <span class="required">*</span></label>
+      <p class="wizard-subtitle" id="floorsHint" style="margin-bottom:8px"></p>
+      <div class="floor-grid" id="floorGrid"></div>
+    </div>
+
+    <div id="floorWorkContainer"></div>
+
+    <div class="form-group">
+      <label>תקלות / ליקויים שהתגלו</label>
+      <textarea id="issues"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>מה נדרש להשלים בביקור הבא</label>
+      <textarea id="nextVisit"></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn">שלח</button>
+  </form>
 </div>
-
-<div class="form-group">
-<label>בחירת קומות <span class="required">*</span></label>
-<div class="floor-grid" id="floorGrid"></div>
-</div>
-
-<div id="floorWorkContainer"></div>
-
-<div class="form-group">
-<label>אביזרים וציוד שהותקנו / הוחלפו</label>
-<div id="equipmentList"></div>
-<button type="button" class="add-btn" onclick="addEquipment()">➕ הוסף פריט</button>
-</div>
-
-<div class="form-group">
-<label>תקלות / ליקויים שהתגלו</label>
-<textarea id="issues"></textarea>
-</div>
-
-<div class="form-group">
-<label>מה נדרש להשלים בביקור הבא</label>
-<textarea id="nextVisit"></textarea>
-</div>
-
-<button type="submit" class="submit-btn">שלח</button>
-</form>
 
 <div id="message"></div>
 </div>
@@ -479,34 +634,185 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const database = getDatabase(app);
 
-        /* ===== Load projects from Firebase ===== */
-        function loadProjects() {
-            const projectSelect = document.getElementById('project');
-            const projectsRef = ref(database, 'projects');
-            
-            onValue(projectsRef, (snapshot) => {
-                const projects = snapshot.val() || {};
-                const projectArray = Object.values(projects).sort((a, b) => 
-                    a.name.localeCompare(b.name, 'he')
-                );
+const WORKERS = ["פאבל", "שי", "ויקטור", "פימה", "יהונתן", "איציק", "יורי", "ראובן"];
 
-                // Keep only the first default option
-                projectSelect.innerHTML = '<option value="" disabled selected>בחר פרויקט</option>';
+const EQUIPMENT_OPTIONS = [
+  "לובי 1 גלאי 1",
+  "לובי 1 גלאי 2",
+  "לובי מעליות",
+  "לובי 2 גלאי 1",
+  "לובי 2 גלאי 2",
+  "שוט",
+  "מדרגות 1",
+  "מדרגות 2",
+  "IN",
+  "לחצן 1",
+  "לחצן 2",
+  "צופר 1",
+  "צופר 2",
+  "מגנט 1",
+  "מגנט 2",
+  "מגנט 3",
+  "מגנט 4",
+  "שקע טלפון חדר מדרגות 1",
+  "שקע טלפון חדר מדרגות 2",
+  "שקע טלפון לובי מעליות",
+  "רמקול לובי 1",
+  "רמקול לובי 2",
+  "רמקול לובי מעליות",
+  "רמקול חדר מדרגות 1",
+  "רמקול חדר מדרגות 2"
+];
 
-                projectArray.forEach(project => {
-                    const option = document.createElement('option');
-                    option.value = project.name;
-                    option.textContent = project.name;
-                    projectSelect.appendChild(option);
-                });
-            });
-        }
+const STATUS_OPTIONS = [
+  { value: "לא בוצע צנרת", label: "לא בוצע צנרת" },
+  { value: "חיווט בלבד", label: "חיווט בלבד" },
+  { value: "הותקן אביזר קופ (למעט גלאי)", label: "הותקן אביזר קופ (למעט גלאי)" },
+  { value: "הותקן גלאי", label: "הותקן גלאי" },
+  { value: "הותקן בסיס", label: "הותקן בסיס" }
+];
 
-        // Load projects when page loads
-        loadProjects();
+let projectsList = {};
+let selectedWorker = "";
+let selectedProject = null;
 
-        /* ===== Storage helpers ===== */
-        async function saveReport(data) {
+const floorGrid = document.getElementById("floorGrid");
+const floorWorkContainer = document.getElementById("floorWorkContainer");
+const activeFloors = new Map();
+
+function goToStep(step) {
+  document.querySelectorAll(".wizard-panel").forEach((p) => p.classList.remove("active"));
+  document.querySelectorAll(".wizard-step-dot").forEach((d) => d.classList.remove("active", "done"));
+
+  document.getElementById(`step-${step === 1 ? "worker" : step === 2 ? "project" : "form"}`).classList.add("active");
+
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById(`dot-step-${i}`);
+    if (i < step) dot.classList.add("done");
+    if (i === step) dot.classList.add("active");
+  }
+}
+
+function renderWorkers() {
+  const grid = document.getElementById("workerGrid");
+  grid.innerHTML = "";
+  WORKERS.forEach((name) => {
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "choice-card";
+    card.textContent = name;
+    card.addEventListener("click", () => selectWorker(name));
+    grid.appendChild(card);
+  });
+}
+
+function selectWorker(name) {
+  selectedWorker = name;
+  document.getElementById("workerName").value = name;
+  document.getElementById("workerLabel").textContent = `שלום, ${name}!`;
+  renderProjects();
+  goToStep(2);
+}
+
+function renderProjects() {
+  const grid = document.getElementById("projectGrid");
+  const noProjects = document.getElementById("noProjects");
+  const projects = Object.values(projectsList).sort((a, b) =>
+    a.name.localeCompare(b.name, "he")
+  );
+
+  grid.innerHTML = "";
+
+  if (projects.length === 0) {
+    grid.style.display = "none";
+    noProjects.style.display = "block";
+    return;
+  }
+
+  grid.style.display = "grid";
+  noProjects.style.display = "none";
+
+  projects.forEach((project) => {
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "choice-card project-card";
+    const floors = Number(project.floors);
+    card.innerHTML = `
+      <div class="project-card-name">${project.name}</div>
+      ${project.address ? `<span class="choice-meta">${project.address}</span>` : ""}
+      <span class="choice-meta">${Number.isInteger(floors) && floors >= 0 ? `${floors} קומות` : "קומות לא הוגדרו"}</span>
+    `;
+    card.addEventListener("click", () => selectProject(project));
+    grid.appendChild(card);
+  });
+}
+
+function selectProject(project) {
+  selectedProject = project;
+  document.getElementById("project").value = project.name;
+
+  const floors = Number(project.floors);
+  const summary = document.getElementById("selectionSummary");
+  summary.innerHTML = `
+    <strong>עובד:</strong> ${selectedWorker}<br>
+    <strong>פרויקט:</strong> ${project.name}
+    ${project.manager ? `<br><strong>מנהל:</strong> ${project.manager}` : ""}
+  `;
+
+  buildFloorGrid(floors);
+  goToStep(3);
+}
+
+function buildFloorGrid(maxFloor) {
+  floorGrid.innerHTML = "";
+  floorWorkContainer.innerHTML = "";
+  activeFloors.clear();
+
+  const hint = document.getElementById("floorsHint");
+  if (!Number.isInteger(maxFloor) || maxFloor < 0) {
+    hint.textContent = "לפרויקט זה לא הוגדר מספר קומות — פנה למנהל.";
+    return;
+  }
+
+  hint.textContent = `בחר קומות (מקומה -5 עד ${maxFloor})`;
+
+  for (let i = -5; i <= maxFloor; i++) {
+    const chip = document.createElement("div");
+    chip.className = "floor-chip";
+    chip.textContent = i;
+    chip.addEventListener("click", () => toggleFloor(i, chip));
+    floorGrid.appendChild(chip);
+  }
+}
+
+function loadProjects() {
+  const projectsRef = ref(database, "projects");
+  onValue(projectsRef, (snapshot) => {
+    projectsList = snapshot.val() || {};
+    if (selectedWorker && !selectedProject) {
+      renderProjects();
+    }
+  });
+}
+
+loadProjects();
+renderWorkers();
+
+document.getElementById("backToWorker").addEventListener("click", () => {
+  selectedProject = null;
+  goToStep(1);
+});
+
+document.getElementById("backToProject").addEventListener("click", () => {
+  selectedProject = null;
+  document.getElementById("project").value = "";
+  floorGrid.innerHTML = "";
+  floorWorkContainer.innerHTML = "";
+  activeFloors.clear();
+  goToStep(2);
+});
+
+async function saveReport(data) {
           try {
             console.log('Saving report to Firebase...');
             
@@ -518,9 +824,7 @@ const database = getDatabase(app);
             const reportRef = ref(database, reportPath);
             
             await set(reportRef, {
-              address: data.address,
               floors: data.floors,
-              equipment: data.equipment,
               issues: data.issues,
               nextVisit: data.nextVisit,
               timestamp: data.timestamp
@@ -534,20 +838,86 @@ const database = getDatabase(app);
           }
         }
 
-/* ===== Address input removed - no autocomplete ===== */
+function createFloorWorkRow(floor, box) {
+  const row = document.createElement("div");
+  row.className = "floor-work-row";
+  row.dataset.floor = floor;
 
-/* ===== Floors ===== */
-const floorGrid = document.getElementById("floorGrid");
-const floorWorkContainer = document.getElementById("floorWorkContainer");
-const activeFloors = new Map();
+  const eqLabel = document.createElement("label");
+  eqLabel.textContent = "אביזר / מיקום";
+  const eqSelect = document.createElement("select");
+  eqSelect.className = "floor-equipment-select";
+  eqSelect.innerHTML = '<option value="">בחר אביזר</option>';
+  EQUIPMENT_OPTIONS.forEach((eq) => {
+    const opt = document.createElement("option");
+    opt.value = eq;
+    opt.textContent = eq;
+    eqSelect.appendChild(opt);
+  });
 
-// Create floor chips
-for (let i = -5; i <= 40; i++) {
-  const chip = document.createElement("div");
-  chip.className = "floor-chip";
-  chip.textContent = i;
-  chip.addEventListener('click', () => toggleFloor(i, chip));
-  floorGrid.appendChild(chip);
+  const statusLabel = document.createElement("label");
+  statusLabel.textContent = "סטטוס ביצוע";
+  const statusSelect = document.createElement("select");
+  statusSelect.className = "floor-status-select";
+  statusSelect.innerHTML = '<option value="">בחר סטטוס</option>';
+  STATUS_OPTIONS.forEach((s) => {
+    const opt = document.createElement("option");
+    opt.value = s.value;
+    opt.textContent = s.label;
+    statusSelect.appendChild(opt);
+  });
+
+  const actions = document.createElement("div");
+  actions.className = "floor-row-actions";
+  const removeBtn = document.createElement("button");
+  removeBtn.type = "button";
+  removeBtn.className = "floor-remove-row-btn";
+  removeBtn.textContent = "הסר שורה";
+  removeBtn.addEventListener("click", () => {
+    const rows = box.querySelectorAll(".floor-work-row");
+    if (rows.length <= 1) return;
+    row.remove();
+    updateFloorRowRemoveButtons(box);
+  });
+
+  actions.appendChild(removeBtn);
+  row.append(eqLabel, eqSelect, statusLabel, statusSelect, actions);
+  return row;
+}
+
+function updateFloorRowRemoveButtons(box) {
+  const rows = box.querySelectorAll(".floor-work-row");
+  rows.forEach((row) => {
+    const btn = row.querySelector(".floor-remove-row-btn");
+    if (btn) btn.style.display = rows.length > 1 ? "block" : "none";
+  });
+}
+
+function createFloorBox(floor) {
+  const box = document.createElement("div");
+  box.className = "floor-box";
+  box.dataset.floor = floor;
+
+  const title = document.createElement("div");
+  title.className = "floor-title";
+  title.textContent = `עבודה בקומה ${floor}`;
+
+  const rowsWrap = document.createElement("div");
+  rowsWrap.className = "floor-rows-wrap";
+  rowsWrap.appendChild(createFloorWorkRow(floor, box));
+
+  const addRowBtn = document.createElement("button");
+  addRowBtn.type = "button";
+  addRowBtn.className = "floor-add-row-btn";
+  addRowBtn.textContent = "➕ הוסף אביזר בקומה זו";
+  addRowBtn.addEventListener("click", () => {
+    rowsWrap.appendChild(createFloorWorkRow(floor, box));
+    updateFloorRowRemoveButtons(box);
+  });
+
+  box.append(title, rowsWrap, addRowBtn);
+  updateFloorRowRemoveButtons(box);
+  return box;
 }
 
 function toggleFloor(floor, chip) {
@@ -556,52 +926,43 @@ function toggleFloor(floor, chip) {
     chip.classList.remove("active");
     document.querySelector(`.floor-box[data-floor="${floor}"]`)?.remove();
   } else {
-    activeFloors.set(floor, '');
+    activeFloors.set(floor, true);
     chip.classList.add("active");
-
-    const box = document.createElement("div");
-    box.className = "floor-box";
-    box.dataset.floor = floor;
-    box.innerHTML = `
-      <div class="floor-title">עבודה שבוצעה בקומה ${floor}</div>
-      <textarea data-floor-textarea="${floor}" placeholder="פרט את העבודה בקומה זו"></textarea>
-    `;
-    
-    const textarea = box.querySelector('textarea');
-    textarea.addEventListener('input', (e) => {
-      activeFloors.set(floor, e.target.value);
-    });
-    
-    floorWorkContainer.appendChild(box);
+    floorWorkContainer.appendChild(createFloorBox(floor));
   }
 }
 
-// Make toggleFloor available globally
-window.toggleFloor = toggleFloor;
+function collectFloorWork() {
+  const floorWork = {};
 
-/* ===== Equipment ===== */
-function addEquipment() {
-  const div = document.createElement("div");
-  div.className = "equipment-item";
-  div.innerHTML = `
-    <input type="text" placeholder="שם פריט" class="equipment-name">
-    <input type="number" placeholder="כמות" class="equipment-quantity">
-    <button type="button" class="remove-equipment">✕</button>
-  `;
-  
-  // Add remove listener
-  div.querySelector('.remove-equipment').addEventListener('click', function() {
-    this.parentElement.remove();
+  document.querySelectorAll(".floor-box").forEach((box) => {
+    const floor = box.dataset.floor;
+    const rows = [];
+
+    box.querySelectorAll(".floor-work-row").forEach((row) => {
+      const equipment = row.querySelector(".floor-equipment-select")?.value.trim();
+      const status = row.querySelector(".floor-status-select")?.value.trim();
+      if (equipment && status) {
+        rows.push({ equipment, status });
+      }
+    });
+
+    if (rows.length === 0) return;
+
+    if (rows.length === 1) {
+      floorWork[floor] = { equipment: rows[0].equipment, status: rows[0].status };
+    } else {
+      floorWork[floor] = {
+        equipment: rows.map((r) => r.equipment).join(", "),
+        status: rows[0].status
+      };
+    }
   });
-  
-  document.getElementById("equipmentList").appendChild(div);
+
+  return floorWork;
 }
 
-// Make addEquipment available globally
-window.addEquipment = addEquipment;
-
-/* ===== Set today's date by default ===== */
-document.getElementById('workDate').valueAsDate = new Date();
+document.getElementById("workDate").valueAsDate = new Date();
 
 /* ===== Form submission ===== */
 document.getElementById('workForm').addEventListener('submit', async (e) => {
@@ -609,39 +970,74 @@ document.getElementById('workForm').addEventListener('submit', async (e) => {
   
   console.log('Form submitted!');
   
-  const messageDiv = document.getElementById('message');
-  
+  const messageDiv = document.getElementById("message");
+
+  if (!selectedWorker || !selectedProject) {
+    messageDiv.innerHTML = '<div class="error-message">נא לבחור שם ופרויקט</div>';
+    setTimeout(() => (messageDiv.innerHTML = ""), 3000);
+    return;
+  }
+
+  if (floorGrid.children.length === 0) {
+    messageDiv.innerHTML = '<div class="error-message">לפרויקט לא הוגדרו קומות — עדכן את הפרויקט בדף יומני עבודה</div>';
+    setTimeout(() => (messageDiv.innerHTML = ""), 4000);
+    return;
+  }
+
   // Validate floors
   if (activeFloors.size === 0) {
     messageDiv.innerHTML = '<div class="error-message">נא לבחור לפחות קומה אחת</div>';
     setTimeout(() => messageDiv.innerHTML = '', 3000);
     return;
   }
-  
-  // Collect equipment
-  const equipment = [];
-  document.querySelectorAll('.equipment-item').forEach(item => {
-    const name = item.querySelector('.equipment-name').value;
-    const quantity = item.querySelector('.equipment-quantity').value;
-    if (name || quantity) {
-      equipment.push({ name, quantity });
+
+  const floorWork = collectFloorWork();
+  const filledFloors = Object.keys(floorWork);
+
+  if (filledFloors.length === 0) {
+    messageDiv.innerHTML = '<div class="error-message">נא למלא אביזר וסטטוס לכל קומה שנבחרה</div>';
+    setTimeout(() => messageDiv.innerHTML = '', 3000);
+    return;
+  }
+
+  if (filledFloors.length < activeFloors.size) {
+    messageDiv.innerHTML = '<div class="error-message">יש קומות ללא אביזר או סטטוס — מלא את כל השדות</div>';
+    setTimeout(() => messageDiv.innerHTML = '', 4000);
+    return;
+  }
+
+  let incompleteRow = false;
+  let mixedStatusFloor = null;
+  document.querySelectorAll(".floor-box").forEach((box) => {
+    const statuses = new Set();
+    box.querySelectorAll(".floor-work-row").forEach((row) => {
+      const equipment = row.querySelector(".floor-equipment-select")?.value.trim();
+      const status = row.querySelector(".floor-status-select")?.value.trim();
+      if ((equipment && !status) || (!equipment && status)) {
+        incompleteRow = true;
+      }
+      if (equipment && status) statuses.add(status);
+    });
+    if (statuses.size > 1) {
+      mixedStatusFloor = box.dataset.floor;
     }
   });
-  
-  // Collect floor work
-  const floorWork = {};
-  activeFloors.forEach((text, floor) => {
-    const textarea = document.querySelector(`textarea[data-floor-textarea="${floor}"]`);
-    floorWork[floor] = textarea ? textarea.value : text;
-  });
+  if (incompleteRow) {
+    messageDiv.innerHTML = '<div class="error-message">בכל שורה יש לבחור גם אביזר וגם סטטוס</div>';
+    setTimeout(() => messageDiv.innerHTML = "", 3000);
+    return;
+  }
+  if (mixedStatusFloor !== null) {
+    messageDiv.innerHTML = `<div class="error-message">בקומה ${mixedStatusFloor} כל האביזרים חייבים להיות באותו סטטוס</div>`;
+    setTimeout(() => messageDiv.innerHTML = "", 4000);
+    return;
+  }
   
   const formData = {
     workerName: document.getElementById('workerName').value,
     workDate: document.getElementById('workDate').value,
     project: document.getElementById('project').value,
-    address: document.getElementById('address').value,
     floors: floorWork,
-    equipment: equipment,
     issues: document.getElementById('issues').value,
     nextVisit: document.getElementById('nextVisit').value,
     timestamp: new Date().toISOString()
@@ -682,15 +1078,19 @@ document.getElementById('workForm').addEventListener('submit', async (e) => {
     console.log('Data saved to Firebase!');
     
     setTimeout(() => {
-      overlay.style.animation = 'overlayFadeIn 0.5s ease-out reverse';
+      overlay.style.animation = "overlayFadeIn 0.5s ease-out reverse";
       setTimeout(() => {
         overlay.remove();
-        document.getElementById('workForm').reset();
-        document.getElementById('workDate').valueAsDate = new Date();
+        selectedWorker = "";
+        selectedProject = null;
+        document.getElementById("workForm").reset();
+        document.getElementById("workDate").valueAsDate = new Date();
+        document.getElementById("workerName").value = "";
+        document.getElementById("project").value = "";
         activeFloors.clear();
-        document.querySelectorAll('.floor-chip').forEach(chip => chip.classList.remove('active'));
-        floorWorkContainer.innerHTML = '';
-        document.getElementById('equipmentList').innerHTML = '';
+        floorGrid.innerHTML = "";
+        floorWorkContainer.innerHTML = "";
+        goToStep(1);
       }, 500);
     }, 2500);
   } else {
