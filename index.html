@@ -17,6 +17,7 @@
         getDatabase,
         ref,
         set,
+        update,
         onValue,
         get,
         off,
@@ -51,6 +52,82 @@
 
       // Для хранения callback-ов подписок
       const checkboxListeners = {};
+      let availablePendingTasks = {};
+
+      function fillPhonesInForm(phones) {
+        const phoneList = document.getElementById('phone-list');
+        phoneList.innerHTML = '';
+        const list = phones && phones.length ? phones : [{}];
+        list.forEach((phone) => {
+          const phoneEntry = document.createElement('div');
+          phoneEntry.className = 'phone-entry';
+          phoneEntry.innerHTML = `
+            <input type="tel" class="phone-number" placeholder="📞 הזן מספר טלפון" value="${phone.phone || ''}" required>
+            <input type="text" class="phone-name" placeholder="🙍‍♂️ שם איש קשר" value="${phone.name || ''}" required>
+            <button class="remove-phone">−</button>
+          `;
+          phoneList.appendChild(phoneEntry);
+          phoneEntry.querySelector('.remove-phone').addEventListener('click', () => {
+            if (phoneList.children.length > 1) phoneEntry.remove();
+          });
+        });
+      }
+
+      function setCodeInForm(code) {
+        const codeEntry = document.getElementById('code-entry');
+        const noCodeEntry = document.getElementById('no-code-entry');
+        const codeEntryOptions = document.getElementById('code-entry-options');
+        const codeEntryOption = document.getElementById('code-entry-option');
+        if (code === 'יש שומר' || code === 'אין קודן / דלת פתוחה') {
+          noCodeEntry.checked = true;
+          codeEntry.style.display = 'none';
+          codeEntryOptions.style.display = 'block';
+          codeEntryOption.value = code;
+        } else {
+          noCodeEntry.checked = false;
+          codeEntry.style.display = 'block';
+          codeEntryOptions.style.display = 'none';
+          codeEntry.value = code || '';
+        }
+      }
+
+      function loadPendingTasksForSelect() {
+        onValue(ref(db, 'pending-tasks'), (snapshot) => {
+          const select = document.getElementById('existing-task-select');
+          if (!select) return;
+          const currentVal = select.value;
+          availablePendingTasks = {};
+          select.innerHTML = '<option value="">— בחר משימה ממתינה —</option>';
+          const data = snapshot.val() || {};
+          Object.entries(data).forEach(([id, task]) => {
+            if (!/^\d+$/.test(id) || typeof task !== 'object' || !task) return;
+            const status = task.status || 'ממתין';
+            if (status !== 'ממתין') return;
+            availablePendingTasks[id] = task;
+            const option = document.createElement('option');
+            option.value = id;
+            option.textContent = `#${id} — ${task.address || 'ללא כתובת'}`;
+            select.appendChild(option);
+          });
+          if (availablePendingTasks[currentVal]) select.value = currentVal;
+        });
+      }
+
+      function fillFromPendingTask(taskId) {
+        const task = availablePendingTasks[taskId];
+        if (!task) return;
+        document.getElementById('task-address').value = task.address || '';
+        document.getElementById('task-reason').value = task.reason || '';
+        document.getElementById('task-comments').value = task.comments || '';
+        setCodeInForm(task.code || '');
+        fillPhonesInForm(task.phones);
+        document.getElementById('single-panel').dataset.pendingTaskId = taskId;
+        delete document.getElementById('single-panel').dataset.dbKey;
+        delete document.getElementById('single-panel').dataset.rowIndex;
+        delete document.getElementById('single-panel').dataset.colIndex;
+        delete document.getElementById('single-panel').dataset.taskNumber;
+        showNotification('משימה נטענה. בחר שם, יום ומספר משימה ולחץ "שמור משימה"');
+      }
 
       function createCheckboxCell(cell, rowIndex, colIndex) {
         const container = document.createElement("div");
@@ -546,6 +623,15 @@
 
         setupPhoneEntries();
         setupCodeInputs();
+        loadPendingTasksForSelect();
+
+        const existingTaskSelect = document.getElementById('existing-task-select');
+        if (existingTaskSelect) {
+          existingTaskSelect.addEventListener('change', () => {
+            const taskId = existingTaskSelect.value;
+            if (taskId) fillFromPendingTask(taskId);
+          });
+        }
 
         document
           .getElementById("single-insert")
@@ -623,6 +709,8 @@
               reason: reason,
               comments: comments
             };
+            const pendingTaskId = document.getElementById('single-panel').dataset.pendingTaskId;
+            if (pendingTaskId) tempTask.pendingTaskId = Number(pendingTaskId);
             await set(ref(db, "notes/tempTask"), tempTask);
             // 3. После успешной записи — читаем из tempTask и сохраняем в нужное место
             const tempSnap = await get(ref(db, "notes/tempTask"));
@@ -632,6 +720,19 @@
               await set(ref(db, dbKey), dataToSave);
               // Очищаем tempTask
               await set(ref(db, "notes/tempTask"), null);
+              if (pendingTaskId) {
+                await update(ref(db, `pending-tasks/${pendingTaskId}`), {
+                  status: 'שובץ',
+                  scheduledWeek: dateRange,
+                  scheduledName: targetName1,
+                  scheduledDay: dayNames[rowIndex],
+                  scheduledTaskNumber: insertNumber,
+                  scheduledAt: Date.now(),
+                });
+                delete document.getElementById('single-panel').dataset.pendingTaskId;
+                const existingSelect = document.getElementById('existing-task-select');
+                if (existingSelect) existingSelect.value = '';
+              }
               showNotification('משימה נשמרה בהצלחה');
               reloadTasksForWeek();
             }
@@ -750,78 +851,23 @@
       });
 
       function fillAdminPanelWithTaskData(taskData, dbKey, rowIndex, colIndex, taskNumber) {
-        // Заполняем поля в админ панели данными задачи
         document.getElementById('target-name').value = taskData.name || '';
         document.getElementById('target-day').value = dayNames.indexOf(taskData.day);
         document.getElementById('target-number').value = taskData.taskNumber || '';
         document.getElementById('task-address').value = taskData.address || '';
         document.getElementById('task-reason').value = taskData.reason || '';
         document.getElementById('task-comments').value = taskData.comments || '';
-        
-        // Обрабатываем код входа
-        const codeEntry = document.getElementById('code-entry');
-        const noCodeEntry = document.getElementById('no-code-entry');
-        const codeEntryOptions = document.getElementById('code-entry-options');
-        const codeEntryOption = document.getElementById('code-entry-option');
-        
-        if (taskData.code === 'יש שומר' || taskData.code === 'אין קודן / דלת פתוחה') {
-          noCodeEntry.checked = true;
-          codeEntry.style.display = 'none';
-          codeEntryOptions.style.display = 'block';
-          codeEntryOption.value = taskData.code;
-        } else {
-          noCodeEntry.checked = false;
-          codeEntry.style.display = 'block';
-          codeEntryOptions.style.display = 'none';
-          codeEntry.value = taskData.code || '';
-        }
-        
-        // Обрабатываем телефоны
-        const phoneList = document.getElementById('phone-list');
-        phoneList.innerHTML = '';
-        
-        if (taskData.phones && taskData.phones.length > 0) {
-          taskData.phones.forEach((phone, index) => {
-            const phoneEntry = document.createElement('div');
-            phoneEntry.className = 'phone-entry';
-            phoneEntry.innerHTML = `
-              <input type="tel" class="phone-number" placeholder="📞 הזן מספר טלפון" value="${phone.phone || ''}" required>
-              <input type="text" class="phone-name" placeholder="🙍‍♂️ שם איש קשר" value="${phone.name || ''}" required>
-              <button class="remove-phone">−</button>
-            `;
-            phoneList.appendChild(phoneEntry);
-            
-            phoneEntry.querySelector('.remove-phone').addEventListener('click', () => {
-              if (phoneList.children.length > 1) {
-                phoneEntry.remove();
-              }
-            });
-          });
-        } else {
-          // Добавляем хотя бы одно поле телефона
-          const phoneEntry = document.createElement('div');
-          phoneEntry.className = 'phone-entry';
-          phoneEntry.innerHTML = `
-            <input type="tel" class="phone-number" placeholder="📞 הזן מספר טלפון" required>
-            <input type="text" class="phone-name" placeholder="🙍‍♂️ שם איש קשר" required>
-            <button class="remove-phone">−</button>
-          `;
-          phoneList.appendChild(phoneEntry);
-          
-          phoneEntry.querySelector('.remove-phone').addEventListener('click', () => {
-            if (phoneList.children.length > 1) {
-              phoneEntry.remove();
-            }
-          });
-        }
-        
-        // Сохраняем данные для использования при сохранении
+        setCodeInForm(taskData.code || '');
+        fillPhonesInForm(taskData.phones);
+
         document.getElementById('single-panel').dataset.dbKey = dbKey;
         document.getElementById('single-panel').dataset.rowIndex = rowIndex;
         document.getElementById('single-panel').dataset.colIndex = colIndex;
         document.getElementById('single-panel').dataset.taskNumber = taskNumber;
-        
-        // Показываем уведомление
+        delete document.getElementById('single-panel').dataset.pendingTaskId;
+        const existingSelect = document.getElementById('existing-task-select');
+        if (existingSelect) existingSelect.value = '';
+
         showNotification('המשימה נטענה לעריכה. שנה את הנתונים ולחץ על "שמור משימה"');
       }
 
@@ -1039,10 +1085,13 @@
         }
         
         // Clear task data from the form
-        document.getElementById('single-panel').dataset.dbKey = '';
-        document.getElementById('single-panel').dataset.rowIndex = '';
-        document.getElementById('single-panel').dataset.colIndex = '';
-        document.getElementById('single-panel').dataset.taskNumber = '';
+        delete document.getElementById('single-panel').dataset.dbKey;
+        delete document.getElementById('single-panel').dataset.rowIndex;
+        delete document.getElementById('single-panel').dataset.colIndex;
+        delete document.getElementById('single-panel').dataset.taskNumber;
+        delete document.getElementById('single-panel').dataset.pendingTaskId;
+        const existingSelect = document.getElementById('existing-task-select');
+        if (existingSelect) existingSelect.value = '';
         
         showNotification('כל השדות נוקו');
       }
@@ -1330,6 +1379,8 @@
         <a href="view.html" class="nav-item logs" data-page="view">יומני עבודה</a>
         <a href="tofes.html" class="nav-item fill-notes" data-page="tofes">מילוי יומן עבודה</a>
         <a href="codes-list.html" class="nav-item building-codes" data-page="codes-list">קודים לבניינים</a>
+        <a href="pending-form.html" class="nav-item fill-notes" data-page="pending-form">מילוי משימה עתידית</a>
+        <a href="pending-tasks.html" class="nav-item service" data-page="pending-tasks">משימות ממתינות</a>
         <a href="#" class="nav-item service" data-page="service">קריאות שירות פתוחות</a>
         <a href="#" class="nav-item fill-service" data-page="fill-service">מילוי קריאת שירות</a>
         <a href="#" class="nav-item service-agreement" data-page="service-agreement">הסכמי שירות</a>
@@ -1423,6 +1474,12 @@
     </table>
 
     <div id="single-panel">
+      <label>
+        משימה קיימת:
+        <select id="existing-task-select">
+          <option value="">— בחר משימה ממתינה —</option>
+        </select>
+      </label>
       <label>
         שם:<span class="required">*</span>
         <select id="target-name" required>
