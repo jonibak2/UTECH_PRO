@@ -1,0 +1,93 @@
+Исправлено: теперь слова удаляются из адреса, а запись остаётся.
+
+```html
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+const wordsToRemove=["פאבל","טימור","איציק","מקסים","מבצע","שי","יורי","ויקטור","עם"];
+
+function cleanAddress(address){
+ let cleaned=address;
+ wordsToRemove.forEach(word=>{
+   const escaped=word.replace(/[.*+?^$()|[\]\\]/g,'\\$&');
+   cleaned=cleaned.replace(new RegExp(escaped,'g'),'');
+ });
+ return cleaned.replace(/\s+/g,' ').trim();
+}
+</script>
+<button onclick="copyOutput()">
+    Скопировать всё
+    </button>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Фильтр адресов</title>
+<style>
+body{font-family:Arial;background:#111;color:#fff;max-width:900px;margin:40px auto;padding:20px}
+textarea{width:100%;height:320px;background:#1e1e1e;color:#00ff88;padding:15px}
+button{margin-top:15px;padding:12px 24px}
+#output{margin-top:30px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<textarea id="jsonInput"></textarea>
+<button onclick="extractAddresses()">Отфильтровать</button>
+<div id="output"></div>
+<script>
+function extractAddresses(){
+let raw=document.getElementById('jsonInput').value;
+try{
+let data=JSON.parse(raw),results=[];
+const words=["פאבל","טימור","איציק","מקסים","מבצע","שי","יורי","ויקטור","עם"];
+function clean(a){
+ let c=a;
+ words.forEach(w=>c=c.split(w).join(''));
+ return c.replace(/\s+/g,' ').trim();
+}
+function scan(obj){
+ if(Array.isArray(obj)) return obj.forEach(scan);
+ if(obj&&typeof obj==='object'){
+   if(obj.address&&obj.code!=null){
+      let code=String(obj.code).trim();
+      let address=clean(String(obj.address));
+      if(!/^0+$/.test(code)&&address) results.push({address,code});
+   }
+   Object.values(obj).forEach(scan);
+ }
+}
+scan(data);
+document.getElementById('output').innerText=
+results.map(x=>`${x.address} - ${x.code}`).join('\n')||'Адресов не найдено';
+}catch(e){
+document.getElementById('output').innerText='Ошибка JSON';
+}
+}
+async function copyOutput(){
+
+const text = document.getElementById("output").innerText;
+
+if(!text){
+    alert("Нечего копировать.");
+    return;
+}
+
+try{
+    await navigator.clipboard.writeText(text);
+    alert("Скопировано!");
+}catch(e){
+    alert("Не удалось скопировать.");
+}
+
+}
+</script>
+</body>
+</html>
+```
+
+Пример:
+`טימור רחוב הרצל איציק 12` → `רחוב הרצל 12`
+
+Вывод:
+`רחוב הרצל 12 - 542`
