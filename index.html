@@ -37,7 +37,7 @@
       const db = getDatabase(app);
 
       const isAdmin = { status: false };
-      const names = ["טימור", "שי", "פאבל", "איציק"];
+      const names = ["טימור", "שי", "פאבל", "איציק", "שרגא", "רונן"];
       const dayNames = ["ראשון", "שני", "שלישי", "רביעי", "חמישי"];
       const taskNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
       let isMobile = window.matchMedia("(max-width: 600px)").matches;
@@ -452,8 +452,8 @@
         document.querySelectorAll('.cell').forEach(cell => cell.innerHTML = '');
         // Загружаем задачи из базы для этой недели
         document.querySelectorAll(".cell").forEach((cell, i) => {
-          const rowIndex = Math.floor(i / 4);
-          const colIndex = i % 4;
+          const rowIndex = Math.floor(i / names.length);
+          const colIndex = i % names.length;
           createCheckboxCell(cell, rowIndex, colIndex);
         });
         
@@ -536,7 +536,7 @@
           
           // Создаем ячейку, которая объединяет две колонки
           const mobileNotesCell = document.createElement('td');
-          mobileNotesCell.colSpan = 6;
+          mobileNotesCell.colSpan = names.length + 2;
           mobileNotesCell.className = 'mobile-notes-cell';
           
           const notesContainer = document.createElement('div');
@@ -611,8 +611,8 @@
       document.addEventListener("DOMContentLoaded", () => {
         initWeekOffsetMap();
         document.querySelectorAll(".cell").forEach((cell, i) => {
-          const rowIndex = Math.floor(i / 4);
-          const colIndex = i % 4;
+          const rowIndex = Math.floor(i / names.length);
+          const colIndex = i % names.length;
           createCheckboxCell(cell, rowIndex, colIndex);
         });
 
@@ -1144,7 +1144,7 @@
         const { printCode, printPhone, printComments } = opts;
         const { dateRange, sunday } = getWeekDateRange(weekOffset);
         const dayNames = ["ראשון", "שני", "שלישי", "רביעי", "חמישי"];
-        const names = ["טימור", "שי", "פאבל", "איציק"];
+        const names = ["טימור", "שי", "פאבל", "איציק", "שרגא", "רונן"];
         const taskNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         const colIndex = names.indexOf(name);
         if (colIndex === -1) {
@@ -1234,7 +1234,7 @@
       // === Замена задач между разными днями и сотрудниками (без командных задач) ===
       async function swapTasks(day1Index, name1, task1, day2Index, name2, task2) {
         const { dateRange } = getWeekDateRange(weekOffset);
-        const names = ["טימור", "שי", "פאבל", "איציק"];
+        const names = ["טימור", "שי", "פאבל", "איציק", "שרגא", "רונן"];
         const col1Index = names.indexOf(name1);
         const col2Index = names.indexOf(name2);
         
@@ -1414,12 +1414,16 @@
           <th id="name-1">שי</th>
           <th id="name-2">פאבל</th>
           <th id="name-3">איציק</th>
+          <th id="name-4">שרגא</th>
+          <th id="name-5">רונן</th>
           <th class="day-notes-header">הערות</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>ראשון</td>
+          <td class="cell"></td>
+          <td class="cell"></td>
           <td class="cell"></td>
           <td class="cell"></td>
           <td class="cell"></td>
@@ -1432,10 +1436,14 @@
           <td class="cell"></td>
           <td class="cell"></td>
           <td class="cell"></td>
+          <td class="cell"></td>
+          <td class="cell"></td>
           <td class="day-notes-cell"></td>
         </tr>
         <tr>
           <td>שלישי</td>
+          <td class="cell"></td>
+          <td class="cell"></td>
           <td class="cell"></td>
           <td class="cell"></td>
           <td class="cell"></td>
@@ -1448,10 +1456,14 @@
           <td class="cell"></td>
           <td class="cell"></td>
           <td class="cell"></td>
+          <td class="cell"></td>
+          <td class="cell"></td>
           <td class="day-notes-cell"></td>
         </tr>
         <tr>
           <td>חמישי</td>
+          <td class="cell"></td>
+          <td class="cell"></td>
           <td class="cell"></td>
           <td class="cell"></td>
           <td class="cell"></td>
@@ -1464,6 +1476,8 @@
           <td>שי</td>
           <td>פאבל</td>
           <td>איציק</td>
+          <td>שרגא</td>
+          <td>רונן</td>
           <td></td>
         </tr>
       </tbody>
@@ -1484,6 +1498,8 @@
           <option>שי</option>
           <option>פאבל</option>
           <option>איציק</option>
+          <option>שרגא</option>
+          <option>רונן</option>
         </select>
       </label>
       <div id="target-name-2-container" style="display:none;"></div>
@@ -1637,6 +1653,8 @@
             <option value="שי">שי</option>
             <option value="פאבל">פאבל</option>
             <option value="איציק">איציק</option>
+            <option value="שרגא">שרגא</option>
+            <option value="רונן">רונן</option>
           </select>
         </label>
         <div style="margin: 12px 0 8px 0; display: flex; flex-direction: column; align-items: center;">
@@ -1673,6 +1691,8 @@
                 <option value="שי">שי</option>
                 <option value="פאבל">פאבל</option>
                 <option value="איציק">איציק</option>
+                <option value="שרגא">שרגא</option>
+                <option value="רונן">רונן</option>
               </select>
             </label>
             <label>מספר משימה:
@@ -1707,6 +1727,8 @@
                 <option value="שי">שי</option>
                 <option value="פאבל">פאבל</option>
                 <option value="איציק">איציק</option>
+                <option value="שרגא">שרגא</option>
+                <option value="רונן">רונן</option>
               </select>
             </label>
             <label>מספר משימה:
