@@ -239,6 +239,34 @@ body.page-work .week-secondary {
   gap: 6px;
 }
 
+body.page-work .undo-action:disabled,
+body.page-work .redo-action:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+body.page-work .undo-action,
+body.page-work .redo-action {
+  height: 32px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+body.page-work .sandbox-link {
+  background: #4267a8;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+body.page-work .sandbox-link:hover {
+  background: #34558c;
+}
+
 body.page-work .week-range {
   font-weight: bold;
   text-align: center;
@@ -255,6 +283,13 @@ body.page-work .week-select {
 body.page-work .week-btn {
   font-size: 0.9em;
   padding: 3px 8px;
+  min-height: 32px;
+  height: 32px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
   transition: transform 0.2s, background-color 0.2s ease;
   cursor: pointer;
 }

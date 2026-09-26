@@ -3,18 +3,6 @@
     "notes": {
       ".read": true,
       ".write": true
-    },
-    "pending-tasks": {
-      ".read": true,
-      ".write": true,
-      "$taskId": {
-        ".read": true,
-        ".write": true
-      }
-    },
-    "pending-tasks-meta": {
-      ".read": true,
-      ".write": true
     }
   }
 }

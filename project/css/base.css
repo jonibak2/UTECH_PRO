@@ -197,24 +197,6 @@ body.page-view {
   background: #7F9A3B;
 }
 
-/* Pending form & tasks */
-.nav-item.pending-task {
-  background: #7f993b;
-  color: white;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .nav-item.pending-task:hover {
-    background: #6f8833;
-  }
-}
-
-.nav-item.pending-task.active {
-  border-left-color: white;
-  box-shadow: inset 5px 0 0 white;
-  background: #6f8833;
-}
-
 /* Service Calls - Muted Green */
 .nav-item.service {
   background: #8a8f99;
