@@ -1,0 +1,9 @@
+{
+  "chat.tools.terminal.autoApprove": {
+    "/^node -e 'const fs = require\\(\"fs\"\\); for \\(const file of \\[\"index\\.html\", \"index-test\\.html\"\\]\\) \\{ const html = fs\\.readFileSync\\(file, \"utf8\"\\); const match = html\\.match\\(/<script type=\"module\">\\(\\[\\\\s\\\\S\\]\\*\\?\\)<\\\\/script>/\\); if \\(!match\\) throw new Error\\(`Missing module script in \\$\\{file\\}`\\); const code = match\\[1\\]\\.replace\\(/\\^import\\[\\\\s\\\\S\\]\\*\\?;\\\\s\\*/gm, \"\"\\); new Function\\(code\\); console\\.log\\(`\\$\\{file\\}: JavaScript syntax OK`\\); \\} JSON\\.parse\\(fs\\.readFileSync\\(\"database\\.rules\\.json\", \"utf8\"\\)\\); console\\.log\\(\"database\\.rules\\.json: JSON OK\"\\);'$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "git commit": true
+  }
+}
