@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UTECH - עבודות טכניות</title>
+  <title>רשימת כתובות וקודים</title>
   <link rel="icon" href="project/assets/logo.jpg" type="image/jpeg" />
   <link rel="apple-touch-icon" href="project/assets/logo.jpg" />
   <meta name="apple-mobile-web-app-title" content="UTECH" />
@@ -78,26 +78,35 @@
       box-shadow: 0 0 0 4px rgba(106, 176, 83, 0.15);
     }
 
-    .admin-access {
-      margin-top: 16px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.06);
-    }
-
-    .admin-access label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 700;
-    }
-
     .meta {
       margin-top: 10px;
       font-size: 14px;
       color: var(--muted);
       text-align: center;
+    }
+
+    .update-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .update-badge {
+      display: inline-block;
+      background: #eef8ea;
+      color: var(--accent-dark);
+      border: 1px solid #d6eccc;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .update-date {
+      font-size: 13px;
+      color: var(--muted);
     }
 
     .list-box {
@@ -259,25 +268,16 @@
       <div class="logo-wrap">
         <img src="project/assets/utech.png" alt="Utech" />
       </div>
-      <h1>הדף כרגע נמצע תחת עבודות טכניות</h1>
-      <input id="searchInput" class="search-input" type="text" placeholder="חיפוש לפי כתובת..." hidden />
-      <div id="meta" class="meta" hidden></div>
+      <h1>רשימת כתובות וקודי כניסה</h1>
+      <div class="update-info">
+        <span class="update-badge">+114 קודים חדשים</span>
+        <span class="update-date">עדכון אחרון 05.07.2026</span>
+      </div>
+      <input id="searchInput" class="search-input" type="text" placeholder="חיפוש לפי כתובת..." />
+      <div id="meta" class="meta"></div>
     </div>
 
-    <div id="list" class="list-box" hidden></div>
-
-    <div class="admin-access">
-      <label for="adminPassword">סיסמת מנהל</label>
-      <input
-        id="adminPassword"
-        class="search-input"
-        type="password"
-        inputmode="numeric"
-        autocomplete="current-password"
-        placeholder="הזן סיסמת מנהל"
-        aria-controls="list"
-      />
-    </div>
+    <div id="list" class="list-box"></div>
   </div>
 
   <script src="codes.js"></script>
@@ -346,7 +346,6 @@
     const listEl = document.getElementById("list");
     const searchInput = document.getElementById("searchInput");
     const metaEl = document.getElementById("meta");
-    const adminPasswordInput = document.getElementById("adminPassword");
 
     const entries = (Array.isArray(codes) ? codes : [])
       .map((line) => {
@@ -398,22 +397,11 @@
         .replaceAll("'", "&#039;");
     }
 
-    function unlockCodes() {
-      const isAdmin = adminPasswordInput.value === "11";
-      listEl.hidden = !isAdmin;
-      searchInput.hidden = !isAdmin;
-      metaEl.hidden = !isAdmin;
-
-      if (isAdmin) {
-        render(searchInput.value);
-      }
-    }
-
     searchInput.addEventListener("input", () => {
       render(searchInput.value);
     });
 
-    adminPasswordInput.addEventListener("input", unlockCodes);
+    render();
   </script>
 </body>
 </html>
